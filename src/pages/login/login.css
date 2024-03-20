@@ -1,15 +1,15 @@
 .login-container {
   width: 100%;
+  height: 100%;
   box-sizing: border-box;
   display: flex;
   overflow: auto;
-  min-height: 100vh;
   align-items: center;
   flex-direction: column;
 }
 .login-login {
   width: 100%;
-  height: 720px;
+  height: 100vh;
   display: flex;
   overflow: hidden;
   position: relative;
@@ -180,6 +180,7 @@
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  white-space: nowrap;
 }
 .login-text12 {
   color: #FFFFFF;
@@ -214,7 +215,10 @@
   left: 0px;
   width: 100%;
   display: flex;
-  padding: 8px 50px;
+  padding-left: 50px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-right: 50px;
   position: absolute;
   align-items: center;
   flex-shrink: 0;
@@ -222,11 +226,9 @@
 }
 .login-frame1518 {
   gap: 10px;
-  width: 973px;
+  width: 100%;
   display: flex;
-  padding: 10px;
   align-items: flex-start;
-  flex-shrink: 0;
   flex-direction: column;
 }
 .login-frame1738 {
@@ -254,17 +256,19 @@
   gap: 40px;
   display: flex;
   align-items: center;
+  padding-right: 50px;
 }
 .login-frame1737 {
   gap: 16px;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
 }
 .login-frame1513 {
   gap: 10px;
   display: flex;
   align-items: flex-start;
   border-radius: 8px;
+  padding: 10px, 20px, 10px, 20px;
 }
 .login-text19 {
   color: #FFFFFF;
