@@ -1,13 +1,14 @@
-import './App.css'
-import Forgot from './pages/reset-password/reset'
+import "./App.css";
+// import Forgot from './pages/reset-password/reset'
+// import Reset from "./pages/CreatePassword/reset";
+import EmailConfirmation from "./pages/EmailConfirmation";
 
 function App() {
-
   return (
     <>
-      <Forgot />
+      <EmailConfirmation />
     </>
   );
 }
 
-export default App
+export default App;
