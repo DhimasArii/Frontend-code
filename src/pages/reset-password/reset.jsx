@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container'
-import './reset.css'
+import '../../components/style.css'
 import ImageNavbar from "../../assets/image-navbar-confirm.png"
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import theme from '../../components/color'
@@ -30,7 +30,7 @@ const Forgot = () => {
                             fontFamily:'Montserrat',
                             textTransform:'none',
                             lineHeight:'1',
-                            borderRadius:'5px',
+                            borderRadius:'8px',
                             '&:hover': {
                                 backgroundColor: 'green.light',
                             },
@@ -47,7 +47,7 @@ const Forgot = () => {
                             fontFamily:'Montserrat',
                             textTransform:'none',
                             lineHeight:'1',
-                            borderRadius:'5px',
+                            borderRadius:'8px',
                             '&:hover': {
                                 backgroundColor: 'yellow.light',
                             },
@@ -84,7 +84,7 @@ const Forgot = () => {
                             fontFamily:'Montserrat',
                             textTransform:'none',
                             lineHeight:'18.29px',
-                            borderRadius:'5px',
+                            borderRadius:'8px',
                             '&:hover': {
                                 backgroundColor: 'yellow.light',
                             },
@@ -101,7 +101,7 @@ const Forgot = () => {
                             fontFamily:'Montserrat',
                             textTransform:'none',
                             lineHeight:'1',
-                            borderRadius:'5px',
+                            borderRadius:'8px',
                             '&:hover': {
                                 backgroundColor: 'green.light',
                             },
