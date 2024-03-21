@@ -1,10 +1,10 @@
 import "./App.css";
-import Register from "./pages/register/register";
+import EmailConfirmation from "./pages/EmailConfirmation/index";
 
 function App() {
   return (
     <>
-      <Register />
+      <EmailConfirmation />
     </>
   );
 }
