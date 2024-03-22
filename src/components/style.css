@@ -63,8 +63,48 @@
   margin-top: 40px;
 }
 
+.mt-46 {
+  margin-top: 46px;
+}
+
+.mt-60 {
+  margin-top: 60px;
+}
+
+.mt-70 {
+  margin-top: 70px;
+}
+
 .mt-8 {
   margin-top: 8px;
+}
+
+.mt-4 {
+  margin-top: 4px;
+}
+
+.mb-72{
+  margin-bottom: 72px;
+}
+
+.p-16 {
+  padding: 16px;
+}
+
+.pl-10 {
+  padding-left: 10px;
+}
+
+.pt-59 {
+  padding-top: 59px;
+}
+
+.pt-27 {
+  padding-top: 27px;
+}
+
+.pb-72 {
+  padding-bottom: 72px;
 }
 
 .py-10 {
@@ -80,6 +120,21 @@
 .px-24 {
   padding-left: 24px;
   padding-right: 24px;
+}
+
+.px-91 {
+  padding-left: 91px;
+  padding-right: 91px;
+}
+
+.px-114 {
+  padding-left: 114px;
+  padding-right: 114px;
+}
+
+.px-141 {
+  padding-left: 141px;
+  padding-right: 141px;
 }
 
 .py-16 {
@@ -99,6 +154,11 @@
   background-color: #ea9e1f;
 }
 
+.bg-header {
+  background-image: url('../assets/image-header.png');
+  height:294px; 
+}
+
 .border-none {
   border: none;
 }
@@ -108,7 +168,7 @@
 }
 
 .text-gray {
-  color: #4f4f4f;
+  color: #828282;
 }
 
 .font-600 {
@@ -127,12 +187,48 @@
   font-size: 24px;
 }
 
+.text-20 {
+  font-size: 20px;
+}
+
 .text-16 {
   font-size: 16px;
 }
 
+.text-18 {
+  font-size: 18px;
+}
+
+.text-32 {
+  font-size: 32px;
+}
+
+.text-48 {
+  font-size: 48px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align:left;
+}
+
 .w-100 {
   width: 100%;
+}
+
+.h-70 {
+  height: 70px;
+}
+
+.h-207 {
+  height: 207px;
+}
+
+.h-20 {
+  height: 20px;
 }
 
 .mt-96 {
@@ -165,6 +261,10 @@
   font-family: Montserrat;
 }
 
+.gap-10 {
+  gap: 10px;
+}
+
 .gap-16 {
   gap: 16px;
 }
@@ -173,8 +273,16 @@
   gap: 24px;
 }
 
+.gap-31 {
+  gap: 31px;
+}
+
 .gap-60 {
   gap: 60px;
+}
+
+.gap-80 {
+  gap: 80px;
 }
 
 .body-email-confirmation {
@@ -187,4 +295,38 @@
 
 .text-gray-light {
   color: #4f4f4f;
+}
+
+.lh-19 {
+  line-height: 19.5px;
+}
+
+.lh-21 {
+  line-height: 21.94px;
+}
+
+.lh-24 {
+  line-height: 24.38px;
+}
+
+.line-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-height: 3.5em;
+}
+
+.flex-basis {
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 0;
+  text-align: center;
 }
