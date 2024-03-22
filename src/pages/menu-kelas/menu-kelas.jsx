@@ -89,7 +89,7 @@ const Kelas = () => {
                             {detail.title}
                         </div>
                         <div className='text-16 font-400 font-montserrat text-black-light'>
-                            {detail.title}
+                            {detail.body}
                         </div>
                     </div>
                     <hr style={{
