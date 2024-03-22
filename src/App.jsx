@@ -6,7 +6,7 @@ import EmailConfirmation from "./pages/EmailConfirmation";
 import Landing from "./pages/landing-page/landing";
 import Kelas from "./pages/menu-kelas/menu-kelas"
 
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, ScrollRestoration } from 'react-router-dom'
 
 function App() {
   return (
@@ -16,8 +16,7 @@ function App() {
       <Route path='/forgot-password' element={<Forgot />} />
       <Route path='/new-password' element={<Reset />} />
       <Route path='/email-confirmation' element={<EmailConfirmation />} />
-      <Route path='/menu-kelas' element={<Kelas />} />
-
+      <Route path='/menu-kelas/:id' element={<Kelas />} />
     </Routes>
   );
 }

@@ -16,7 +16,7 @@ import Instagram from "../../assets/instagram.png";
 import Youtube from "../../assets/youtube.png";
 import Telegram from "../../assets/telegram.png";
 import Email from "../../assets/email.png";
-import { Outlet, Link } from 'react-router-dom'
+import { Outlet, Link, useNavigate } from 'react-router-dom'
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -29,6 +29,8 @@ const Item = styled(Paper)(({ theme }) => ({
 const Landing = () => {
     const [state, setState] = useState(false);
     const [data, setData] = useState([]);
+    const navigate = useNavigate();
+
 
     const column1 = ["Arabic", "English", "Indonesian", "Mandarin"];
     const column2 = ["Deutsch", "French", "Japanese", "Melayu"];
@@ -56,51 +58,51 @@ const Landing = () => {
                     </div>
                     <div id="frame1516" className="flex items-center">
                         <div>
-                        <Link to="/login">
-                            <Button
-                                variant="contained"
-                                sx={{
-                                    backgroundColor: "green.main",
-                                    padding: "10px 20px",
-                                    width: "86px",
-                                    height: "40px",
-                                    fontSize: "15px",
-                                    fontWeight: "600",
-                                    fontFamily: "Montserrat",
-                                    textTransform: "none",
-                                    lineHeight: "1",
-                                    borderRadius: "8px",
-                                    "&:hover": {
-                                        backgroundColor: "green.light",
-                                    },
-                                }}
-                            >
-                                Login
-                            </Button>
+                            <Link to="/login">
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        backgroundColor: "green.main",
+                                        padding: "10px 20px",
+                                        width: "86px",
+                                        height: "40px",
+                                        fontSize: "15px",
+                                        fontWeight: "600",
+                                        fontFamily: "Montserrat",
+                                        textTransform: "none",
+                                        lineHeight: "1",
+                                        borderRadius: "8px",
+                                        "&:hover": {
+                                            backgroundColor: "green.light",
+                                        },
+                                    }}
+                                >
+                                    Login
+                                </Button>
                             </Link>
                         </div>
                         <div className="ml-16">
-                        <Link to="/login">
-                            <Button
-                                variant="contained"
-                                sx={{
-                                    backgroundColor: "yellow.main",
-                                    padding: "10px 20px",
-                                    width: "105px",
-                                    height: "40px",
-                                    fontSize: "15px",
-                                    fontWeight: "600",
-                                    fontFamily: "Montserrat",
-                                    textTransform: "none",
-                                    lineHeight: "1",
-                                    borderRadius: "8px",
-                                    "&:hover": {
-                                        backgroundColor: "yellow.light",
-                                    },
-                                }}
-                            >
-                                Sign Up
-                            </Button>
+                            <Link to="/login">
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        backgroundColor: "yellow.main",
+                                        padding: "10px 20px",
+                                        width: "105px",
+                                        height: "40px",
+                                        fontSize: "15px",
+                                        fontWeight: "600",
+                                        fontFamily: "Montserrat",
+                                        textTransform: "none",
+                                        lineHeight: "1",
+                                        borderRadius: "8px",
+                                        "&:hover": {
+                                            backgroundColor: "yellow.light",
+                                        },
+                                    }}
+                                >
+                                    Sign Up
+                                </Button>
                             </Link>
                         </div>
                     </div>
@@ -169,13 +171,13 @@ const Landing = () => {
                         </div>
                         <div id="frame1545" className="flex flex-basis items-center mt-60">
                             <div>
-                            <Link to="/menu-kelas">
                                 <Grid container columnSpacing={2} rowSpacing={5}>
                                     {data.slice(0, 6).map((item, index) => {
                                         console.log(index);
                                         return (
                                             <Grid key={index} xs={4} maxWidth={350}>
                                                 <Item>
+
                                                     <CardComponent
                                                         title={item.title}
                                                         body={item.title}
@@ -186,7 +188,6 @@ const Landing = () => {
                                         );
                                     })}
                                 </Grid>
-                                </Link>
                             </div>
                         </div>
                     </div>
@@ -233,7 +234,9 @@ const Landing = () => {
                                         return (
                                             <Grid key={index} xs={3} maxWidth={350}>
                                                 <Item>
-                                                    <CardFlag body={item.title} image={item.url} />
+                                                    <Link to={`/menu-kelas/${item.id}`} preventScrollReset={false}>
+                                                        <CardFlag body={item.title} image={item.url} />
+                                                    </Link>
                                                 </Item>
                                             </Grid>
                                         );

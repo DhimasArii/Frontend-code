@@ -18,6 +18,7 @@ import Instagram from "../../assets/instagram.png";
 import Youtube from "../../assets/youtube.png";
 import Telegram from "../../assets/telegram.png";
 import Email from "../../assets/email.png";
+import { useParams } from 'react-router-dom'
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -30,15 +31,23 @@ const Item = styled(Paper)(({ theme }) => ({
 const Kelas = () => {
     const [state, setState] = useState(false)
     const [data, setData] = useState([])
+    const [detail, setDetail] = useState([])
+    const { id } = useParams();
 
     const column1 = ["Arabic", "English", "Indonesian", "Mandarin"];
     const column2 = ["Deutsch", "French", "Japanese", "Melayu"];
 
     useEffect(() => {
-        fetch('https://jsonplaceholder.typicode.com/photos')
+        fetch(`https://jsonplaceholder.typicode.com/photos`)
             .then(response => response.json())
             .then(json => setData(json))
     }, [])
+
+    useEffect(() => {
+        fetch(`https://jsonplaceholder.typicode.com/posts/${id}`)
+            .then((response) => response.json())
+            .then((json) => setDetail(json));
+    }, [id])
     return (
         <Container>
             <ThemeProvider theme={theme}>
@@ -77,10 +86,10 @@ const Kelas = () => {
                     <img src={ImageHeaderKelas} style={{ width: '100%' }} />
                     <div id='frame1736' className='flex flex-col mx-70 gap-16'>
                         <div className='mt-46 text-24 font-600 font-montserrat'>
-                            English
+                            {detail.title}
                         </div>
                         <div className='text-16 font-400 font-montserrat text-black-light'>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            {detail.title}
                         </div>
                     </div>
                     <hr style={{
@@ -92,7 +101,7 @@ const Kelas = () => {
                         borderWidth: '1px 0 0 0',
                     }} />
 
-                    <div id='frame1546' className='flex flex-col items-center mt-80 gap-60'>
+                    <div id='frame1546' className='flex flex-col items-center mt-80 gap-60 mx-91'>
                         <div className='text-green font-600 font-montserrat text-24'>
                             Class you might like
                         </div>
@@ -115,10 +124,10 @@ const Kelas = () => {
                             </Grid>
                         </div>
                     </div>
-                    
+
                     {/* Footer */}
                     <div>
-                        <footer className="footer flex flex-row mt-205 px-95 py-24 bg-green text-white gap-80 font-poppins text-justify" style={{borderBottomLeftRadius:20, borderBottomRightRadius:20}}>
+                        <footer className="footer flex flex-row mt-205 px-95 py-24 bg-green text-white gap-80 font-poppins text-justify" style={{ borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
                             <div className="aboutUsContainer gap-8">
                                 <h3 className='font-500 text-16'>About Us</h3>
                                 <p className='font-400 text-14'>
