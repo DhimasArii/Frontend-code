@@ -156,8 +156,8 @@ const Kelas = () => {
                                     </p>
                                 </div>
                                 <div className="contactUs">
-                                    <h3>Contact Us</h3>
-                                    <div style={{ display: "flex" }}>
+                                    <h3 className='font-500 text-16'>Contact Us</h3>
+                                    <div style={{ display: "flex" }} className='gap-16'>
                                         <img src={Phone} alt="Phone" />
                                         <img src={Instagram} alt="Phone" />
                                         <img src={Youtube} alt="Phone" />
