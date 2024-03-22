@@ -1,9 +1,9 @@
 import "./App.css";
 import Login from './pages/login/login'
-import Forgot from './pages/reset-password/reset'
+import Forgot from "./pages/reset-password/reset";
 import Reset from "./pages/CreatePassword/reset";
 import EmailConfirmation from "./pages/EmailConfirmation";
-import Landing from "./pages/landing-page/landing"
+import Landing from "./pages/landing-page/landing";
 import Kelas from "./pages/menu-kelas/menu-kelas"
 
 import { Routes, Route } from 'react-router-dom'

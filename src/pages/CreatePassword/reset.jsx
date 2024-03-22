@@ -5,8 +5,56 @@ import "../../components/style.css";
 import ImageNavbar from "../../assets/image-navbar-confirm.png";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import theme from "../../components/color";
+import { useState } from "react";
 
 const CreatePassword = () => {
+  const [data, setData] = useState({
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [error, setError] = useState({
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleInput = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    setData({
+      ...data,
+      [name]: value,
+    });
+  };
+
+  const handleReset = () => {
+    setError({
+      password: "",
+      confirmPassword: "",
+    });
+  };
+
+  const handleClick = () => {
+    handleReset();
+    if (!data.password && !data.confirmPassword) {
+      setError({
+        password: "Password tidak boleh kosong",
+        confirmPassword: "Confirm Password tidak boleh kosong",
+      });
+    } else if (!data.password) {
+      setError({
+        password: "Password tidak boleh kosong",
+      });
+    } else if (!data.confirmPassword) {
+      setError({
+        confirmPassword: "Confirm Password tidak boleh kosong",
+      });
+    } else {
+      console.log(data);
+    }
+  };
+
   return (
     <Container>
       <ThemeProvider theme={theme}>
@@ -78,6 +126,10 @@ const CreatePassword = () => {
                 <div className="w-100">
                   <TextField
                     fullWidth
+                    name="password"
+                    onChange={handleInput}
+                    error={error.password}
+                    helperText={error.password}
                     id="outlined-basic"
                     label="New Password"
                     variant="outlined"
@@ -88,6 +140,10 @@ const CreatePassword = () => {
                 <div className="w-100">
                   <TextField
                     fullWidth
+                    name="confirmPassword"
+                    onChange={handleInput}
+                    error={error.confirmPassword}
+                    helperText={error.confirmPassword}
                     id="outlined-basic"
                     label="Confirm New Password"
                     variant="outlined"
@@ -124,6 +180,7 @@ const CreatePassword = () => {
               <div>
                 <Button
                   variant="contained"
+                  onClick={handleClick}
                   sx={{
                     backgroundColor: "green.main",
                     padding: "10px",
