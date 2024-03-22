@@ -1,8 +1,8 @@
 import "./App.css";
-import Forgot from './pages/reset-password/reset'
+import Forgot from "./pages/reset-password/reset";
 import Reset from "./pages/CreatePassword/reset";
 import EmailConfirmation from "./pages/EmailConfirmation";
-import Landing from "./pages/landing-page/landing"
+import Landing from "./pages/landing-page/landing";
 
 function App() {
   return (
