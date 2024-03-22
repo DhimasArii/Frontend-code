@@ -75,6 +75,14 @@
   margin-top: 70px;
 }
 
+.mt-80 {
+  margin-top: 80px;
+}
+
+.mt-205 {
+  margin-top: 205px;
+}
+
 .mt-8 {
   margin-top: 8px;
 }
@@ -85,6 +93,11 @@
 
 .mb-72{
   margin-bottom: 72px;
+}
+
+.mx-70 {
+  margin-left: 70px;
+  margin-right: 70px;
 }
 
 .p-16 {
@@ -112,6 +125,11 @@
   padding-bottom: 10px;
 }
 
+.py-24 {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
 .px-20 {
   padding-left: 20px;
   padding-right: 20px;
@@ -125,6 +143,11 @@
 .px-91 {
   padding-left: 91px;
   padding-right: 91px;
+}
+
+.px-95 {
+  padding-left: 95px;
+  padding-right: 95px;
 }
 
 .px-114 {
@@ -167,6 +190,10 @@
   color: #ffffff;
 }
 
+.text-black-light {
+  color: #333333;
+}
+
 .text-gray {
   color: #828282;
 }
@@ -189,6 +216,10 @@
 
 .text-20 {
   font-size: 20px;
+}
+
+.text-14 {
+  font-size: 14px;
 }
 
 .text-16 {
@@ -215,6 +246,10 @@
   text-align:left;
 }
 
+.text-justify {
+  text-align: justify;
+}
+
 .w-100 {
   width: 100%;
 }
@@ -225,6 +260,10 @@
 
 .h-207 {
   height: 207px;
+}
+
+.h-220 {
+  height: 220px;
 }
 
 .h-20 {
@@ -261,6 +300,10 @@
   font-family: Montserrat;
 }
 
+.font-poppins {
+  font-family: Poppins;
+}
+
 .gap-10 {
   gap: 10px;
 }
@@ -275,6 +318,10 @@
 
 .gap-31 {
   gap: 31px;
+}
+
+.gap-40 {
+  gap: 40px;
 }
 
 .gap-60 {
