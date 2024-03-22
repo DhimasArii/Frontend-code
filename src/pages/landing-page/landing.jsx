@@ -1,14 +1,15 @@
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container'
 import '../../components/style.css'
 import ImageNavbar from "../../assets/image-navbar-confirm.png"
-import {ThemeProvider,styled } from '@mui/material/styles';
+import { ThemeProvider, styled } from '@mui/material/styles';
 import { InputAdornment, Box, Paper } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2'
 import theme from '../../components/color'
 import CardComponent from '../../components/CardComponents'
+import { Outlet, Link } from 'react-router-dom'
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -42,28 +43,31 @@ const Landing = () => {
                     </div>
                     <div id='frame1516' className="flex items-center">
                         <div>
-                            <Button
-                                variant='contained'
-                                sx={{
-                                    backgroundColor: 'green.main',
-                                    padding: '10px 20px',
-                                    width: '86px',
-                                    height: '40px',
-                                    fontSize: '15px',
-                                    fontWeight: '600',
-                                    fontFamily: 'Montserrat',
-                                    textTransform: 'none',
-                                    lineHeight: '1',
-                                    borderRadius: '8px',
-                                    '&:hover': {
-                                        backgroundColor: 'green.light',
-                                    },
-                                }}
-                            >
-                                Login
-                            </Button>
+                            <Link to="/login">
+                                <Button
+                                    variant='contained'
+                                    sx={{
+                                        backgroundColor: 'green.main',
+                                        padding: '10px 20px',
+                                        width: '86px',
+                                        height: '40px',
+                                        fontSize: '15px',
+                                        fontWeight: '600',
+                                        fontFamily: 'Montserrat',
+                                        textTransform: 'none',
+                                        lineHeight: '1',
+                                        borderRadius: '8px',
+                                        '&:hover': {
+                                            backgroundColor: 'green.light',
+                                        },
+                                    }}
+                                >
+                                    Login
+                                </Button>
+                            </Link>
                         </div>
                         <div className="ml-16">
+                        <Link to="/login">
                             <Button
                                 variant='contained'
                                 sx={{
@@ -84,9 +88,11 @@ const Landing = () => {
                             >
                                 Sign Up
                             </Button>
+                            </Link>
                         </div>
                     </div>
                 </div>
+                <Outlet />
 
                 {/* body */}
                 <div className='flex flex-col items-center w-100'>
