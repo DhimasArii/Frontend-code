@@ -234,7 +234,7 @@ const Landing = () => {
                                         return (
                                             <Grid key={index} xs={3} maxWidth={350}>
                                                 <Item>
-                                                    <Link to={`/menu-kelas/${item.id}`} preventScrollReset={false}>
+                                                    <Link to={`/menu-kelas/${item.id}`} style={{textDecoration:'none'}}>
                                                         <CardFlag body={item.title} image={item.url} />
                                                     </Link>
                                                 </Item>
