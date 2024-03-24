@@ -7,6 +7,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import theme from "../../components/color";
 import { useState } from "react";
 import Navbar from "../../components/Navbar";
+import { Link } from "react-router-dom";
 
 const Forgot = () => {
   const [data, setData] = useState({
@@ -69,14 +70,14 @@ const Forgot = () => {
       });
     } else {
       // Lakukan aksi selanjutnya setelah validasi sukses
-      console.log('Form valid,\n Email :',data.email,'\n Password:', data.password);
+      console.log('Form valid,\n Email :', data.email);
     }
   };
 
   return (
     <Container>
       <ThemeProvider theme={theme}>
-        <Navbar/>
+        <Navbar />
 
         {/* body */}
         <div className="flex items-center flex-col mt-96">
@@ -92,67 +93,71 @@ const Forgot = () => {
               </div>
 
               <div className="w-100">
-              <TextField
-                    fullWidth
-                    name='email'
-                    id="outlined-basic"
-                    label="Email"
-                    variant="outlined"
-                    size="small"
-                    color="green"
-                    inputProps={{type: "email"}}
-                    error={error.email}
-                    onChange={handleInput}
-                    helperText={error.email}
-                  />
+                <TextField
+                  fullWidth
+                  name='email'
+                  id="outlined-basic"
+                  label="Email"
+                  variant="outlined"
+                  size="small"
+                  color="green"
+                  inputProps={{ type: "email" }}
+                  error={!!error.email}
+                  onChange={handleInput}
+                  helperText={error.email}
+                />
               </div>
             </div>
 
             <div className="flex items-right flex-row gap-24">
               <div>
-                <Button
-                  variant="contained"
-                  sx={{
-                    backgroundColor: "yellow.main",
-                    padding: "10px",
-                    width: "140px",
-                    height: "38px",
-                    fontSize: "15px",
-                    fontWeight: "500",
-                    fontFamily: "Montserrat",
-                    textTransform: "none",
-                    lineHeight: "18.29px",
-                    borderRadius: "8px",
-                    "&:hover": {
-                      backgroundColor: "yellow.light",
-                    },
-                  }}
-                >
-                  Cancel
-                </Button>
+                <Link to="/login">
+                  <Button
+                    variant="contained"
+                    sx={{
+                      backgroundColor: "yellow.main",
+                      padding: "10px",
+                      width: "140px",
+                      height: "38px",
+                      fontSize: "15px",
+                      fontWeight: "500",
+                      fontFamily: "Montserrat",
+                      textTransform: "none",
+                      lineHeight: "18.29px",
+                      borderRadius: "8px",
+                      "&:hover": {
+                        backgroundColor: "yellow.light",
+                      },
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </Link>
               </div>
               <div>
-                <Button
-                  variant="contained"
-                  onClick={handleClick}
-                  sx={{
-                    backgroundColor: "green.main",
-                    padding: "10px",
-                    width: "140px",
-                    height: "38px",
-                    fontSize: "15px",
-                    fontWeight: "500",
-                    fontFamily: "Montserrat",
-                    textTransform: "none",
-                    lineHeight: "1",
-                    borderRadius: "8px",
-                    "&:hover": {
-                      backgroundColor: "green.light",
-                    },
-                  }}
-                >
-                  Confirm
-                </Button>
+                <Link to="/">
+                  <Button
+                    variant="contained"
+                    onClick={handleClick}
+                    sx={{
+                      backgroundColor: "green.main",
+                      padding: "10px",
+                      width: "140px",
+                      height: "38px",
+                      fontSize: "15px",
+                      fontWeight: "500",
+                      fontFamily: "Montserrat",
+                      textTransform: "none",
+                      lineHeight: "1",
+                      borderRadius: "8px",
+                      "&:hover": {
+                        backgroundColor: "green.light",
+                      },
+                    }}
+                  >
+                    Confirm
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
