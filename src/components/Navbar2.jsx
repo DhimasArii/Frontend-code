@@ -6,7 +6,7 @@ import IconShopingCart from '../assets/icon_shopping_cart.png';
 import IconPerson from '../assets/icon_person.png';
 import IconLogout from '../assets/icon_logout.png';
 
-const Navbar2 = () => {
+const Navbar2 = ({handleLogout}) => {
     return (
         <>
             {/* navbar */}
@@ -34,7 +34,7 @@ const Navbar2 = () => {
                         borderColor: '#000000'
                     }} />
                     <img src={IconPerson} alt='' />
-                    <Link to="/">
+                    <Link to="/" onClick={handleLogout}>
                     <img src={IconLogout} alt='' />
                     </Link>
 

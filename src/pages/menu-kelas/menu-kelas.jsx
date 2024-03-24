@@ -12,7 +12,8 @@ import theme from '../../components/color'
 import CardComponent from '../../components/CardComponents'
 
 import { useParams } from 'react-router-dom'
-import Navbar2 from '../../components/Navbar2';
+import NavbarLogIn from "../../components/Navbar2"
+import NavbarLogOut from "../../components/Navbar"
 import Footer from '../../components/Footer';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -23,7 +24,7 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary,
 }));
 
-const Kelas = () => {
+const Kelas = ({ isLoggedIn, setIsLoggedIn }) => {
     const [state, setState] = useState(false)
     const [data, setData] = useState([])
     const [detail, setDetail] = useState([])
@@ -43,10 +44,16 @@ const Kelas = () => {
             .then((response) => response.json())
             .then((json) => setDetail(json));
     }, [id])
+
+    const handleLogout = () => {
+        setIsLoggedIn(false);
+        // Lakukan aksi logout, misalnya redirect ke halaman login
+        navigate('/login');
+    };
     return (
         <Container>
             <ThemeProvider theme={theme}>
-                <Navbar2/>
+            {isLoggedIn ? <NavbarLogIn handleLogout={handleLogout}/> : <NavbarLogOut />}
 
                 {/* body */}
                 <div className='flex flex-col items-center'>

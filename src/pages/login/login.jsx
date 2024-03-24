@@ -12,10 +12,10 @@ import IconButton from '@mui/material/IconButton';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
-import {Link} from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
-const Login = () => {
-
+const Login = ({setIsLoggedIn}) => {
+  const navigate = useNavigate();
   const [data, setData] = useState({
     email: '',
     password: '',
@@ -120,8 +120,15 @@ const Login = () => {
       });
     } else {
       // Lakukan aksi selanjutnya setelah validasi sukses
-      console.log('Form valid,\n Email :', data.email, '\n Password:', data.password);
+      setIsLoggedIn(true)
+      // Redirect ke halaman Landing setelah login berhasil
+      navigate('/');
+
+      
+      console.log('Form ',setIsLoggedIn,'\n Email :', data.email, '\n Password:', data.password);
+
     }
+    
   }
 
   return (
@@ -227,7 +234,7 @@ const Login = () => {
           </div>
           <div className='flex items-center mt-40 font-400 text-16 font-montserrat'>
             Dont have account? &nbsp;
-            <Link to="/register-new/:id" style={{ textDecoration: 'none', color: 'blue' }}>
+            <Link to="/register-new" style={{ textDecoration: 'none', color: 'blue' }}>
               Sign Up here
             </Link>
           </div>
