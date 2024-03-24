@@ -242,6 +242,10 @@
   color: #828282;
 }
 
+.text-yellow {
+  color: #ea9e1f;
+}
+
 .font-600 {
   font-weight: 600;
 }
@@ -280,6 +284,10 @@
 
 .text-32 {
   font-size: 32px;
+}
+
+.text-36 {
+  font-size: 36px;
 }
 
 .text-48 {
