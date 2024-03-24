@@ -12,13 +12,9 @@ import IconButton from '@mui/material/IconButton';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
-import { Outlet, Link, useNavigate } from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
 const Login = () => {
-
-  const handleForgotPassword = () => {
-    alert('Forgot Password di Klik')
-  }
 
   const [data, setData] = useState({
     email: '',
@@ -157,7 +153,7 @@ const Login = () => {
                     size="small"
                     color="green"
                     inputProps={{ type: "email" }}
-                    error={error.email}
+                    error={!!error.email}
                     onChange={handleInput}
                     helperText={error.email}
                   />
@@ -171,7 +167,7 @@ const Login = () => {
                     type={data.showPassword ? 'text' : 'password'}
                     size="small"
                     color="green"
-                    error={error.password}
+                    error={!!error.password}
                     value={data.password}
                     onChange={handleInput}
                     helperText={error.password}
