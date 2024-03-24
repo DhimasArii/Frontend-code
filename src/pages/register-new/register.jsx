@@ -208,28 +208,6 @@ const Forgot = () => {
               <div>
                 <Button
                   variant="contained"
-                  sx={{
-                    backgroundColor: "yellow.main",
-                    padding: "10px",
-                    width: "140px",
-                    height: "38px",
-                    fontSize: "15px",
-                    fontWeight: "500",
-                    fontFamily: "Montserrat",
-                    textTransform: "none",
-                    lineHeight: "18.29px",
-                    borderRadius: "8px",
-                    "&:hover": {
-                      backgroundColor: "yellow.light",
-                    },
-                  }}
-                >
-                  Cancel
-                </Button>
-              </div>
-              <div>
-                <Button
-                  variant="contained"
                   onClick={handleClick}
                   sx={{
                     backgroundColor: "green.main",
@@ -247,10 +225,14 @@ const Forgot = () => {
                     },
                   }}
                 >
-                  Confirm
+                  Sign Up
                 </Button>
               </div>
             </div>
+          </div>
+          <div className="flex items-center mt-40 font-400 text-16 font-montserrat">
+            Have account? &nbsp;
+            <a href="">Login here</a>
           </div>
         </div>
       </ThemeProvider>
