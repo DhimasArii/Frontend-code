@@ -24,23 +24,23 @@ const Forgot = () => {
     });
 
     //cek valid email
-    if (name === 'email') {
+    if (name === "email") {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
       if (!value.trim()) {
         setError({
           ...error,
-          email: 'Email tidak boleh kosong'
+          email: "Email tidak boleh kosong",
         });
       } else if (!emailRegex.test(value)) {
         setError({
           ...error,
-          email: 'Format email tidak valid'
+          email: "Format email tidak valid",
         });
       } else {
         setError({
           ...error,
-          email: '' // Reset pesan error jika valid
+          email: "", // Reset pesan error jika valid
         });
       }
     }
@@ -62,15 +62,15 @@ const Forgot = () => {
 
     if (!data.email.trim()) {
       setError({
-        email: 'Email tidak boleh kosong'
+        email: "Email tidak boleh kosong",
       });
     } else if (!emailRegex.test(data.email)) {
       setError({
-        email: 'Format email tidak valid'
+        email: "Format email tidak valid",
       });
     } else {
       // Lakukan aksi selanjutnya setelah validasi sukses
-      console.log('Form valid,\n Email :', data.email);
+      console.log("Form valid,\n Email :", data.email);
     }
   };
 
@@ -95,7 +95,7 @@ const Forgot = () => {
               <div className="w-100">
                 <TextField
                   fullWidth
-                  name='email'
+                  name="email"
                   id="outlined-basic"
                   label="Email"
                   variant="outlined"
@@ -135,7 +135,7 @@ const Forgot = () => {
                 </Link>
               </div>
               <div>
-                <Link to="/">
+                <Link to="/new-password">
                   <Button
                     variant="contained"
                     onClick={handleClick}

@@ -6,17 +6,37 @@ import ImageNavbar from "../../assets/image-navbar-confirm.png";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import theme from "../../components/color";
 import { useState } from "react";
+import IconButton from "@mui/material/IconButton";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { InputAdornment, Box, Paper } from "@mui/material";
+import { Link } from "react-router-dom";
+import Navbar from "../../components/Navbar";
 
 const CreatePassword = () => {
   const [data, setData] = useState({
     password: "",
     confirmPassword: "",
+    showPassword: false,
+    showConfirmPassword: false,
   });
 
   const [error, setError] = useState({
     password: "",
     confirmPassword: "",
   });
+
+  const handleClickShowPassword = () => {
+    setData({
+      ...data,
+      showPassword: !data.showPassword,
+      showConfirmPassword: !data.showConfirmPassword,
+    });
+  };
+
+  const handleMouseDownPassword = (e) => {
+    e.preventDefault();
+  };
 
   const handleInput = (e) => {
     const name = e.target.name;
@@ -26,6 +46,46 @@ const CreatePassword = () => {
       ...data,
       [name]: value,
     });
+
+    //cek valid password
+    if (name === "password") {
+      if (!value.trim()) {
+        setError({
+          ...error,
+          password: "Password tidak boleh kosong",
+        });
+      } else if (value.length < 8) {
+        setError({
+          ...error,
+          password: "Password minimal 8 karakter",
+        });
+      } else {
+        setError({
+          ...error,
+          password: "", // Reset pesan error jika valid
+        });
+      }
+    }
+
+    //cek valid password
+    if (name === "confirmPassword") {
+      if (!value.trim()) {
+        setError({
+          ...error,
+          confirmPassword: "Confirm Password tidak boleh kosong",
+        });
+      } else if (value.length < 8) {
+        setError({
+          ...error,
+          confirmPassword: "Confirm Password minimal 8 karakter",
+        });
+      } else {
+        setError({
+          ...error,
+          confirmPassword: "", // Reset pesan error jika valid
+        });
+      }
+    }
   };
 
   const handleReset = () => {
@@ -51,68 +111,20 @@ const CreatePassword = () => {
         confirmPassword: "Confirm Password tidak boleh kosong",
       });
     } else {
-      console.log(data);
+      console.log(
+        "Form valid",
+        "\n Password :",
+        data.paswword,
+        "\n Confirm Password :",
+        data.confirmPassword
+      );
     }
   };
 
   return (
     <Container>
       <ThemeProvider theme={theme}>
-        {/* navbar */}
-        <div className="flex items-center justify-sb t-0 l-0 r-0 padding-nv">
-          <div className="flex items-center">
-            <div className="mr-10-5">
-              <img src={ImageNavbar} alt="" />
-            </div>
-            <div className="font-400 text-24 font-montserrat">Language</div>
-          </div>
-          <div className="flex items-center">
-            <div>
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: "green.main",
-                  padding: "10px 20px",
-                  width: "86px",
-                  height: "40px",
-                  fontSize: "15px",
-                  fontWeight: "600",
-                  fontFamily: "Montserrat",
-                  textTransform: "none",
-                  lineHeight: "1",
-                  borderRadius: "8px",
-                  "&:hover": {
-                    backgroundColor: "green.light",
-                  },
-                }}
-              >
-                Login
-              </Button>
-            </div>
-            <div className="ml-16">
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: "yellow.main",
-                  padding: "10px 20px",
-                  width: "105px",
-                  height: "40px",
-                  fontSize: "15px",
-                  fontWeight: "600",
-                  fontFamily: "Montserrat",
-                  textTransform: "none",
-                  lineHeight: "1",
-                  borderRadius: "8px",
-                  "&:hover": {
-                    backgroundColor: "yellow.light",
-                  },
-                }}
-              >
-                Sign Up
-              </Button>
-            </div>
-          </div>
-        </div>
+        <Navbar />
 
         {/* body */}
         <div className="flex items-center flex-col mt-96">
@@ -130,11 +142,38 @@ const CreatePassword = () => {
                     onChange={handleInput}
                     error={error.password}
                     helperText={error.password}
+                    value={data.password}
+                    type={data.showPassword ? "text" : "password"}
                     id="outlined-basic"
                     label="New Password"
                     variant="outlined"
                     size="small"
                     color="green"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                          >
+                            {data.showPassword ? (
+                              <VisibilityIcon />
+                            ) : (
+                              <VisibilityOffIcon />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    sx={{
+                      '& input[type="password"]::-ms-reveal': {
+                        display: "none",
+                      },
+                      '& input[type="password"]::-ms-clear': {
+                        display: "none",
+                      },
+                    }}
                   />
                 </div>
                 <div className="w-100">
@@ -144,11 +183,38 @@ const CreatePassword = () => {
                     onChange={handleInput}
                     error={error.confirmPassword}
                     helperText={error.confirmPassword}
+                    value={data.confirmPassword}
+                    type={data.showConfirmPassword ? "text" : "confirmPassword"}
                     id="outlined-basic"
                     label="Confirm New Password"
                     variant="outlined"
                     size="small"
                     color="green"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                          >
+                            {data.showConfirmPassword ? (
+                              <VisibilityIcon />
+                            ) : (
+                              <VisibilityOffIcon />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    sx={{
+                      '& input[type="password"]::-ms-reveal': {
+                        display: "none",
+                      },
+                      '& input[type="password"]::-ms-clear': {
+                        display: "none",
+                      },
+                    }}
                   />
                 </div>
               </div>
@@ -156,49 +222,53 @@ const CreatePassword = () => {
 
             <div className="flex items-right flex-row gap-24">
               <div>
-                <Button
-                  variant="contained"
-                  sx={{
-                    backgroundColor: "yellow.main",
-                    padding: "10px",
-                    width: "140px",
-                    height: "38px",
-                    fontSize: "15px",
-                    fontWeight: "500",
-                    fontFamily: "Montserrat",
-                    textTransform: "none",
-                    lineHeight: "18.29px",
-                    borderRadius: "8px",
-                    "&:hover": {
-                      backgroundColor: "yellow.light",
-                    },
-                  }}
-                >
-                  Cancel
-                </Button>
+                <Link to="/forgot-password">
+                  <Button
+                    variant="contained"
+                    sx={{
+                      backgroundColor: "yellow.main",
+                      padding: "10px",
+                      width: "140px",
+                      height: "38px",
+                      fontSize: "15px",
+                      fontWeight: "500",
+                      fontFamily: "Montserrat",
+                      textTransform: "none",
+                      lineHeight: "18.29px",
+                      borderRadius: "8px",
+                      "&:hover": {
+                        backgroundColor: "yellow.light",
+                      },
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </Link>
               </div>
               <div>
-                <Button
-                  variant="contained"
-                  onClick={handleClick}
-                  sx={{
-                    backgroundColor: "green.main",
-                    padding: "10px",
-                    width: "140px",
-                    height: "38px",
-                    fontSize: "15px",
-                    fontWeight: "500",
-                    fontFamily: "Montserrat",
-                    textTransform: "none",
-                    lineHeight: "1",
-                    borderRadius: "8px",
-                    "&:hover": {
-                      backgroundColor: "green.light",
-                    },
-                  }}
-                >
-                  Confirm
-                </Button>
+                <Link to="/login">
+                  <Button
+                    variant="contained"
+                    onClick={handleClick}
+                    sx={{
+                      backgroundColor: "green.main",
+                      padding: "10px",
+                      width: "140px",
+                      height: "38px",
+                      fontSize: "15px",
+                      fontWeight: "500",
+                      fontFamily: "Montserrat",
+                      textTransform: "none",
+                      lineHeight: "1",
+                      borderRadius: "8px",
+                      "&:hover": {
+                        backgroundColor: "green.light",
+                      },
+                    }}
+                  >
+                    Confirm
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

@@ -1,30 +1,30 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Container from '@mui/material/Container'
-import '../../components/style.css'
-import { ThemeProvider, styled } from '@mui/material/styles';
-import { InputAdornment, Box, Paper } from '@mui/material';
-import theme from '../../components/color'
-import Navbar from '../../components/Navbar';
-import IconButton from '@mui/material/IconButton';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import React from "react";
+import { useState, useEffect } from "react";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Container from "@mui/material/Container";
+import "../../components/style.css";
+import { ThemeProvider, styled } from "@mui/material/styles";
+import { InputAdornment, Box, Paper } from "@mui/material";
+import theme from "../../components/color";
+import Navbar from "../../components/Navbar";
+import IconButton from "@mui/material/IconButton";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from "react-router-dom";
 
-const Login = ({setIsLoggedIn}) => {
+const Login = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
   const [data, setData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
     showPassword: false,
-  })
+  });
   const [error, setError] = useState({
-    email: '',
-    password: ''
-  })
+    email: "",
+    password: "",
+  });
 
   const handleClickShowPassword = () => {
     setData({
@@ -38,63 +38,63 @@ const Login = ({setIsLoggedIn}) => {
   };
 
   const handleInput = (e) => {
-    const name = e.target.name
-    const value = e.target.value
+    const name = e.target.name;
+    const value = e.target.value;
 
     setData({
       ...data,
-      [name]: value
-    })
+      [name]: value,
+    });
 
     //cek valid email
-    if (name === 'email') {
+    if (name === "email") {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
       if (!value.trim()) {
         setError({
           ...error,
-          email: 'Email tidak boleh kosong'
+          email: "Email tidak boleh kosong",
         });
       } else if (!emailRegex.test(value)) {
         setError({
           ...error,
-          email: 'Format email tidak valid'
+          email: "Format email tidak valid",
         });
       } else {
         setError({
           ...error,
-          email: '' // Reset pesan error jika valid
+          email: "", // Reset pesan error jika valid
         });
       }
     }
 
     //cek valid password
-    if (name === 'password') {
+    if (name === "password") {
       if (!value.trim()) {
         setError({
           ...error,
-          password: 'Password tidak boleh kosong'
+          password: "Password tidak boleh kosong",
         });
       } else if (value.length < 8) {
         setError({
           ...error,
-          password: 'Password minimal 8 karakter'
+          password: "Password minimal 8 karakter",
         });
       } else {
         setError({
           ...error,
-          password: '' // Reset pesan error jika valid
+          password: "", // Reset pesan error jika valid
         });
       }
     }
-  }
+  };
 
   const handleReset = () => {
     setError({
-      email: '',
-      password: ''
-    })
-  }
+      email: "",
+      password: "",
+    });
+  };
 
   const handleClick = () => {
     handleReset();
@@ -103,33 +103,37 @@ const Login = ({setIsLoggedIn}) => {
 
     if (!data.email.trim() && !data.password.trim()) {
       setError({
-        email: 'Email tidak boleh kosong',
-        password: 'Password tidak boleh kosong'
+        email: "Email tidak boleh kosong",
+        password: "Password tidak boleh kosong",
       });
     } else if (!data.email.trim()) {
       setError({
-        email: 'Email tidak boleh kosong'
+        email: "Email tidak boleh kosong",
       });
     } else if (!emailRegex.test(data.email)) {
       setError({
-        email: 'Format email tidak valid'
+        email: "Format email tidak valid",
       });
     } else if (!data.password.trim()) {
       setError({
-        password: 'Password tidak boleh kosong'
+        password: "Password tidak boleh kosong",
       });
     } else {
       // Lakukan aksi selanjutnya setelah validasi sukses
-      setIsLoggedIn(true)
+      setIsLoggedIn(true);
       // Redirect ke halaman Landing setelah login berhasil
-      navigate('/');
+      navigate("/");
 
-      
-      console.log('Form ',setIsLoggedIn,'\n Email :', data.email, '\n Password:', data.password);
-
+      console.log(
+        "Form ",
+        setIsLoggedIn,
+        "\n Email :",
+        data.email,
+        "\n Password:",
+        data.password
+      );
     }
-    
-  }
+  };
 
   return (
     <Container>
@@ -140,11 +144,11 @@ const Login = ({setIsLoggedIn}) => {
         <div className="flex items-center flex-col mt-96">
           <div className="flex flex-col gap-16 items-right gap-60">
             <div className="flex flex-col gap-40">
-              <div className='flex flex-col gap-16'>
+              <div className="flex flex-col gap-16">
                 <div className="mr-429 font-montserrat text-24 text-green">
                   Welcome Back!
                 </div>
-                <div className='font-400 text-16 font-montserrat'>
+                <div className="font-400 text-16 font-montserrat">
                   Please login first
                 </div>
               </div>
@@ -153,7 +157,7 @@ const Login = ({setIsLoggedIn}) => {
                 <div className="w-100">
                   <TextField
                     fullWidth
-                    name='email'
+                    name="email"
                     id="outlined-basic"
                     label="Email"
                     variant="outlined"
@@ -169,9 +173,9 @@ const Login = ({setIsLoggedIn}) => {
                   <TextField
                     fullWidth
                     id="outlined-basic-password"
-                    name='password'
+                    name="password"
                     label="Password"
-                    type={data.showPassword ? 'text' : 'password'}
+                    type={data.showPassword ? "text" : "password"}
                     size="small"
                     color="green"
                     error={!!error.password}
@@ -186,20 +190,31 @@ const Login = ({setIsLoggedIn}) => {
                             onClick={handleClickShowPassword}
                             onMouseDown={handleMouseDownPassword}
                           >
-                            {data.showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                            {data.showPassword ? (
+                              <VisibilityIcon />
+                            ) : (
+                              <VisibilityOffIcon />
+                            )}
                           </IconButton>
                         </InputAdornment>
                       ),
                     }}
                     sx={{
-                      '& input[type="password"]::-ms-reveal': { display: 'none' },
-                      '& input[type="password"]::-ms-clear': { display: 'none' },
+                      '& input[type="password"]::-ms-reveal': {
+                        display: "none",
+                      },
+                      '& input[type="password"]::-ms-clear': {
+                        display: "none",
+                      },
                     }}
                   />
                 </div>
-                <div className='flex flex-row font-400 text-16 font-montserrat'>
+                <div className="flex flex-row font-400 text-16 font-montserrat">
                   Forgot Password &nbsp;
-                  <Link to="/forgot-password" style={{ textDecoration: 'none', color: 'blue' }}>
+                  <Link
+                    to="/forgot-password"
+                    style={{ textDecoration: "none", color: "blue" }}
+                  >
                     Click Here
                   </Link>
                 </div>
@@ -232,16 +247,19 @@ const Login = ({setIsLoggedIn}) => {
               </div>
             </div>
           </div>
-          <div className='flex items-center mt-40 font-400 text-16 font-montserrat'>
+          <div className="flex items-center mt-40 font-400 text-16 font-montserrat">
             Dont have account? &nbsp;
-            <Link to="/register-new" style={{ textDecoration: 'none', color: 'blue' }}>
+            <Link
+              to="/register-new"
+              style={{ textDecoration: "none", color: "blue" }}
+            >
               Sign Up here
             </Link>
           </div>
         </div>
       </ThemeProvider>
     </Container>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

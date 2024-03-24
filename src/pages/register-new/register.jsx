@@ -4,19 +4,44 @@ import Container from "@mui/material/Container";
 import "../../components/style.css";
 import ImageNavbar from "../../assets/image-navbar-confirm.png";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { InputAdornment, Box, Paper } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
 import theme from "../../components/color";
 import { useState } from "react";
-import { Outlet, Link, useNavigate } from 'react-router-dom'
+import { Outlet, Link, useNavigate } from "react-router-dom";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 import Navbar from "../../components/Navbar";
 
-const Forgot = () => {
+const Forgot = ({ setIsLoggedIn }) => {
   const [data, setData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
+    showPassword: false,
+    showConfirmPassword: false,
   });
+
+  const [error, setError] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleClickShowPassword = () => {
+    setData({
+      ...data,
+      showPassword: !data.showPassword,
+      showConfirmPassword: !data.showConfirmPassword,
+    });
+  };
+
+  const handleMouseDownPassword = (e) => {
+    e.preventDefault();
+  };
 
   const handleInput = (e) => {
     const name = e.target.name;
@@ -26,14 +51,69 @@ const Forgot = () => {
       ...data,
       [name]: value,
     });
-  };
 
-  const [error, setError] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+    //cek valid email
+    if (name === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!value.trim()) {
+        setError({
+          ...error,
+          email: "Email tidak boleh kosong",
+        });
+      } else if (!emailRegex.test(value)) {
+        setError({
+          ...error,
+          email: "Format email tidak valid",
+        });
+      } else {
+        setError({
+          ...error,
+          email: "", // Reset pesan error jika valid
+        });
+      }
+    }
+
+    //cek valid password
+    if (name === "password") {
+      if (!value.trim()) {
+        setError({
+          ...error,
+          password: "Password tidak boleh kosong",
+        });
+      } else if (value.length < 8) {
+        setError({
+          ...error,
+          password: "Password minimal 8 karakter",
+        });
+      } else {
+        setError({
+          ...error,
+          password: "", // Reset pesan error jika valid
+        });
+      }
+    }
+
+    //cek valid confirmPassword
+    if (name === "confirmPassword") {
+      if (!value.trim()) {
+        setError({
+          ...error,
+          confirmPassword: "confirmPassword tidak boleh kosong",
+        });
+      } else if (value.length < 8) {
+        setError({
+          ...error,
+          confirmPassword: "confirmPassword minimal 8 karakter",
+        });
+      } else {
+        setError({
+          ...error,
+          confirmPassword: "", // Reset pesan error jika valid
+        });
+      }
+    }
+  };
 
   const handleReset = () => {
     setError({
@@ -46,30 +126,78 @@ const Forgot = () => {
 
   const handleClick = () => {
     handleReset();
-    if (!data.name && !data.email && !data.password && !data.confirmPassword) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (
+      !data.name.trim() &&
+      !data.email.trim() &&
+      !data.password.trim() &&
+      !data.confirmPassword.trim()
+    ) {
       setError({
         name: "Nama tidak boleh kosong",
         email: "Email tidak boleh kosong",
         password: "Password tidak boleh kosong",
         confirmPassword: "Confirm Password tidak boleh kosong",
       });
-    } else if (!data.name) {
+    } else if (!data.name.trim() && !data.email.trim()) {
+      setError({
+        name: "Nama tidak boleh kosong",
+        email: "Email tidak boleh kosong",
+      });
+    } else if (!data.email.trim() && !data.password.trim()) {
+      setError({
+        email: "Email tidak boleh kosong",
+        password: "Password tidak boleh kosong",
+      });
+    } else if (!data.password.trim() && !data.confirmPassword.trim()) {
+      setError({
+        password: "Password tidak boleh kosong",
+        confirmPassword: "Confirm Password tidak boleh kosong",
+      });
+    } else if (!data.confirmPassword.trim() && !data.name.trim()) {
+      setError({
+        confirmPassword: "Confirm Password tidak boleh kosong",
+        name: "Nama tidak boleh kosong",
+      });
+    } else if (!data.name.trim()) {
       setError({
         name: "Nama tidak boleh kosong",
       });
-    } else if (!data.email) {
+    } else if (!data.email.trim()) {
       setError({
         email: "Email tidak boleh kosong",
       });
-    } else if (!data.password) {
+    } else if (!data.password.trim()) {
       setError({
         password: "Password tidak boleh kosong",
       });
-    } else if (!data.confirmPassword) {
+    } else if (!data.confirmPassword.trim()) {
       setError({
         confirmPassword: "Confirm Password tidak boleh kosong",
+      });
+    } else if (!emailRegex.test(data.email)) {
+      setError({
+        email: "Format email tidak valid",
       });
     } else {
+      // Lakukan aksi selanjutnya setelah validasi sukses
+      setIsLoggedIn(true);
+      // Redirect ke halaman Landing setelah login berhasil
+      navigate("/Login");
+
+      console.log(
+        "Form ",
+        setIsLoggedIn,
+        "\n Nama :",
+        data.name,
+        "\n Email :",
+        data.email,
+        "\n Password:",
+        data.password,
+        "\n Confirm Password:",
+        data.confirmPassword
+      );
       console.log(data);
     }
   };
@@ -77,7 +205,7 @@ const Forgot = () => {
   return (
     <Container>
       <ThemeProvider theme={theme}>
-        <Navbar/>
+        <Navbar />
 
         {/* body */}
         <div className="flex items-center flex-col mt-96">
@@ -120,6 +248,7 @@ const Forgot = () => {
                     variant="outlined"
                     size="small"
                     color="green"
+                    inputProps={{ type: "email" }}
                   />
                 </div>
                 <div className="w-100">
@@ -129,11 +258,38 @@ const Forgot = () => {
                     onChange={handleInput}
                     error={error.password}
                     helperText={error.password}
+                    type={data.showPassword ? "text" : "password"}
                     id="outlined-basic"
                     label="Password"
                     variant="outlined"
                     size="small"
                     color="green"
+                    value={data.password}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                          >
+                            {data.showPassword ? (
+                              <VisibilityIcon />
+                            ) : (
+                              <VisibilityOffIcon />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    sx={{
+                      '& input[type="password"]::-ms-reveal': {
+                        display: "none",
+                      },
+                      '& input[type="password"]::-ms-clear': {
+                        display: "none",
+                      },
+                    }}
                   />
                 </div>
                 <div className="w-100">
@@ -143,11 +299,38 @@ const Forgot = () => {
                     onChange={handleInput}
                     error={error.confirmPassword}
                     helperText={error.confirmPassword}
+                    type={data.showConfirmPassword ? "text" : "confirmPassword"}
                     id="outlined-basic"
                     label="Confirm Password"
                     variant="outlined"
                     size="small"
                     color="green"
+                    value={data.confirmPassword}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                          >
+                            {data.showConfirmPassword ? (
+                              <VisibilityIcon />
+                            ) : (
+                              <VisibilityOffIcon />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    sx={{
+                      '& input[type="password"]::-ms-reveal': {
+                        display: "none",
+                      },
+                      '& input[type="password"]::-ms-clear': {
+                        display: "none",
+                      },
+                    }}
                   />
                 </div>
               </div>
@@ -157,7 +340,6 @@ const Forgot = () => {
               <div>
                 <Button
                   variant="contained"
-                  onClick={handleClick}
                   sx={{
                     backgroundColor: "green.main",
                     padding: "10px",
@@ -173,6 +355,7 @@ const Forgot = () => {
                       backgroundColor: "green.light",
                     },
                   }}
+                  onClick={handleClick}
                 >
                   Sign Up
                 </Button>
@@ -181,7 +364,7 @@ const Forgot = () => {
           </div>
           <div className="flex items-center mt-40 font-400 text-16 font-montserrat">
             Have account? &nbsp;
-            <Link to="/register-new" style={{textDecoration:'none',color:'blue'}}>
+            <Link to="/Login" style={{ textDecoration: "none", color: "blue" }}>
               Login here
             </Link>
           </div>
