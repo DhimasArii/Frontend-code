@@ -18,7 +18,7 @@ function App() {
       <Route path='/new-password' element={<Reset />} />
       <Route path='/email-confirmation' element={<EmailConfirmation />} />
       <Route path='/menu-kelas/:id' element={<Kelas />} />
-      <Route path='/register-new/:id' element={<Regis />} />
+      <Route path='/register-new' element={<Regis />} />
     </Routes>
   );
 }

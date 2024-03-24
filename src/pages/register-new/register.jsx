@@ -6,6 +6,9 @@ import ImageNavbar from "../../assets/image-navbar-confirm.png";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import theme from "../../components/color";
 import { useState } from "react";
+import { Outlet, Link, useNavigate } from 'react-router-dom'
+
+import Navbar from "../../components/Navbar";
 
 const Forgot = () => {
   const [data, setData] = useState({
@@ -74,61 +77,7 @@ const Forgot = () => {
   return (
     <Container>
       <ThemeProvider theme={theme}>
-        {/* navbar */}
-        <div className="flex items-center justify-sb t-0 l-0 r-0 padding-nv">
-          <div className="flex items-center">
-            <div className="mr-10-5">
-              <img src={ImageNavbar} alt="" />
-            </div>
-            <div className="font-400 text-24 font-montserrat">Language</div>
-          </div>
-          <div className="flex items-center">
-            <div>
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: "green.main",
-                  padding: "10px 20px",
-                  width: "86px",
-                  height: "40px",
-                  fontSize: "15px",
-                  fontWeight: "600",
-                  fontFamily: "Montserrat",
-                  textTransform: "none",
-                  lineHeight: "1",
-                  borderRadius: "8px",
-                  "&:hover": {
-                    backgroundColor: "green.light",
-                  },
-                }}
-              >
-                Login
-              </Button>
-            </div>
-            <div className="ml-16">
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: "yellow.main",
-                  padding: "10px 20px",
-                  width: "105px",
-                  height: "40px",
-                  fontSize: "15px",
-                  fontWeight: "600",
-                  fontFamily: "Montserrat",
-                  textTransform: "none",
-                  lineHeight: "1",
-                  borderRadius: "8px",
-                  "&:hover": {
-                    backgroundColor: "yellow.light",
-                  },
-                }}
-              >
-                Sign Up
-              </Button>
-            </div>
-          </div>
-        </div>
+        <Navbar/>
 
         {/* body */}
         <div className="flex items-center flex-col mt-96">
@@ -232,7 +181,9 @@ const Forgot = () => {
           </div>
           <div className="flex items-center mt-40 font-400 text-16 font-montserrat">
             Have account? &nbsp;
-            <a href="">Login here</a>
+            <Link to="/register-new" style={{textDecoration:'none',color:'blue'}}>
+              Login here
+            </Link>
           </div>
         </div>
       </ThemeProvider>

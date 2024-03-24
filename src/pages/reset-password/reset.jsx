@@ -6,6 +6,7 @@ import ImageNavbar from "../../assets/image-navbar-confirm.png";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import theme from "../../components/color";
 import { useState } from "react";
+import Navbar from "../../components/Navbar";
 
 const Forgot = () => {
   const [data, setData] = useState({
@@ -20,6 +21,28 @@ const Forgot = () => {
       ...data,
       [name]: value,
     });
+
+    //cek valid email
+    if (name === 'email') {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!value.trim()) {
+        setError({
+          ...error,
+          email: 'Email tidak boleh kosong'
+        });
+      } else if (!emailRegex.test(value)) {
+        setError({
+          ...error,
+          email: 'Format email tidak valid'
+        });
+      } else {
+        setError({
+          ...error,
+          email: '' // Reset pesan error jika valid
+        });
+      }
+    }
   };
 
   const [error, setError] = useState({
@@ -34,73 +57,26 @@ const Forgot = () => {
 
   const handleClick = () => {
     handleReset();
-    if (!data.email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!data.email.trim()) {
       setError({
-        email: "email tidak boleh kosong",
+        email: 'Email tidak boleh kosong'
+      });
+    } else if (!emailRegex.test(data.email)) {
+      setError({
+        email: 'Format email tidak valid'
       });
     } else {
-      console.log(data);
+      // Lakukan aksi selanjutnya setelah validasi sukses
+      console.log('Form valid,\n Email :',data.email,'\n Password:', data.password);
     }
   };
 
   return (
     <Container>
       <ThemeProvider theme={theme}>
-        {/* navbar */}
-        <div className="flex items-center justify-sb t-0 l-0 r-0 padding-nv">
-          <div className="flex items-center">
-            <div className="mr-10-5">
-              <img src={ImageNavbar} alt="" />
-            </div>
-            <div className="font-400 text-24 font-montserrat">Language</div>
-          </div>
-          <div className="flex items-center">
-            <div>
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: "green.main",
-                  padding: "10px 20px",
-                  width: "86px",
-                  height: "40px",
-                  fontSize: "15px",
-                  fontWeight: "600",
-                  fontFamily: "Montserrat",
-                  textTransform: "none",
-                  lineHeight: "1",
-                  borderRadius: "8px",
-                  "&:hover": {
-                    backgroundColor: "green.light",
-                  },
-                }}
-              >
-                Login
-              </Button>
-            </div>
-            <div className="ml-16">
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: "yellow.main",
-                  padding: "10px 20px",
-                  width: "105px",
-                  height: "40px",
-                  fontSize: "15px",
-                  fontWeight: "600",
-                  fontFamily: "Montserrat",
-                  textTransform: "none",
-                  lineHeight: "1",
-                  borderRadius: "8px",
-                  "&:hover": {
-                    backgroundColor: "yellow.light",
-                  },
-                }}
-              >
-                Sign Up
-              </Button>
-            </div>
-          </div>
-        </div>
+        <Navbar/>
 
         {/* body */}
         <div className="flex items-center flex-col mt-96">
@@ -116,18 +92,19 @@ const Forgot = () => {
               </div>
 
               <div className="w-100">
-                <TextField
-                  fullWidth
-                  name="email"
-                  onChange={handleInput}
-                  error={error.email}
-                  helperText={error.email}
-                  id="outlined-basic"
-                  label="Email"
-                  variant="outlined"
-                  size="small"
-                  color="green"
-                />
+              <TextField
+                    fullWidth
+                    name='email'
+                    id="outlined-basic"
+                    label="Email"
+                    variant="outlined"
+                    size="small"
+                    color="green"
+                    inputProps={{type: "email"}}
+                    error={error.email}
+                    onChange={handleInput}
+                    helperText={error.email}
+                  />
               </div>
             </div>
 

@@ -4,12 +4,15 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container'
 import '../../components/style.css'
-import ImageNavbar from "../../assets/image-navbar-confirm.png"
 import { ThemeProvider, styled } from '@mui/material/styles';
 import { InputAdornment, Box, Paper } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2'
 import theme from '../../components/color'
-import CardComponent from '../../components/CardComponents'
+import Navbar from '../../components/Navbar';
+import IconButton from '@mui/material/IconButton';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+
+import { Outlet, Link, useNavigate } from 'react-router-dom'
 
 const Login = () => {
 
@@ -19,12 +22,24 @@ const Login = () => {
 
   const [data, setData] = useState({
     email: '',
-    password: ''
+    password: '',
+    showPassword: false,
   })
   const [error, setError] = useState({
     email: '',
     password: ''
   })
+
+  const handleClickShowPassword = () => {
+    setData({
+      ...data,
+      showPassword: !data.showPassword,
+    });
+  };
+
+  const handleMouseDownPassword = (e) => {
+    e.preventDefault();
+  };
 
   const handleInput = (e) => {
     const name = e.target.name
@@ -64,10 +79,10 @@ const Login = () => {
           ...error,
           password: 'Password tidak boleh kosong'
         });
-      } else if (value.length < 6) {
+      } else if (value.length < 8) {
         setError({
           ...error,
-          password: 'Password minimal 6 karakter'
+          password: 'Password minimal 8 karakter'
         });
       } else {
         setError({
@@ -109,60 +124,14 @@ const Login = () => {
       });
     } else {
       // Lakukan aksi selanjutnya setelah validasi sukses
-      console.log('Form valid,\n Email :',data.email,'\n Password:', data.password);
+      console.log('Form valid,\n Email :', data.email, '\n Password:', data.password);
     }
   }
 
   return (
     <Container>
       <ThemeProvider theme={theme}>
-        {/* navbar */}
-        <div className="flex items-center justify-sb t-0 l-0 r-0 padding-nv">
-          <div className="flex items-center">
-            <div className="mr-10-5">
-              <img src={ImageNavbar} alt="" />
-            </div>
-            <div className="font-400 text-24 font-montserrat">Language</div>
-          </div>
-          <div className="flex items-center">
-            <div>
-              <Button variant='contained'
-                sx={{
-                  backgroundColor: 'green.main',
-                  padding: '10px 20px',
-                  width: '86px',
-                  height: '40px',
-                  fontSize: '15px',
-                  fontWeight: '600',
-                  fontFamily: 'Montserrat',
-                  textTransform: 'none',
-                  lineHeight: '1',
-                  borderRadius: '8px',
-                  '&:hover': {
-                    backgroundColor: 'green.light',
-                  },
-                }}>Login</Button>
-            </div>
-            <div className="ml-16">
-              <Button variant='contained'
-                sx={{
-                  backgroundColor: 'yellow.main',
-                  padding: '10px 20px',
-                  width: '105px',
-                  height: '40px',
-                  fontSize: '15px',
-                  fontWeight: '600',
-                  fontFamily: 'Montserrat',
-                  textTransform: 'none',
-                  lineHeight: '1',
-                  borderRadius: '8px',
-                  '&:hover': {
-                    backgroundColor: 'yellow.light',
-                  },
-                }}>Sign Up</Button>
-            </div>
-          </div>
-        </div>
+        <Navbar />
 
         {/* body */}
         <div className="flex items-center flex-col mt-96">
@@ -187,7 +156,7 @@ const Login = () => {
                     variant="outlined"
                     size="small"
                     color="green"
-                    inputProps={{type: "email"}}
+                    inputProps={{ type: "email" }}
                     error={error.email}
                     onChange={handleInput}
                     helperText={error.email}
@@ -196,22 +165,40 @@ const Login = () => {
                 <div className="w-100">
                   <TextField
                     fullWidth
-                    id="outlined-basic"
+                    id="outlined-basic-password"
                     name='password'
                     label="Password"
-                    type="password"
-                    autoComplete="current-password"
-                    variant="outlined"
+                    type={data.showPassword ? 'text' : 'password'}
                     size="small"
                     color="green"
                     error={error.password}
+                    value={data.password}
                     onChange={handleInput}
                     helperText={error.password}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                          >
+                            {data.showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    sx={{
+                      '& input[type="password"]::-ms-reveal': { display: 'none' },
+                      '& input[type="password"]::-ms-clear': { display: 'none' },
+                    }}
                   />
                 </div>
                 <div className='flex flex-row font-400 text-16 font-montserrat'>
                   Forgot Password &nbsp;
-                  <a href="">Click Here</a>
+                  <Link to="/forgot-password" style={{ textDecoration: 'none', color: 'blue' }}>
+                    Click Here
+                  </Link>
                 </div>
               </div>
             </div>
@@ -244,7 +231,9 @@ const Login = () => {
           </div>
           <div className='flex items-center mt-40 font-400 text-16 font-montserrat'>
             Dont have account? &nbsp;
-            <a href="">Sign Up here</a>
+            <Link to="/register-new/:id" style={{ textDecoration: 'none', color: 'blue' }}>
+              Sign Up here
+            </Link>
           </div>
         </div>
       </ThemeProvider>
