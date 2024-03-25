@@ -36,6 +36,11 @@ const Forgot = ({ setIsLoggedIn }) => {
     setData({
       ...data,
       showPassword: !data.showPassword,
+    });
+  };
+  const handleClickShowConfirmPassword = () => {
+    setData({
+      ...data,
       showConfirmPassword: !data.showConfirmPassword,
     });
   };
@@ -190,7 +195,7 @@ const Forgot = ({ setIsLoggedIn }) => {
       // Lakukan aksi selanjutnya setelah validasi sukses
       setIsLoggedIn(true);
       // Redirect ke halaman Landing setelah login berhasil
-      navigate("/Login");
+      navigate("/email-confirmation");
 
       console.log(
         "Form ",
@@ -218,7 +223,7 @@ const Forgot = ({ setIsLoggedIn }) => {
           <div className="flex flex-col gap-16 items-right gap-60">
             <div className="flex flex-col gap-60">
               <div className="flex flex-col gap-16">
-                <div className="mr-415 font-montserrat flex font-500">
+                <div className="mr-415 font-montserrat items-center flex font-500 gap-10">
                   <div className="text-green text-24">Lets Join</div>
                   <div className="text-yellow text-36"> D’Language</div>
                 </div>
@@ -317,7 +322,7 @@ const Forgot = ({ setIsLoggedIn }) => {
                         <InputAdornment position="end">
                           <IconButton
                             aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
+                            onClick={handleClickShowConfirmPassword}
                             onMouseDown={handleMouseDownPassword}
                           >
                             {data.showConfirmPassword ? (

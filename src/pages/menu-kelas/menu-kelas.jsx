@@ -97,13 +97,11 @@ const Kelas = ({ isLoggedIn, setIsLoggedIn }) => {
                   console.log(index);
                   return (
                     <Grid key={index} xs={4} maxWidth={350}>
-                      <Item>
-                        <CardComponent
-                          title={item.title}
-                          body={item.title}
-                          image={item.url}
-                        />
-                      </Item>
+                      <CardComponent
+                        title={item.title}
+                        body={item.title}
+                        image={item.url}
+                      />
                     </Grid>
                   );
                 })}
