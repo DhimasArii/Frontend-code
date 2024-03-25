@@ -5,6 +5,7 @@ import ImageBody from "../../assets/image-body-confirm.png";
 import Button from "@mui/material/Button";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import theme from "../../components/color";
+import { Link, useNavigate } from "react-router-dom";
 
 const EmailConfirmation = () => {
   return (
@@ -31,26 +32,28 @@ const EmailConfirmation = () => {
               Thanks for confirmation your email. Please login first
             </div>
             <div className="mt-40">
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: "green.main",
-                  padding: "16px 20px",
-                  width: "133px",
-                  height: "50px",
-                  fontSize: "15px",
-                  fontWeight: "600",
-                  fontFamily: "Montserrat",
-                  textTransform: "none",
-                  lineHeight: "1",
-                  borderRadius: "8px",
-                  "&:hover": {
-                    backgroundColor: "green.light",
-                  },
-                }}
-              >
-                Login Here
-              </Button>
+              <Link to="/login">
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "green.main",
+                    padding: "16px 20px",
+                    width: "133px",
+                    height: "50px",
+                    fontSize: "15px",
+                    fontWeight: "600",
+                    fontFamily: "Montserrat",
+                    textTransform: "none",
+                    lineHeight: "1",
+                    borderRadius: "8px",
+                    "&:hover": {
+                      backgroundColor: "green.light",
+                    },
+                  }}
+                >
+                  Login Here
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

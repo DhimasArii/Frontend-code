@@ -31,6 +31,11 @@ const CreatePassword = ({ setIsLoggedIn }) => {
     setData({
       ...data,
       showPassword: !data.showPassword,
+    });
+  };
+  const handleClickShowConfirmPassword = () => {
+    setData({
+      ...data,
       showConfirmPassword: !data.showConfirmPassword,
     });
   };
@@ -207,7 +212,7 @@ const CreatePassword = ({ setIsLoggedIn }) => {
                         <InputAdornment position="end">
                           <IconButton
                             aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
+                            onClick={handleClickShowConfirmPassword}
                             onMouseDown={handleMouseDownPassword}
                           >
                             {data.showConfirmPassword ? (
@@ -258,29 +263,27 @@ const CreatePassword = ({ setIsLoggedIn }) => {
                 </Link>
               </div>
               <div>
-                <Link to="/login">
-                  <Button
-                    variant="contained"
-                    onClick={handleClick}
-                    sx={{
-                      backgroundColor: "green.main",
-                      padding: "10px",
-                      width: "140px",
-                      height: "38px",
-                      fontSize: "15px",
-                      fontWeight: "500",
-                      fontFamily: "Montserrat",
-                      textTransform: "none",
-                      lineHeight: "1",
-                      borderRadius: "8px",
-                      "&:hover": {
-                        backgroundColor: "green.light",
-                      },
-                    }}
-                  >
-                    Confirm
-                  </Button>
-                </Link>
+                <Button
+                  variant="contained"
+                  onClick={handleClick}
+                  sx={{
+                    backgroundColor: "green.main",
+                    padding: "10px",
+                    width: "140px",
+                    height: "38px",
+                    fontSize: "15px",
+                    fontWeight: "500",
+                    fontFamily: "Montserrat",
+                    textTransform: "none",
+                    lineHeight: "1",
+                    borderRadius: "8px",
+                    "&:hover": {
+                      backgroundColor: "green.light",
+                    },
+                  }}
+                >
+                  Confirm
+                </Button>
               </div>
             </div>
           </div>
