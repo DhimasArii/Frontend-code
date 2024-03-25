@@ -119,7 +119,7 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
                         <CardComponent
                           title={item.title}
                           body={item.title}
-                          image={item.url}
+                          image={"/images/image-body-confirm.png"}
                         />
                       </Grid>
                     );
