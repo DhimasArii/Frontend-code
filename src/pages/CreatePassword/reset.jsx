@@ -10,10 +10,11 @@ import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { InputAdornment, Box, Paper } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 
-const CreatePassword = () => {
+const CreatePassword = ({ setIsLoggedIn }) => {
+  const navigate = useNavigate();
   const [data, setData] = useState({
     password: "",
     confirmPassword: "",
@@ -111,10 +112,16 @@ const CreatePassword = () => {
         confirmPassword: "Confirm Password tidak boleh kosong",
       });
     } else {
+      // Lakukan aksi selanjutnya setelah validasi sukses
+      setIsLoggedIn(true);
+      // Redirect ke halaman Landing setelah login berhasil
+      navigate("/login");
+
       console.log(
-        "Form valid",
+        "Form ",
+        setIsLoggedIn,
         "\n Password :",
-        data.paswword,
+        data.password,
         "\n Confirm Password :",
         data.confirmPassword
       );
@@ -184,7 +191,7 @@ const CreatePassword = () => {
                     error={error.confirmPassword}
                     helperText={error.confirmPassword}
                     value={data.confirmPassword}
-                    type={data.showConfirmPassword ? "text" : "confirmPassword"}
+                    type={data.showConfirmPassword ? "text" : "password"}
                     id="outlined-basic"
                     label="Confirm New Password"
                     variant="outlined"

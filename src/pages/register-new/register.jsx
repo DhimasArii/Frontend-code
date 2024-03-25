@@ -15,6 +15,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import Navbar from "../../components/Navbar";
 
 const Forgot = ({ setIsLoggedIn }) => {
+  const navigate = useNavigate();
   const [data, setData] = useState({
     name: "",
     email: "",
@@ -299,7 +300,7 @@ const Forgot = ({ setIsLoggedIn }) => {
                     onChange={handleInput}
                     error={error.confirmPassword}
                     helperText={error.confirmPassword}
-                    type={data.showConfirmPassword ? "text" : "confirmPassword"}
+                    type={data.showConfirmPassword ? "text" : "password"}
                     id="outlined-basic"
                     label="Confirm Password"
                     variant="outlined"
