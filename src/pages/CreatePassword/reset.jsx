@@ -103,6 +103,11 @@ const CreatePassword = ({ setIsLoggedIn }) => {
         password: "Password tidak boleh kosong",
         confirmPassword: "Confirm Password tidak boleh kosong",
       });
+    } else if (data.confirmPassword !== data.password) {
+      setError({
+        password: "Password dan Confirm Password harus sama",
+        confirmPassword: "Password dan Confirm Password harus sama",
+      });
     } else if (!data.password) {
       setError({
         password: "Password tidak boleh kosong",

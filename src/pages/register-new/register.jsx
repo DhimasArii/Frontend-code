@@ -181,6 +181,11 @@ const Forgot = ({ setIsLoggedIn }) => {
       setError({
         email: "Format email tidak valid",
       });
+    } else if (data.confirmPassword !== data.password) {
+      setError({
+        password: "Password dan Confirm Password harus sama",
+        confirmPassword: "Password dan Confirm Password harus sama",
+      });
     } else {
       // Lakukan aksi selanjutnya setelah validasi sukses
       setIsLoggedIn(true);
