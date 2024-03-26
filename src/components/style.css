@@ -43,6 +43,10 @@
   right: 70;
 }
 
+.b-0 {
+  bottom: 0;
+}
+
 .r-0 {
   right: 0;
 }
@@ -85,6 +89,10 @@
 
 .mt-205 {
   margin-top: 205px;
+}
+
+.mt-284 {
+  margin-top: 284px;
 }
 
 .mt-8 {
@@ -159,6 +167,11 @@
   padding-bottom: 24px;
 }
 
+.py-30 {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
 .px-20 {
   padding-left: 20px;
   padding-right: 20px;
@@ -199,6 +212,11 @@
   padding-right: 95px;
 }
 
+.px-70 {
+  padding-left: 70px;
+  padding-right: 70px;
+}
+
 .py-16 {
   padding-top: 16px;
   padding-bottom: 16px;
@@ -232,6 +250,10 @@
 
 .border-none {
   border: none;
+}
+
+.border-top {
+  border-top: 1px solid;
 }
 
 .text-white {
@@ -319,7 +341,7 @@
 }
 
 .wx-70 {
-  width: calc(100% - 140px)
+  width: calc(100% - 140px);
 }
 
 .h-86 {
