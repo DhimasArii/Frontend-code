@@ -30,10 +30,22 @@ const Login = ({ setIsLoggedIn }) => {
   const [dataUser, setDataUser] = useState();
 
   useEffect(() => {
-    axios.get(`https://dummyjson.com/users`).then((json) => {
-      setDataUser(json.data.users);
-      console.log(json.data.users);
-    });
+    axios
+      .post(
+        "https://dummyjson.com/auth/login",
+        {
+          username: "kminchelle",
+          password: "0lelplR",
+          // expiresInMins: 60, // optional
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => console.log(response.data))
+      .catch((error) => console.error(error));
   }, []);
 
   useEffect(() => {
@@ -114,11 +126,10 @@ const Login = ({ setIsLoggedIn }) => {
     handleReset();
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    fetch("https://dummyjson.com/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    fetch("https://dummyjson.com/users", {
+      method: "GET",
       body: JSON.stringify({
-        username: "atuny0",
+        email: "atuny0@sohu.com",
         password: "9uQFF1Lh",
         // expiresInMins: 60, // optional
       }),
