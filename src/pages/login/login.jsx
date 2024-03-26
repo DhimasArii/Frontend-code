@@ -11,6 +11,7 @@ import Navbar from "../../components/Navbar";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import axios from "axios";
 
 import { Link, useNavigate } from "react-router-dom";
 
@@ -25,6 +26,19 @@ const Login = ({ setIsLoggedIn }) => {
     email: "",
     password: "",
   });
+
+  const [dataUser, setDataUser] = useState();
+
+  useEffect(() => {
+    axios.get(`https://dummyjson.com/users`).then((json) => {
+      setDataUser(json.data.users);
+      console.log(json.data.users);
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log(dataUser);
+  }, [dataUser]);
 
   const handleClickShowPassword = () => {
     setData({
@@ -100,6 +114,17 @@ const Login = ({ setIsLoggedIn }) => {
     handleReset();
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    fetch("https://dummyjson.com/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: "atuny0",
+        password: "9uQFF1Lh",
+        // expiresInMins: 60, // optional
+      }),
+    })
+      .then((res) => res.json())
+      .then(console.log);
 
     if (!data.email.trim() && !data.password.trim()) {
       setError({

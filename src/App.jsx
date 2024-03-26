@@ -6,6 +6,7 @@ import Reset from "./pages/CreatePassword/reset";
 import EmailConfirmation from "./pages/EmailConfirmation";
 import Landing from "./pages/landing-page/landing";
 import Kelas from "./pages/menu-kelas/menu-kelas";
+import DetailKelas from "./pages/detail-kelas/detail-kelas";
 import Regis from "./pages/register-new/register";
 
 import { Routes, Route, ScrollRestoration } from "react-router-dom";
@@ -31,6 +32,12 @@ function App() {
         path="/menu-kelas/:id"
         element={
           <Kelas isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        }
+      />
+      <Route
+        path="/detail-kelas/:id"
+        element={
+          <DetailKelas isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
         }
       />
       <Route

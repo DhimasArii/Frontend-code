@@ -373,7 +373,7 @@ const Forgot = ({ setIsLoggedIn }) => {
               </div>
             </div>
           </div>
-          <div className="flex items-center mt-40 font-400 text-16 font-montserrat">
+          <div className="flex items-center mt-40 font-400 text-16 font-montserrat mb-92">
             Have account? &nbsp;
             <Link to="/Login" style={{ textDecoration: "none", color: "blue" }}>
               Login here
