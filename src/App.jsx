@@ -8,6 +8,7 @@ import Landing from "./pages/landing-page/landing";
 import Kelas from "./pages/menu-kelas/menu-kelas";
 import DetailKelas from "./pages/detail-kelas/detail-kelas";
 import Regis from "./pages/register-new/register";
+import Checkout from "./pages/Checkout/checkout";
 
 import { Routes, Route, ScrollRestoration } from "react-router-dom";
 
@@ -43,6 +44,12 @@ function App() {
       <Route
         path="/register-new"
         element={<Regis setIsLoggedIn={setIsLoggedIn} />}
+      />
+      <Route
+        path="/checkout"
+        element={
+          <Checkout isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        }
       />
     </Routes>
   );
