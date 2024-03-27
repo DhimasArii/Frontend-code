@@ -15,6 +15,7 @@ import { Outlet, Link, useNavigate } from "react-router-dom";
 import NavbarLogIn from "../../components/Navbar2";
 import NavbarLogOut from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import axios from "axios";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -27,13 +28,24 @@ const Item = styled(Paper)(({ theme }) => ({
 const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
   const [state, setState] = useState(false);
   const [data, setData] = useState([]);
+  const [category, setCategory] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/photos")
-      .then((response) => response.json())
-      .then((json) => setData(json));
+    axios
+      .get("https://dummyjson.com/products")
+      .then((json) => setData(json.data.products));
   }, []);
+
+  useEffect(() => {
+    axios
+      .get("https://dummyjson.com/products/categories")
+      .then((json) => setCategory(json.data));
+  }, []);
+
+  console.log(data);
+  console.log(category);
+
   const handleLogout = () => {
     setIsLoggedIn(false);
     // Lakukan aksi logout, misalnya redirect ke halaman login
@@ -118,8 +130,9 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
                       <Grid key={index} xs={4} maxWidth={350}>
                         <CardComponent
                           title={item.title}
-                          body={item.title}
-                          image={item.url}
+                          body={item.description}
+                          image={item.thumbnail}
+                          price={item.price}
                         />
                       </Grid>
                     );
@@ -166,7 +179,7 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
             <div id="frame1545" className="flex flex-basis items-center">
               <div>
                 <Grid container columnSpacing={2} rowSpacing={5}>
-                  {data.slice(0, 8).map((item, index) => {
+                  {category.slice(0, 8).map((item, index) => {
                     console.log(index);
                     return (
                       <Grid key={index} xs={3} maxWidth={350}>
@@ -174,7 +187,7 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
                           to={`/menu-kelas/${item.id}`}
                           style={{ textDecoration: "none" }}
                         >
-                          <CardFlag body={item.title} image={item.url} />
+                          <CardFlag body={item} image={data[index].thumbnail} />
                         </Link>
                       </Grid>
                     );
