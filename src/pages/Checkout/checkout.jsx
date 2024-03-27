@@ -9,7 +9,7 @@ import { ThemeProvider, styled } from "@mui/material/styles";
 import { InputAdornment, Box, Paper } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import Button from "@mui/material/Button";
-import { Form, useParams, useNavigate } from "react-router-dom";
+import { Form, useParams, useNavigate, Link } from "react-router-dom";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import axios from "axios";
 
@@ -100,8 +100,6 @@ const Checkout = () => {
   //   console.log(localStorage.getItem("token"));
   // }, []);
 
-  console.log(data);
-
   const totalHarga = data.reduce((total, item) => {
     // Pastikan item.price adalah angka sebelum ditambahkan ke total
     if (!isNaN(item.price)) {
@@ -144,9 +142,9 @@ const Checkout = () => {
     }
     console.log(checkedItems);
   };
-  useEffect(() => {
-    console.log(checkedItems);
-  }, [checkedItems]);
+  // useEffect(() => {
+  //   console.log(checkedItems);
+  // }, [checkedItems]);
 
   const handleChangeItem = (index) => {
     setCheckedItems((prevCheckedItems) => ({
@@ -204,38 +202,47 @@ const Checkout = () => {
 
           {/* <img src={Sampah} alt="" style={{ right: "0" }} /> */}
           <Grid container columnSpacing={1} rowSpacing={5} direction={"column"}>
-            {data.map((item, index) => {
-              console.log(index);
-              return (
-                <Grid
-                  key={index}
-                  xs={4}
-                  sx={{ width: "100%" }}
-                  display={"flex"}
-                  flexDirection={"row"}
-                >
-                  <FormControlLabel
+            {(() => {
+              if (!data || data.length === 0) {
+                return (
+                  <div style={{ cursor: "pointer" }}>
+                    <Link to="/">
+                      Cartmu kosong. Klik di sini untuk menambahkan produk.
+                    </Link>
+                  </div>
+                );
+              } else {
+                return data.map((item, index) => (
+                  <Grid
                     key={index}
-                    control={
-                      <Checkbox
-                        style={{
-                          border: "none",
-                          color: "#00e676",
-                        }}
-                        checked={checkedItems[index] || false}
-                        onChange={() => handleChangeItem(index)}
-                      />
-                    }
-                  />
-                  <CardCheckbox
-                    title={item.title}
-                    body={item.title}
-                    image={item.thumbnail}
-                    price={item.price}
-                  />
-                </Grid>
-              );
-            })}
+                    xs={4}
+                    sx={{ width: "100%" }}
+                    display={"flex"}
+                    flexDirection={"row"}
+                  >
+                    <FormControlLabel
+                      key={index}
+                      control={
+                        <Checkbox
+                          style={{
+                            border: "none",
+                            color: "#00e676",
+                          }}
+                          checked={checkedItems[index] || false}
+                          onChange={() => handleChangeItem(index)}
+                        />
+                      }
+                    />
+                    <CardCheckbox
+                      title={item.title}
+                      body={item.title}
+                      image={item.thumbnail}
+                      price={item.price}
+                    />
+                  </Grid>
+                ));
+              }
+            })()}
           </Grid>
         </Box>
 
