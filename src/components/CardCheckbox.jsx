@@ -10,10 +10,16 @@ import "../components/style.css";
 export default function ActionAreaCard({ title, body, image }) {
   return (
     <Card sx={{ width: 1017, gap: 24 }}>
-      <CardActionArea sx={{ display: "flex", flexDirection: "row" }}>
+      <CardActionArea
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-start",
+        }}
+      >
         <CardMedia
+          sx={{ width: 200 }}
           component="img"
-          width="200"
           height="133.33"
           src={image}
           alt="green iguana"

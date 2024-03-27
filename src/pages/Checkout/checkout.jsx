@@ -8,8 +8,9 @@ import { ThemeProvider, styled } from "@mui/material/styles";
 import { InputAdornment, Box, Paper } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import Button from "@mui/material/Button";
-import { useParams } from "react-router-dom";
+import { Form, useParams } from "react-router-dom";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import axios from "axios";
 
 import Gopay from "../../assets/gopay.png";
 import Ovo from "../../assets/ovo.png";
@@ -34,22 +35,58 @@ const Checkout = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/posts`)
-      .then((response) => response.json())
-      .then((json) => setData(json));
+    axios
+      .get(`https://dummyjson.com/cart/user/${id}`)
+      .then((json) => setData(json.data.carts[0].products));
+    console.log(data);
   }, []);
 
   console.log(data);
 
   // Checkbox
-  const [checked, setChecked] = React.useState([true, false]);
+  const [checkedItems, setCheckedItems] = useState({});
+  useEffect(() => {
+    if (data.length > 0) {
+      const initialCheckedItems = {};
+      data.forEach((_, index) => {
+        initialCheckedItems[index] = true;
+      });
+      setCheckedItems(initialCheckedItems);
+    }
+  }, [data]);
 
-  const handleChange1 = (event) => {
-    setChecked([event.target.checked, event.target.checked]);
+  const handleCheckAll = () => {
+    const allChecked = Object.values(checkedItems).every(
+      (isChecked) => isChecked
+    );
+
+    // Jika semua item sudah dicentang, set semua item menjadi tidak dicentang (false)
+    if (allChecked) {
+      const newCheckedItems = {};
+      data.forEach((item, index) => {
+        newCheckedItems[index] = false;
+      });
+      setCheckedItems(newCheckedItems);
+    } else {
+      // Jika belum semua item dicentang, set semua item menjadi dicentang (true)
+      const newCheckedItems = {};
+      data.forEach((item, index) => {
+        newCheckedItems[index] = true;
+      });
+      setCheckedItems(newCheckedItems);
+    }
+    console.log(checkedItems);
   };
+  useEffect(() => {
+    console.log(checkedItems);
+  }, [checkedItems]);
 
-  const handleChange2 = (event) => {
-    setChecked([event.target.checked, checked[1]]);
+  const handleChangeItem = (index) => {
+    setCheckedItems((prevCheckedItems) => ({
+      ...prevCheckedItems,
+      [index]: !prevCheckedItems[index],
+    }));
+    console.log(checkedItems);
   };
 
   const handleChange3 = (event) => {
@@ -85,63 +122,49 @@ const Checkout = () => {
                   border: "none",
                   color: "#00e676",
                 }}
-                checked={checked[0] && checked[1]}
-                indeterminate={checked[0] !== checked[1]}
-                onChange={handleChange1}
+                checked={Object.values(checkedItems).every(
+                  (isChecked) => isChecked
+                )}
+                // indeterminate={!checkedAll && checkedItems.some((item) => item)}
+                onChange={handleCheckAll}
               />
             }
           />
-          <FormControlLabel
-            sx={{ borderBottom: "1px solid", gap: "24px" }}
-            label={data.slice(0, 1).map((item, index) => {
-              console.log(index);
-              return (
-                <Grid key={index} xs={4} maxWidth={350}>
-                  <CardCheckbox
-                    title={item.title}
-                    body={item.title}
-                    image={item.url}
-                  />
-                </Grid>
-              );
-            })}
-            control={
-              <Checkbox
-                style={{
-                  border: "none",
-                  color: "#00e676",
-                }}
-                checked={checked[0]}
-                onChange={handleChange2}
-              />
-            }
-          />
+
           {/* <img src={Sampah} alt="" style={{ right: "0" }} /> */}
-          <FormControlLabel
-            sx={{ borderBottom: "1px solid", gap: "24px" }}
-            label={data.slice(0, 1).map((item, index) => {
+          <Grid container columnSpacing={1} rowSpacing={5} direction={"column"}>
+            {data.map((item, index) => {
               console.log(index);
               return (
-                <Grid key={index} xs={4} maxWidth={350}>
+                <Grid
+                  key={index}
+                  xs={4}
+                  sx={{ width: "100%" }}
+                  display={"flex"}
+                  flexDirection={"row"}
+                >
+                  <FormControlLabel
+                    key={index}
+                    control={
+                      <Checkbox
+                        style={{
+                          border: "none",
+                          color: "#00e676",
+                        }}
+                        checked={checkedItems[index] || false}
+                        onChange={() => handleChangeItem(index)}
+                      />
+                    }
+                  />
                   <CardCheckbox
                     title={item.title}
                     body={item.title}
-                    image={item.url}
+                    image={item.thumbnail}
                   />
                 </Grid>
               );
             })}
-            control={
-              <Checkbox
-                style={{
-                  border: "none",
-                  color: "#00e676",
-                }}
-                checked={checked[1]}
-                onChange={handleChange3}
-              />
-            }
-          />
+          </Grid>
         </Box>
 
         <div

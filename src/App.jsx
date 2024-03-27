@@ -46,7 +46,7 @@ function App() {
         element={<Regis setIsLoggedIn={setIsLoggedIn} />}
       />
       <Route
-        path="/checkout"
+        path="/checkout/user/:id"
         element={
           <Checkout isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
         }

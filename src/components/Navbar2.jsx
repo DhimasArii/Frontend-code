@@ -15,7 +15,7 @@ const Navbar2 = ({ handleLogout }) => {
         className="flex items-center justify-sb t-0 l-0 r-0 padding-nv"
       >
         <div id="frame1518" className="flex items-center py-10 pl-10">
-          <Link to="/">
+          <Link to="/" style={{ textDecoration: "none", color: "#000000" }}>
             <div id="frame1738" className="flex items-center">
               <div className="mr-10-5">
                 <img src={ImageNavbar} alt="" />

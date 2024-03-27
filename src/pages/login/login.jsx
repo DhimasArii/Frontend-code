@@ -31,21 +31,9 @@ const Login = ({ setIsLoggedIn }) => {
 
   useEffect(() => {
     axios
-      .post(
-        "https://dummyjson.com/auth/login",
-        {
-          username: "kminchelle",
-          password: "0lelplR",
-          // expiresInMins: 60, // optional
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((response) => console.log(response.data))
-      .catch((error) => console.error(error));
+      .get(`https://dummyjson.com/users/filter?key=email&value=${data.email}`)
+      .then((json) => setDataUser(json.data.users));
+    console.log(dataUser);
   }, []);
 
   useEffect(() => {
@@ -122,20 +110,10 @@ const Login = ({ setIsLoggedIn }) => {
     });
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     handleReset();
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    fetch("https://dummyjson.com/users", {
-      method: "GET",
-      body: JSON.stringify({
-        email: "atuny0@sohu.com",
-        password: "9uQFF1Lh",
-        // expiresInMins: 60, // optional
-      }),
-    })
-      .then((res) => res.json())
-      .then(console.log);
 
     if (!data.email.trim() && !data.password.trim()) {
       setError({
@@ -146,28 +124,45 @@ const Login = ({ setIsLoggedIn }) => {
       setError({
         email: "Email tidak boleh kosong",
       });
-    } else if (!emailRegex.test(data.email)) {
-      setError({
-        email: "Format email tidak valid",
-      });
-    } else if (!data.password.trim()) {
+    }
+    // else if (!emailRegex.test(data.email)) {
+    //   setError({
+    //     email: "Format email tidak valid",
+    //   });
+    // }
+    else if (!data.password.trim()) {
       setError({
         password: "Password tidak boleh kosong",
       });
     } else {
-      // Lakukan aksi selanjutnya setelah validasi sukses
-      setIsLoggedIn(true);
-      // Redirect ke halaman Landing setelah login berhasil
-      navigate("/");
+      try {
+        const response = await axios.post(
+          "https://dummyjson.com/auth/login",
+          {
+            username: data.email,
+            password: data.password,
+            // expiresInMins: 60, // optional
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-      console.log(
-        "Form ",
-        setIsLoggedIn,
-        "\n Email :",
-        data.email,
-        "\n Password:",
-        data.password
-      );
+        console.log(response.data);
+        console.log(response.data.token);
+        if (response.data.token) {
+          localStorage.setItem("token", response.data.token);
+
+          setIsLoggedIn(true);
+          navigate("/");
+        } else {
+          console.error("Login failed:", response.data.error);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 

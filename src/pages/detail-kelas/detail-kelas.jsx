@@ -43,7 +43,10 @@ const DetailKelas = ({ isLoggedIn, setIsLoggedIn }) => {
   useEffect(() => {
     fetch(`https://jsonplaceholder.typicode.com/photos`)
       .then((response) => response.json())
-      .then((json) => setData(json));
+      .then((json) => {
+        setData(json);
+        console.log(data);
+      });
   }, []);
 
   useEffect(() => {
