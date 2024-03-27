@@ -30,7 +30,7 @@ function App() {
       />
       <Route path="/email-confirmation" element={<EmailConfirmation />} />
       <Route
-        path="/menu-kelas/:id"
+        path="/menu-kelas/:category"
         element={
           <Kelas isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
         }
@@ -46,7 +46,7 @@ function App() {
         element={<Regis setIsLoggedIn={setIsLoggedIn} />}
       />
       <Route
-        path="/checkout/user/:id"
+        path="/checkout"
         element={
           <Checkout isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
         }

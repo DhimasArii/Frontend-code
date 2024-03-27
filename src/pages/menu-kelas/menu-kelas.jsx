@@ -10,6 +10,7 @@ import { InputAdornment, Box, Paper } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import theme from "../../components/color";
 import CardComponent from "../../components/CardComponents";
+import axios from "axios";
 
 import { useParams } from "react-router-dom";
 import NavbarLogIn from "../../components/Navbar2";
@@ -28,32 +29,56 @@ const Kelas = ({ isLoggedIn, setIsLoggedIn }) => {
   const [state, setState] = useState(false);
   const [data, setData] = useState([]);
   const [detail, setDetail] = useState([]);
-  const { id } = useParams();
+  const { category } = useParams();
 
   const column1 = ["Arabic", "English", "Indonesian", "Mandarin"];
   const column2 = ["Deutsch", "French", "Japanese", "Melayu"];
 
   useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/photos`)
-      .then((response) => response.json())
-      .then((json) => setData(json));
-  }, []);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `https://dummyjson.com/products/category/${category}`
+        );
+        setData(response.data.products);
+        console.log(response.data.products);
+      } catch (error) {
+        console.error("Error fetching product data:", error);
+        // Handle error, such as displaying an error message to the user
+      }
+    };
+
+    fetchData();
+  }, [category]);
 
   useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/posts/${id}`)
-      .then((response) => response.json())
-      .then((json) => setDetail(json));
-  }, [id]);
+    const fetchDetail = async () => {
+      try {
+        const response = await fetch(
+          "https://jsonplaceholder.typicode.com/posts/1"
+        );
+        const json = await response.json();
+        setDetail(json);
+        console.log(json);
+      } catch (error) {
+        console.error("Error fetching detail data:", error);
+        // Handle error, such as displaying an error message to the user
+      }
+    };
+
+    fetchDetail();
+  }, []);
 
   const handleLogout = () => {
     setIsLoggedIn(false);
     // Lakukan aksi logout, misalnya redirect ke halaman login
+    localStorage.removeItem("token");
     navigate("/login");
   };
   return (
     <Container>
       <ThemeProvider theme={theme}>
-        {isLoggedIn ? (
+        {localStorage.getItem("token") ? (
           <NavbarLogIn handleLogout={handleLogout} />
         ) : (
           <NavbarLogOut />
@@ -67,7 +92,7 @@ const Kelas = ({ isLoggedIn, setIsLoggedIn }) => {
             className="flex flex-col items-center gap-16 wx-70"
           >
             <div className="mt-46 text-24 font-600 mx-70 w-100 font-montserrat">
-              {detail.title}
+              {category}
             </div>
             <div className="text-16 font-400  mx-70 w-100 font-montserrat text-black-light">
               {detail.body}
@@ -93,14 +118,15 @@ const Kelas = ({ isLoggedIn, setIsLoggedIn }) => {
             </div>
             <div>
               <Grid container columnSpacing={2} rowSpacing={5}>
-                {data.slice(0, 3).map((item, index) => {
+                {data.map((item, index) => {
                   console.log(index);
                   return (
                     <Grid key={index} xs={4} maxWidth={350}>
                       <CardComponent
                         title={item.title}
-                        body={item.title}
-                        image={item.url}
+                        body={item.description}
+                        image={item.thumbnail}
+                        price={item.price}
                       />
                     </Grid>
                   );

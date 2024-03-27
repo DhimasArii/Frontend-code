@@ -1,5 +1,6 @@
 import React from "react";
-import Navbar2 from "../../components/Navbar2";
+import NavbarLogIn from "../../components/Navbar2";
+import NavbarLogOut from "../../components/Navbar";
 import Container from "@mui/material/Container";
 import theme from "../../components/color";
 import { useState, useEffect } from "react";
@@ -8,7 +9,7 @@ import { ThemeProvider, styled } from "@mui/material/styles";
 import { InputAdornment, Box, Paper } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import Button from "@mui/material/Button";
-import { Form, useParams } from "react-router-dom";
+import { Form, useParams, useNavigate } from "react-router-dom";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import axios from "axios";
 
@@ -37,31 +38,57 @@ const Checkout = () => {
   const total = 0;
   const idUser = "";
 
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // setIsLoggedIn(false);
+    // Lakukan aksi logout, misalnya redirect ke halaman login
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   useEffect(() => {
-    axios
-      .get("https://dummyjson.com/auth/me", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
-      .then((response) => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          alert("Silakan login terlebih dahulu.");
+          return;
+        }
+
+        const response = await axios.get("https://dummyjson.com/auth/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setDataUser(response.data);
-        console.log(dataUser);
-      })
-      .catch((error) => {
+        console.log(response.data);
+      } catch (error) {
         console.error("Error fetching user data:", error);
-      });
+        // Handle error, such as redirecting to login page or displaying an error message
+      }
+    };
+
+    fetchUserData();
   }, []);
 
-  // useEffect(() => {
-  //   console.log(dataUser);
-  // }, [dataUser]);
-
   useEffect(() => {
-    axios
-      .get(`https://dummyjson.com/cart/user/${dataUser.id}`)
-      .then((json) => setData(json.data.carts[0].products));
-    console.log(data);
+    const fetchCartData = async () => {
+      try {
+        if (dataUser.id) {
+          const response = await axios.get(
+            `https://dummyjson.com/cart/user/${dataUser.id}`
+          );
+          setData(response.data.carts[0].products);
+          console.log(response.data.carts[0].products);
+        }
+      } catch (error) {
+        console.error("Error fetching cart data:", error);
+        // Handle error, such as displaying an error message or retrying the request
+      }
+    };
+
+    fetchCartData();
   }, [dataUser]);
 
   // useEffect(() => {
@@ -74,6 +101,14 @@ const Checkout = () => {
   // }, []);
 
   console.log(data);
+
+  const totalHarga = data.reduce((total, item) => {
+    // Pastikan item.price adalah angka sebelum ditambahkan ke total
+    if (!isNaN(item.price)) {
+      return total + parseFloat(item.price);
+    }
+    return total;
+  }, 0);
 
   // Checkbox
   const [checkedItems, setCheckedItems] = useState({});
@@ -136,7 +171,11 @@ const Checkout = () => {
   return (
     <Container>
       <ThemeProvider theme={theme}>
-        <Navbar2 />
+        {localStorage.getItem("token") ? (
+          <NavbarLogIn handleLogout={handleLogout} />
+        ) : (
+          <NavbarLogOut />
+        )}
         <Box
           sx={{
             display: "flex",
@@ -206,7 +245,7 @@ const Checkout = () => {
         >
           <div id="1574" className="flex flex-row gap-24 items-center">
             <div className="font-400 text-18">Total Price</div>
-            <div className="font-600 text-24 text-green">IDR {total}</div>
+            <div className="font-600 text-24 text-green">IDR {totalHarga}</div>
           </div>
           <div>
             <Button

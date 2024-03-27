@@ -32,15 +32,33 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get("https://dummyjson.com/products")
-      .then((json) => setData(json.data.products));
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("https://dummyjson.com/products");
+        setData(response.data.products);
+      } catch (error) {
+        console.error("Error fetching product data:", error);
+        // Handle error, such as displaying an error message to the user
+      }
+    };
+
+    fetchData();
   }, []);
 
   useEffect(() => {
-    axios
-      .get("https://dummyjson.com/products/categories")
-      .then((json) => setCategory(json.data));
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          "https://dummyjson.com/products/categories"
+        );
+        setCategory(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        // Handle error, such as displaying an error message to the user
+      }
+    };
+
+    fetchCategories();
   }, []);
 
   console.log(data);
@@ -55,7 +73,7 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
   return (
     <Container>
       <ThemeProvider theme={theme}>
-        {isLoggedIn ? (
+        {localStorage.getItem("token") ? (
           <NavbarLogIn handleLogout={handleLogout} />
         ) : (
           <NavbarLogOut />
@@ -185,7 +203,7 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
                     return (
                       <Grid key={index} xs={3} maxWidth={350}>
                         <Link
-                          to={`/menu-kelas/${item.id}`}
+                          to={`/menu-kelas/${item}`}
                           style={{ textDecoration: "none" }}
                         >
                           <CardFlag body={item} image={data[index].thumbnail} />

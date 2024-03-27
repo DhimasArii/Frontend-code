@@ -25,7 +25,9 @@ const Navbar2 = ({ handleLogout }) => {
           </Link>
         </div>
         <div id="frame1516" className="flex items-center gap-40">
-          <img src={IconShopingCart} alt="" />
+          <Link to="/checkout">
+            <img src={IconShopingCart} alt="" />
+          </Link>
           <div className="text-16 font-montserrat text-green">My Class</div>
           <div className="text-16 font-montserrat text-green">Invoice</div>
           <hr
