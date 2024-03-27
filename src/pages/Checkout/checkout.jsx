@@ -32,14 +32,46 @@ import {
 
 const Checkout = () => {
   const [data, setData] = useState([]);
+  const [dataUser, setDataUser] = useState([]);
   const { id } = useParams();
+  const total = 0;
+  const idUser = "";
 
   useEffect(() => {
     axios
-      .get(`https://dummyjson.com/cart/user/${id}`)
+      .get("https://dummyjson.com/auth/me", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((response) => {
+        setDataUser(response.data);
+        console.log(dataUser);
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+      });
+  }, []);
+
+  // useEffect(() => {
+  //   console.log(dataUser);
+  // }, [dataUser]);
+
+  useEffect(() => {
+    axios
+      .get(`https://dummyjson.com/cart/user/${dataUser.id}`)
       .then((json) => setData(json.data.carts[0].products));
     console.log(data);
-  }, []);
+  }, [dataUser]);
+
+  // useEffect(() => {
+  //   axios.get(`https://dummyjson.com/cart/user/${id}`).then((json) => {
+  //     setData(json.data.carts[0]);
+  //     console.log(data);
+  //   });
+  //   console.log(data);
+  //   console.log(localStorage.getItem("token"));
+  // }, []);
 
   console.log(data);
 
@@ -160,6 +192,7 @@ const Checkout = () => {
                     title={item.title}
                     body={item.title}
                     image={item.thumbnail}
+                    price={item.price}
                   />
                 </Grid>
               );
@@ -173,7 +206,7 @@ const Checkout = () => {
         >
           <div id="1574" className="flex flex-row gap-24 items-center">
             <div className="font-400 text-18">Total Price</div>
-            <div className="font-600 text-24 text-green">IDR 700.000</div>
+            <div className="font-600 text-24 text-green">IDR {total}</div>
           </div>
           <div>
             <Button

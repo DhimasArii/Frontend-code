@@ -7,7 +7,7 @@ import ImageCourse from "../assets/image-course.png";
 import { CardActionArea } from "@mui/material";
 import "../components/style.css";
 
-export default function ActionAreaCard({ title, body, image }) {
+export default function ActionAreaCard({ title, body, image, price }) {
   return (
     <Card sx={{ width: 1017, gap: 24 }}>
       <CardActionArea
@@ -35,7 +35,7 @@ export default function ActionAreaCard({ title, body, image }) {
           </CardContent>
           <CardContent sx={{}}>
             <div className=" text-yellow font-600 font-montserrat text-20 ">
-              IDR 400.000
+              IDR {price}
             </div>
           </CardContent>
         </div>

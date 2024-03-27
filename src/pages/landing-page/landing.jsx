@@ -49,6 +49,7 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
   const handleLogout = () => {
     setIsLoggedIn(false);
     // Lakukan aksi logout, misalnya redirect ke halaman login
+    localStorage.removeItem("token");
     navigate("/login");
   };
   return (

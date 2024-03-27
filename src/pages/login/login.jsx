@@ -27,19 +27,6 @@ const Login = ({ setIsLoggedIn }) => {
     password: "",
   });
 
-  const [dataUser, setDataUser] = useState();
-
-  useEffect(() => {
-    axios
-      .get(`https://dummyjson.com/users/filter?key=email&value=${data.email}`)
-      .then((json) => setDataUser(json.data.users));
-    console.log(dataUser);
-  }, []);
-
-  useEffect(() => {
-    console.log(dataUser);
-  }, [dataUser]);
-
   const handleClickShowPassword = () => {
     setData({
       ...data,
@@ -156,6 +143,7 @@ const Login = ({ setIsLoggedIn }) => {
           localStorage.setItem("token", response.data.token);
 
           setIsLoggedIn(true);
+
           navigate("/");
         } else {
           console.error("Login failed:", response.data.error);
