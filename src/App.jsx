@@ -13,6 +13,7 @@ import Invoice from "./pages/invoice/invoice";
 import DetailInvoice from "./pages/detail-invoice/detailInvoice";
 
 import { Routes, Route, ScrollRestoration } from "react-router-dom";
+import MyClass from "./pages/my-class/my-class";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -66,6 +67,12 @@ function App() {
             isLoggedIn={isLoggedIn}
             setIsLoggedIn={setIsLoggedIn}
           />
+        }
+      />
+      <Route
+        path="/my-class"
+        element={
+          <MyClass isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
         }
       />
     </Routes>
