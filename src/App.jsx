@@ -9,6 +9,7 @@ import Kelas from "./pages/menu-kelas/menu-kelas";
 import DetailKelas from "./pages/detail-kelas/detail-kelas";
 import Regis from "./pages/register-new/register";
 import Checkout from "./pages/Checkout/checkout";
+import Index from "./pages/index";
 
 import { Routes, Route, ScrollRestoration } from "react-router-dom";
 
@@ -51,6 +52,8 @@ function App() {
           <Checkout isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
         }
       />
+
+      <Route path="/test" element={<Index />} />
     </Routes>
   );
 }
