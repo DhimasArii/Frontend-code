@@ -9,7 +9,8 @@ import Kelas from "./pages/menu-kelas/menu-kelas";
 import DetailKelas from "./pages/detail-kelas/detail-kelas";
 import Regis from "./pages/register-new/register";
 import Checkout from "./pages/Checkout/checkout";
-import Index from "./pages/index";
+import Invoice from "./pages/invoice/invoice";
+import DetailInvoice from "./pages/detail-invoice/detailInvoice";
 
 import { Routes, Route, ScrollRestoration } from "react-router-dom";
 
@@ -52,8 +53,21 @@ function App() {
           <Checkout isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
         }
       />
-
-      <Route path="/test" element={<Index />} />
+      <Route
+        path="/invoice"
+        element={
+          <Invoice isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        }
+      />
+      <Route
+        path="/detail-invoice"
+        element={
+          <DetailInvoice
+            isLoggedIn={isLoggedIn}
+            setIsLoggedIn={setIsLoggedIn}
+          />
+        }
+      />
     </Routes>
   );
 }
