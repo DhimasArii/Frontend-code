@@ -124,10 +124,10 @@ const Login = ({ setIsLoggedIn }) => {
     } else {
       try {
         const response = await axios.post(
-          "https://dummyjson.com/auth/login",
+          "https://localhost:7175/api/User/login",
           {
-            username: data.email,
-            password: data.password,
+            email: data.email,
+            passwords: data.password,
             // expiresInMins: 60, // optional
           },
           {
