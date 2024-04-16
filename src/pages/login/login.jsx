@@ -111,13 +111,11 @@ const Login = ({ setIsLoggedIn }) => {
       setError({
         email: "Email tidak boleh kosong",
       });
-    }
-    // else if (!emailRegex.test(data.email)) {
-    //   setError({
-    //     email: "Format email tidak valid",
-    //   });
-    // }
-    else if (!data.password.trim()) {
+    } else if (!emailRegex.test(data.email)) {
+      setError({
+        email: "Format email tidak valid",
+      });
+    } else if (!data.password.trim()) {
       setError({
         password: "Password tidak boleh kosong",
       });
@@ -150,6 +148,7 @@ const Login = ({ setIsLoggedIn }) => {
         }
       } catch (error) {
         console.error(error);
+        alert("User not found!\nSilahkan cek kembali email dan password anda!");
       }
     }
   };
