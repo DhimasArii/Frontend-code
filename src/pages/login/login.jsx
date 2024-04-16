@@ -148,7 +148,7 @@ const Login = ({ setIsLoggedIn }) => {
         }
       } catch (error) {
         console.error(error);
-        alert("User not found!\nSilahkan cek kembali email dan password anda!");
+        alert("Login gagal!\nSilahkan cek kembali email dan password anda!");
       }
     }
   };
