@@ -17,6 +17,21 @@ import NavbarLogOut from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import axios from "axios";
 
+import BasicEnglish from "../../assets/BasicEnglish.png";
+import ComplitPackage from "../../assets/ComplitPackage.png";
+import Level1 from "../../assets/Level1.png";
+import ArabicCourse from "../../assets/ArabicCourse.png";
+import KursusIndo from "../../assets/KursusIndo.png";
+import GermanyLanguage from "../../assets/GermanyLanguage.png";
+import Arabic from "../../assets/Arabic.png";
+import Deutsch from "../../assets/Deutsch.png";
+import English from "../../assets/English.png";
+import French from "../../assets/French.png";
+import Indonesia from "../../assets/Indo.png";
+import Japanese from "../../assets/Japanese.png";
+import Mandarin from "../../assets/Mandarin.png";
+import Melayu from "../../assets/Melayu.png";
+
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -70,6 +85,101 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
     localStorage.removeItem("token");
     navigate("/login");
   };
+
+  const boxes = [
+    {
+      course_id: 1,
+      category_id: 1,
+      course_name: "English",
+      course_description: "Basic English for Junior",
+      price: "IDR 400.000",
+      course_img: BasicEnglish,
+    },
+    {
+      course_id: 2,
+      category_id: 2,
+      course_name: "English",
+      course_description: "Complit Package - Expert English, TOEFL and IELT",
+      price: "IDR 2.000.000",
+      course_img: ComplitPackage,
+    },
+    {
+      course_id: 3,
+      category_id: 3,
+      course_name: "Mandarin",
+      course_description: "Level 1 Mandarin",
+      price: "IDR 200.000",
+      course_img: Level1,
+    },
+    {
+      course_id: 4,
+      category_id: 4,
+      course_name: "Arabic",
+      course_description: "Arabic Course - Beginner to Middle",
+      price: "IDR 550.000",
+      course_img: ArabicCourse,
+    },
+    {
+      course_id: 5,
+      category_id: 5,
+      course_name: "Indonesia",
+      course_description: "Kursus Bahasa Indonesia",
+      price: "IDR 650.000",
+      course_img: KursusIndo,
+    },
+    {
+      course_id: 6,
+      category_id: 6,
+      course_name: "Germany",
+      course_description: "Germany Language for Junior",
+      price: "IDR 450.000",
+      course_img: GermanyLanguage,
+    },
+  ];
+
+  const miniBoxes = [
+    {
+      category_id: 1,
+      category_name: "Arabic",
+      category_img: Arabic,
+    },
+    {
+      category_id: 2,
+      category_name: "Deutsch",
+      category_img: Deutsch,
+    },
+    {
+      category_id: 3,
+      category_name: "English",
+      category_img: English,
+    },
+    {
+      category_id: 4,
+      category_name: "French",
+      category_img: French,
+    },
+    {
+      category_id: 5,
+      category_name: "Indonesia",
+      category_img: Indonesia,
+    },
+    {
+      category_id: 6,
+      category_name: "Japanesee",
+      category_img: Japanese,
+    },
+    {
+      category_id: 7,
+      category_name: "Mandarin",
+      category_img: Mandarin,
+    },
+    {
+      category_id: 8,
+      category_name: "Melayu",
+      category_img: Melayu,
+    },
+  ];
+
   return (
     <Container>
       <ThemeProvider theme={theme}>
@@ -143,19 +253,27 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
             <div id="frame1545" className="flex flex-basis items-center mt-60">
               <div>
                 <Grid container columnSpacing={2} rowSpacing={5}>
-                  {data.slice(0, 6).map((item, index) => {
-                    console.log(index);
-                    return (
-                      <Grid key={index} xs={4} maxWidth={350}>
-                        <CardComponent
-                          title={item.title}
-                          body={item.description}
-                          image={item.thumbnail}
-                          price={item.price}
-                        />
-                      </Grid>
-                    );
-                  })}
+                  {boxes
+                    .slice(0, 6)
+                    .map(
+                      ({
+                        course_img,
+                        course_name,
+                        course_description,
+                        price,
+                      }) => {
+                        return (
+                          <Grid key={course_img} xs={4} maxWidth={350}>
+                            <CardComponent
+                              title={course_name}
+                              body={course_description}
+                              image={course_img}
+                              price={price}
+                            />
+                          </Grid>
+                        );
+                      }
+                    )}
                 </Grid>
               </div>
             </div>
@@ -198,19 +316,15 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
             <div id="frame1545" className="flex flex-basis items-center">
               <div>
                 <Grid container columnSpacing={2} rowSpacing={5}>
-                  {category.slice(0, 8).map((item, index) => {
-                    console.log(index);
-                    return (
-                      <Grid key={index} xs={3} maxWidth={350}>
-                        <Link
-                          to={`/menu-kelas/${item}`}
-                          style={{ textDecoration: "none" }}
-                        >
-                          <CardFlag body={item} image={data[index].thumbnail} />
-                        </Link>
-                      </Grid>
-                    );
-                  })}
+                  {miniBoxes
+                    .slice(0, 8)
+                    .map(({ category_name, category_img }) => {
+                      return (
+                        <Grid key={category_img} xs={3} maxWidth={350}>
+                          <CardFlag body={category_name} image={category_img} />
+                        </Grid>
+                      );
+                    })}
                 </Grid>
               </div>
             </div>
