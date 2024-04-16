@@ -92,7 +92,7 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
       category_id: 1,
       course_name: "English",
       course_description: "Basic English for Junior",
-      price: "IDR 400.000",
+      price: "400.000",
       course_img: BasicEnglish,
     },
     {
@@ -100,7 +100,7 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
       category_id: 2,
       course_name: "English",
       course_description: "Complit Package - Expert English, TOEFL and IELT",
-      price: "IDR 2.000.000",
+      price: "2.000.000",
       course_img: ComplitPackage,
     },
     {
@@ -108,7 +108,7 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
       category_id: 3,
       course_name: "Mandarin",
       course_description: "Level 1 Mandarin",
-      price: "IDR 200.000",
+      price: "200.000",
       course_img: Level1,
     },
     {
@@ -116,7 +116,7 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
       category_id: 4,
       course_name: "Arabic",
       course_description: "Arabic Course - Beginner to Middle",
-      price: "IDR 550.000",
+      price: "550.000",
       course_img: ArabicCourse,
     },
     {
@@ -124,7 +124,7 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
       category_id: 5,
       course_name: "Indonesia",
       course_description: "Kursus Bahasa Indonesia",
-      price: "IDR 650.000",
+      price: "650.000",
       course_img: KursusIndo,
     },
     {
@@ -132,7 +132,7 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
       category_id: 6,
       course_name: "Germany",
       course_description: "Germany Language for Junior",
-      price: "IDR 450.000",
+      price: "450.000",
       course_img: GermanyLanguage,
     },
   ];
