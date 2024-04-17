@@ -17,21 +17,6 @@ import NavbarLogOut from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import axios from "axios";
 
-import BasicEnglish from "../../assets/BasicEnglish.png";
-import ComplitPackage from "../../assets/ComplitPackage.png";
-import Level1 from "../../assets/Level1.png";
-import ArabicCourse from "../../assets/ArabicCourse.png";
-import KursusIndo from "../../assets/KursusIndo.png";
-import GermanyLanguage from "../../assets/GermanyLanguage.png";
-import Arabic from "../../assets/Arabic.png";
-import Deutsch from "../../assets/Deutsch.png";
-import English from "../../assets/English.png";
-import French from "../../assets/French.png";
-import Indonesia from "../../assets/Indo.png";
-import Japanese from "../../assets/Japanese.png";
-import Mandarin from "../../assets/Mandarin.png";
-import Melayu from "../../assets/Melayu.png";
-
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -93,7 +78,7 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
       course_name: "English",
       course_description: "Basic English for Junior",
       price: "400.000",
-      course_img: BasicEnglish,
+      course_img: "../images/BasicEnglish.png",
     },
     {
       course_id: 2,
@@ -101,7 +86,7 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
       course_name: "English",
       course_description: "Complit Package - Expert English, TOEFL and IELT",
       price: "2.000.000",
-      course_img: ComplitPackage,
+      course_img: "../images/ComplitPackage.png",
     },
     {
       course_id: 3,
@@ -109,7 +94,7 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
       course_name: "Mandarin",
       course_description: "Level 1 Mandarin",
       price: "200.000",
-      course_img: Level1,
+      course_img: "../images/Level1.png",
     },
     {
       course_id: 4,
@@ -117,7 +102,7 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
       course_name: "Arabic",
       course_description: "Arabic Course - Beginner to Middle",
       price: "550.000",
-      course_img: ArabicCourse,
+      course_img: "../images/ArabicCourse.png",
     },
     {
       course_id: 5,
@@ -125,7 +110,7 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
       course_name: "Indonesia",
       course_description: "Kursus Bahasa Indonesia",
       price: "650.000",
-      course_img: KursusIndo,
+      course_img: "../images/KursusIndo.png",
     },
     {
       course_id: 6,
@@ -133,7 +118,7 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
       course_name: "Germany",
       course_description: "Germany Language for Junior",
       price: "450.000",
-      course_img: GermanyLanguage,
+      course_img: "../images/GermanyLanguage.png",
     },
   ];
 
@@ -141,42 +126,42 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
     {
       category_id: 1,
       category_name: "Arabic",
-      category_img: Arabic,
+      category_img: "../images/Arabic.png",
     },
     {
       category_id: 2,
       category_name: "Deutsch",
-      category_img: Deutsch,
+      category_img: "../images/Deutsch.png",
     },
     {
       category_id: 3,
       category_name: "English",
-      category_img: English,
+      category_img: "../images/English.png",
     },
     {
       category_id: 4,
       category_name: "French",
-      category_img: French,
+      category_img: "../images/French.png",
     },
     {
       category_id: 5,
       category_name: "Indonesia",
-      category_img: Indonesia,
+      category_img: "../images/Indo.png",
     },
     {
       category_id: 6,
       category_name: "Japanesee",
-      category_img: Japanese,
+      category_img: "../images/Japanese.png",
     },
     {
       category_id: 7,
       category_name: "Mandarin",
-      category_img: Mandarin,
+      category_img: "../images/Mandarin.png",
     },
     {
       category_id: 8,
       category_name: "Melayu",
-      category_img: Melayu,
+      category_img: "../images/Melayu.png",
     },
   ];
 
