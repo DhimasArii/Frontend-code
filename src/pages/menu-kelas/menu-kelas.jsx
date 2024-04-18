@@ -38,10 +38,10 @@ const Kelas = ({ isLoggedIn, setIsLoggedIn }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://dummyjson.com/products/category/${category}`
+          `https://localhost:7175/api/Course/GetAllCoursesByCategory/${category}`
         );
-        setData(response.data.products);
-        console.log(response.data.products);
+        setData(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("Error fetching product data:", error);
         // Handle error, such as displaying an error message to the user
@@ -54,14 +54,13 @@ const Kelas = ({ isLoggedIn, setIsLoggedIn }) => {
   useEffect(() => {
     const fetchDetail = async () => {
       try {
-        const response = await fetch(
-          "https://jsonplaceholder.typicode.com/posts/1"
+        const response = await axios.get(
+          `https://localhost:7175/api/Category/${category}`
         );
-        const json = await response.json();
-        setDetail(json);
-        console.log(json);
+        setDetail(response.data[0]);
+        console.log(response.data[0]);
       } catch (error) {
-        console.error("Error fetching detail data:", error);
+        console.error("Error fetching product data:", error);
         // Handle error, such as displaying an error message to the user
       }
     };
@@ -92,10 +91,10 @@ const Kelas = ({ isLoggedIn, setIsLoggedIn }) => {
             className="flex flex-col items-center gap-16 wx-70"
           >
             <div className="mt-46 text-24 font-600 mx-70 w-100 font-montserrat">
-              {category}
+              {detail.category_name}
             </div>
             <div className="text-16 font-400  mx-70 w-100 font-montserrat text-black-light">
-              {detail.body}
+              {detail.category_description}
             </div>
           </div>
           <hr
@@ -121,11 +120,11 @@ const Kelas = ({ isLoggedIn, setIsLoggedIn }) => {
                 {data.map((item, index) => {
                   console.log(index);
                   return (
-                    <Grid key={index} xs={4} maxWidth={350}>
+                    <Grid key={index} xs={"auto"} maxWidth={350}>
                       <CardComponent
-                        title={item.title}
-                        body={item.description}
-                        image={item.thumbnail}
+                        title={item.course_name}
+                        body={item.course_name}
+                        image={item.course_image}
                         price={item.price}
                       />
                     </Grid>

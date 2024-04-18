@@ -34,8 +34,10 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("https://dummyjson.com/products");
-        setData(response.data.products);
+        const response = await axios.get(
+          "https://localhost:7175/api/Course/GetAllCourse"
+        );
+        setData(response.data);
       } catch (error) {
         console.error("Error fetching product data:", error);
         // Handle error, such as displaying an error message to the user
@@ -49,9 +51,10 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "https://dummyjson.com/products/categories"
+          "https://localhost:7175/api/Category/GetAll"
         );
         setCategory(response.data);
+        console.log(response);
       } catch (error) {
         console.error("Error fetching categories:", error);
         // Handle error, such as displaying an error message to the user
@@ -70,100 +73,6 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
     localStorage.removeItem("token");
     navigate("/login");
   };
-
-  const boxes = [
-    {
-      course_id: 1,
-      category_id: 1,
-      course_name: "English",
-      course_description: "Basic English for Junior",
-      price: "400.000",
-      course_img: "../images/BasicEnglish.png",
-    },
-    {
-      course_id: 2,
-      category_id: 2,
-      course_name: "English",
-      course_description: "Complit Package - Expert English, TOEFL and IELT",
-      price: "2.000.000",
-      course_img: "../images/ComplitPackage.png",
-    },
-    {
-      course_id: 3,
-      category_id: 3,
-      course_name: "Mandarin",
-      course_description: "Level 1 Mandarin",
-      price: "200.000",
-      course_img: "../images/Level1.png",
-    },
-    {
-      course_id: 4,
-      category_id: 4,
-      course_name: "Arabic",
-      course_description: "Arabic Course - Beginner to Middle",
-      price: "550.000",
-      course_img: "../images/ArabicCourse.png",
-    },
-    {
-      course_id: 5,
-      category_id: 5,
-      course_name: "Indonesia",
-      course_description: "Kursus Bahasa Indonesia",
-      price: "650.000",
-      course_img: "../images/KursusIndo.png",
-    },
-    {
-      course_id: 6,
-      category_id: 6,
-      course_name: "Germany",
-      course_description: "Germany Language for Junior",
-      price: "450.000",
-      course_img: "../images/GermanyLanguage.png",
-    },
-  ];
-
-  const miniBoxes = [
-    {
-      category_id: 1,
-      category_name: "Arabic",
-      category_img: "../images/Arabic.png",
-    },
-    {
-      category_id: 2,
-      category_name: "Deutsch",
-      category_img: "../images/Deutsch.png",
-    },
-    {
-      category_id: 3,
-      category_name: "English",
-      category_img: "../images/English.png",
-    },
-    {
-      category_id: 4,
-      category_name: "French",
-      category_img: "../images/French.png",
-    },
-    {
-      category_id: 5,
-      category_name: "Indonesia",
-      category_img: "../images/Indo.png",
-    },
-    {
-      category_id: 6,
-      category_name: "Japanesee",
-      category_img: "../images/Japanese.png",
-    },
-    {
-      category_id: 7,
-      category_name: "Mandarin",
-      category_img: "../images/Mandarin.png",
-    },
-    {
-      category_id: 8,
-      category_name: "Melayu",
-      category_img: "../images/Melayu.png",
-    },
-  ];
 
   return (
     <Container>
@@ -238,21 +147,21 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
             <div id="frame1545" className="flex flex-basis items-center mt-60">
               <div>
                 <Grid container columnSpacing={2} rowSpacing={5}>
-                  {boxes
+                  {data
                     .slice(0, 6)
                     .map(
                       ({
-                        course_img,
+                        course_image,
                         course_name,
                         course_description,
                         price,
                       }) => {
                         return (
-                          <Grid key={course_img} xs={4} maxWidth={350}>
+                          <Grid key={course_image} xs={4} maxWidth={350}>
                             <CardComponent
                               title={course_name}
                               body={course_description}
-                              image={course_img}
+                              image={course_image}
                               price={price}
                             />
                           </Grid>
@@ -301,12 +210,21 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
             <div id="frame1545" className="flex flex-basis items-center">
               <div>
                 <Grid container columnSpacing={2} rowSpacing={5}>
-                  {miniBoxes
+                  {category
                     .slice(0, 8)
-                    .map(({ category_name, category_img }) => {
+                    .map(({ category_id, category_image, category_name }) => {
+                      console.log(category_id);
                       return (
-                        <Grid key={category_img} xs={3} maxWidth={350}>
-                          <CardFlag body={category_name} image={category_img} />
+                        <Grid key={category_id} xs={3} maxWidth={350}>
+                          <Link
+                            to={`/menu-kelas/${category_id}`}
+                            style={{ textDecoration: "none" }}
+                          >
+                            <CardFlag
+                              body={category_name}
+                              image={category_image}
+                            />
+                          </Link>
                         </Grid>
                       );
                     })}
