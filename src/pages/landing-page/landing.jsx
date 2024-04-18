@@ -151,6 +151,7 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
                     .slice(0, 6)
                     .map(
                       ({
+                        course_id,
                         course_image,
                         course_name,
                         course_description,
@@ -158,12 +159,17 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
                       }) => {
                         return (
                           <Grid key={course_image} xs={4} maxWidth={350}>
-                            <CardComponent
-                              title={course_name}
-                              body={course_description}
-                              image={course_image}
-                              price={price}
-                            />
+                            <Link
+                              to={`/detail-kelas/${course_id}`}
+                              style={{ textDecoration: "none" }}
+                            >
+                              <CardComponent
+                                title={course_name}
+                                body={course_description}
+                                image={course_image}
+                                price={price}
+                              />
+                            </Link>
                           </Grid>
                         );
                       }

@@ -12,7 +12,7 @@ import theme from "../../components/color";
 import CardComponent from "../../components/CardComponents";
 import axios from "axios";
 
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import NavbarLogIn from "../../components/Navbar2";
 import NavbarLogOut from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -120,13 +120,22 @@ const Kelas = ({ isLoggedIn, setIsLoggedIn }) => {
                 {data.map((item, index) => {
                   console.log(index);
                   return (
-                    <Grid key={index} xs={"auto"} maxWidth={350}>
-                      <CardComponent
-                        title={item.course_name}
-                        body={item.course_name}
-                        image={item.course_image}
-                        price={item.price}
-                      />
+                    <Grid
+                      key={index}
+                      xs={data.length > 1 ? 4 : 12}
+                      maxWidth={350}
+                    >
+                      <Link
+                        to={`/detail-kelas/${item.course_id}`}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <CardComponent
+                          title={item.category_name}
+                          body={item.course_name}
+                          image={item.course_image}
+                          price={item.price}
+                        />
+                      </Link>
                     </Grid>
                   );
                 })}

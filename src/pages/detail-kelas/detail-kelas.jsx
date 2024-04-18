@@ -13,8 +13,9 @@ import theme from "../../components/color";
 import CardComponent from "../../components/CardComponents";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import axios from "axios";
 
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import NavbarLogIn from "../../components/Navbar2";
 import NavbarLogOut from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -41,19 +42,43 @@ const DetailKelas = ({ isLoggedIn, setIsLoggedIn }) => {
   const column2 = ["Deutsch", "French", "Japanese", "Melayu"];
 
   useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/photos`)
-      .then((response) => response.json())
-      .then((json) => {
-        setData(json);
-        console.log(data);
-      });
-  }, []);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `https://localhost:7175/api/Course/${id}`
+        );
+        if (!response.data || response.data.length === 0) {
+          throw new Error("Data not found");
+        }
+        setDetail(response.data[0]);
+        console.log(response.data[0]);
+      } catch (error) {
+        console.error("There was a problem with the fetch operation:", error);
+      }
+    };
+
+    fetchData();
+  }, [id]);
 
   useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/posts/${id}`)
-      .then((response) => response.json())
-      .then((json) => setDetail(json));
-  }, [id]);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `https://localhost:7175/api/Course/GetAllCoursesByCategory/${detail.category_id}`
+        );
+        const filteredData = response.data.filter(
+          (item) => item.course_id !== detail.course_id
+        );
+        setData(filteredData);
+        console.log(filteredData);
+      } catch (error) {
+        console.error("Error fetching product data:", error);
+        // Handle error, such as displaying an error message to the user
+      }
+    };
+
+    fetchData();
+  }, [detail]);
 
   const handleLogout = () => {
     setIsLoggedIn(false);
@@ -80,7 +105,7 @@ const DetailKelas = ({ isLoggedIn, setIsLoggedIn }) => {
               className="flex flex-row mt-46 text-24 font-600 mx-70 w-100 font-montserrat gap-40"
             >
               <img
-                src="/images/image-course.png"
+                src={detail.course_image}
                 style={{ width: 400, height: 266.67 }}
               />
               <div id="frame1559" className="flex gap-60 flex-col">
@@ -88,16 +113,16 @@ const DetailKelas = ({ isLoggedIn, setIsLoggedIn }) => {
                   <div id="frame1555" className="flex flex-col gap-16">
                     <div id="frame1554" className="flex flex-col gap-8">
                       <div className="font-400 text-16 font-montserrat text-gray">
-                        English
+                        {detail.category_name}
                       </div>
                       <div className="font-600 text-24 font-montserrat ">
-                        Basic English for Junior
+                        {detail.course_name}
                       </div>
                       <div
                         className="font-600 text-24"
                         style={{ color: "#EA9E1F" }}
                       >
-                        IDR 400.000
+                        IDR {detail.price}
                       </div>
                     </div>
                   </div>
@@ -175,14 +200,7 @@ const DetailKelas = ({ isLoggedIn, setIsLoggedIn }) => {
               </div>
               <div id="frame1561" className="flex flex-col gap-24">
                 <div className="font-400 text-16 font-montserrat">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                  irure dolor in reprehenderit in voluptate velit esse cillum
-                  dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                  cupidatat non proident, sunt in culpa qui officia deserunt
-                  mollit anim id est laborum.
+                  {detail.course_description}
                 </div>
                 <div className="font-400 text-16 font-poppins">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
@@ -217,15 +235,25 @@ const DetailKelas = ({ isLoggedIn, setIsLoggedIn }) => {
             </div>
             <div>
               <Grid container columnSpacing={2} rowSpacing={5}>
-                {data.slice(0, 3).map((item, index) => {
+                {data.slice(0, 8).map((item, index) => {
                   console.log(index);
                   return (
-                    <Grid key={index} xs={4} maxWidth={350}>
-                      <CardComponent
-                        title={item.title}
-                        body={item.title}
-                        image={item.url}
-                      />
+                    <Grid
+                      key={index}
+                      xs={data.length > 1 ? 4 : 12}
+                      maxWidth={350}
+                    >
+                      <Link
+                        to={`/detail-kelas/${item.course_id}`}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <CardComponent
+                          title={item.category_name}
+                          body={item.course_name}
+                          image={item.course_image}
+                          price={item.price}
+                        />
+                      </Link>
                     </Grid>
                   );
                 })}
