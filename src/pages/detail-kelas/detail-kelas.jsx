@@ -15,10 +15,12 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import axios from "axios";
 
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import NavbarLogIn from "../../components/Navbar2";
 import NavbarLogOut from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import useCheckLogin from "../../hooks/useCheckLogin";
+import useLogout from "../../hooks/useLogout";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -28,8 +30,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const DetailKelas = ({ isLoggedIn, setIsLoggedIn }) => {
-  const [state, setState] = useState(false);
+const DetailKelas = () => {
   const [data, setData] = useState([]);
   const [detail, setDetail] = useState([]);
   const { id } = useParams();
@@ -37,6 +38,9 @@ const DetailKelas = ({ isLoggedIn, setIsLoggedIn }) => {
   const handleSelect = (event) => {
     setSchedule(event.target.value);
   };
+  const navigate = useNavigate();
+  const { isLoggedIn } = useCheckLogin();
+  const { handleLogout } = useLogout();
 
   const column1 = ["Arabic", "English", "Indonesian", "Mandarin"];
   const column2 = ["Deutsch", "French", "Japanese", "Melayu"];
@@ -80,16 +84,15 @@ const DetailKelas = ({ isLoggedIn, setIsLoggedIn }) => {
     fetchData();
   }, [detail]);
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    // Lakukan aksi logout, misalnya redirect ke halaman login
+  const handleLogoutClick = async () => {
+    await handleLogout();
     navigate("/login");
   };
   return (
     <Container>
       <ThemeProvider theme={theme}>
         {isLoggedIn ? (
-          <NavbarLogIn handleLogout={handleLogout} />
+          <NavbarLogIn handleLogout={handleLogoutClick} />
         ) : (
           <NavbarLogOut />
         )}

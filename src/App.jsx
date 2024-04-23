@@ -19,12 +19,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
     <Routes>
-      <Route
-        path="/"
-        element={
-          <Landing isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
-        }
-      />
+      <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
       <Route path="/forgot-password" element={<Forgot />} />
       <Route

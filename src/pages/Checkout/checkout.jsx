@@ -30,20 +30,19 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
+import useCheckLogin from "../../hooks/useCheckLogin";
+import useLogout from "../../hooks/useLogout";
 
 const Checkout = () => {
   const [data, setData] = useState([]);
   const [dataUser, setDataUser] = useState([]);
-  const { id } = useParams();
-  const total = 0;
-  const idUser = "";
 
   const navigate = useNavigate();
+  const { isLoggedIn } = useCheckLogin();
+  const { handleLogout } = useLogout();
 
-  const handleLogout = () => {
-    // setIsLoggedIn(false);
-    // Lakukan aksi logout, misalnya redirect ke halaman login
-    localStorage.removeItem("token");
+  const handleLogoutClick = async () => {
+    await handleLogout();
     navigate("/login");
   };
 
@@ -169,8 +168,8 @@ const Checkout = () => {
   return (
     <Container>
       <ThemeProvider theme={theme}>
-        {localStorage.getItem("token") ? (
-          <NavbarLogIn handleLogout={handleLogout} />
+        {isLoggedIn ? (
+          <NavbarLogIn handleLogout={handleLogoutClick} />
         ) : (
           <NavbarLogOut />
         )}

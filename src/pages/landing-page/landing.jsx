@@ -16,6 +16,8 @@ import NavbarLogIn from "../../components/Navbar2";
 import NavbarLogOut from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import axios from "axios";
+import useCheckLogin from "../../hooks/useCheckLogin";
+import useLogout from "../../hooks/useLogout";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -25,11 +27,12 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
-  const [state, setState] = useState(false);
+const Landing = () => {
   const [data, setData] = useState([]);
   const [category, setCategory] = useState([]);
   const navigate = useNavigate();
+  const { isLoggedIn } = useCheckLogin();
+  const { handleLogout } = useLogout();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,18 +70,16 @@ const Landing = ({ isLoggedIn, setIsLoggedIn }) => {
   console.log(data);
   console.log(category);
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    // Lakukan aksi logout, misalnya redirect ke halaman login
-    localStorage.removeItem("token");
-    navigate("/login");
+  const handleLogoutClick = async () => {
+    await handleLogout();
+    navigate(0);
   };
 
   return (
     <Container>
       <ThemeProvider theme={theme}>
-        {localStorage.getItem("token") ? (
-          <NavbarLogIn handleLogout={handleLogout} />
+        {isLoggedIn ? (
+          <NavbarLogIn handleLogout={handleLogoutClick} />
         ) : (
           <NavbarLogOut />
         )}
