@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import ImageCourse from "../assets/image-course.png";
 import { CardActionArea } from "@mui/material";
 import "../components/style.css";
+import PropTypes from "prop-types";
 
 export default function ActionAreaCard({ body, image }) {
   return (
@@ -27,3 +28,8 @@ export default function ActionAreaCard({ body, image }) {
     </Card>
   );
 }
+
+ActionAreaCard.PropTypes = {
+  body: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+};
