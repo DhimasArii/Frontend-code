@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import ImageCourse from "../assets/image-course.png";
 import { CardActionArea } from "@mui/material";
 import "../components/style.css";
-import PropTypes from "prop-types";
+import propTypes from "prop-types";
 
 export default function ActionAreaCard({
   title,
@@ -54,9 +54,9 @@ export default function ActionAreaCard({
   );
 }
 
-ActionAreaCard.PropTypes = {
-  title: PropTypes.string.isRequired,
-  body: PropTypes.string.isRequired,
-  image: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
+ActionAreaCard.propTypes = {
+  title: propTypes.string.isRequired,
+  body: propTypes.string.isRequired,
+  image: propTypes.string.isRequired,
+  price: propTypes.number.isRequired,
 };

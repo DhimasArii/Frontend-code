@@ -28,10 +28,10 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Landing = () => {
+  const { isLoggedIn } = useCheckLogin();
   const [data, setData] = useState([]);
   const [category, setCategory] = useState([]);
   const navigate = useNavigate();
-  const { isLoggedIn } = useCheckLogin();
   const { handleLogout } = useLogout();
 
   useEffect(() => {

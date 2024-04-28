@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import CardCheckbox from "../../components/CardCheckbox";
 import { ThemeProvider, styled } from "@mui/material/styles";
 import { InputAdornment, Box, Paper } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Unstable_Grid2";
 import Button from "@mui/material/Button";
 import { Form, useParams, useNavigate, Link } from "react-router-dom";
@@ -69,6 +70,13 @@ const Checkout = () => {
       } catch (error) {
         console.error("Error fetching user data:", error);
         // Handle error, such as redirecting to login page or displaying an error message
+        if (error.response && error.response.status === 401) {
+          alert("Sesi Anda telah berakhir. Silakan login kembali.");
+          localStorage.removeItem("token"); // Hapus token dari localStorage
+          navigate("/login"); // Redirect ke halaman login
+        } else {
+          // Handle other errors, such as displaying an error message
+        }
       }
     };
 
@@ -94,34 +102,24 @@ const Checkout = () => {
     fetchCartData();
   }, [dataUser]);
 
-  // useEffect(() => {
-  //   axios.get(`https://dummyjson.com/cart/user/${id}`).then((json) => {
-  //     setData(json.data.carts[0]);
-  //     console.log(data);
-  //   });
-  //   console.log(data);
-  //   console.log(localStorage.getItem("token"));
-  // }, []);
-
-  // const totalHarga = data.reduce((total, item) => {
-  //   // Pastikan item.price adalah angka sebelum ditambahkan ke total
-  //   if (!isNaN(item.price)) {
-  //     return total + parseFloat(item.price);
-  //   }
-  //   return total;
-  // }, 0);
-
   // Checkbox
   const [checkedItems, setCheckedItems] = useState({});
   useEffect(() => {
     if (data.length > 0) {
       const initialCheckedItems = {};
-      data.forEach((_, index) => {
-        initialCheckedItems[index] = true;
+      data.forEach((item, index) => {
+        initialCheckedItems[index] = item.checklist;
       });
       setCheckedItems(initialCheckedItems);
     }
   }, [data]);
+
+  const totalHarga = data.reduce((total, item) => {
+    if (!isNaN(item.price)) {
+      return total + parseFloat(item.price);
+    }
+    return total;
+  }, 0);
 
   const handleCheckAll = () => {
     const allChecked = Object.values(checkedItems).every(
@@ -133,6 +131,7 @@ const Checkout = () => {
       const newCheckedItems = {};
       data.forEach((item, index) => {
         newCheckedItems[index] = false;
+        updateDetailCheckout(item.detail_checkout_id, false); // Tambahkan pembaruan otomatis ke API
       });
       setCheckedItems(newCheckedItems);
     } else {
@@ -140,25 +139,45 @@ const Checkout = () => {
       const newCheckedItems = {};
       data.forEach((item, index) => {
         newCheckedItems[index] = true;
+        updateDetailCheckout(item.detail_checkout_id, true); // Tambahkan pembaruan otomatis ke API
       });
       setCheckedItems(newCheckedItems);
     }
-    console.log(checkedItems);
   };
-  // useEffect(() => {
-  //   console.log(checkedItems);
-  // }, [checkedItems]);
 
   const handleChangeItem = (index) => {
     setCheckedItems((prevCheckedItems) => ({
       ...prevCheckedItems,
       [index]: !prevCheckedItems[index],
     }));
-    console.log(checkedItems);
+
+    const item = data[index];
+    const isChecked = !checkedItems[index];
+    updateDetailCheckout(item.detail_checkout_id, isChecked); // Panggil fungsi pembaruan otomatis ke API
   };
 
-  const handleChange3 = (event) => {
-    setChecked([checked[0], event.target.checked]);
+  const updateDetailCheckout = async (detailCheckoutId, isChecked) => {
+    try {
+      const response = await axios.put(
+        `https://localhost:7175/api/Checkout/UpdateDetailCheckout?detail_checkout_id=${detailCheckoutId}`,
+        { checklist: isChecked }
+      );
+      console.log(response.data); // Lakukan sesuatu dengan respons jika perlu
+    } catch (error) {
+      console.error("Error updating checklist:", error);
+    }
+  };
+  const handleDelete = async (detail_checkout_id) => {
+    try {
+      const response = await axios.delete(
+        `https://localhost:7175/api/Checkout/DeleteDetailCheckout?detail_checkout_id=${detail_checkout_id}`
+      );
+      console.log(response.data);
+      // Tambahkan logika untuk mengupdate state atau komponen setelah penghapusan berhasil
+      navigate(0);
+    } catch (error) {
+      console.error("Error deleting detail checkout:", error);
+    }
   };
 
   // pop up
@@ -206,49 +225,48 @@ const Checkout = () => {
           {/* <img src={Sampah} alt="" style={{ right: "0" }} /> */}
           <Grid container columnSpacing={1} rowSpacing={5} direction={"column"}>
             {(() => {
-              if (!data || data.length === 0) {
-                return (
-                  <div style={{ cursor: "pointer" }}>
-                    <Link to="/">
-                      Cartmu kosong. Klik di sini untuk menambahkan produk.
-                    </Link>
-                  </div>
-                );
-              } else {
-                return data.map((item, index) => (
-                  <Grid
-                    key={item.schedule_id}
-                    xs={4}
-                    sx={{ width: "100%" }}
-                    display={"flex"}
-                    flexDirection={"row"}
+              return data.map((item, index) => (
+                <Grid
+                  key={item.schedule_id}
+                  xs={4}
+                  sx={{ width: "100%", alignItems: "center" }}
+                  display={"flex"}
+                  flexDirection={"row"}
+                >
+                  <FormControlLabel
+                    key={index}
+                    control={
+                      <Checkbox
+                        style={{
+                          border: "none",
+                          color: "#00e676",
+                        }}
+                        checked={checkedItems[index] || false}
+                        onChange={() => handleChangeItem(index)}
+                      />
+                    }
+                  />
+                  <CardCheckbox
+                    title={item.category_name}
+                    body={item.course_description}
+                    image={item.course_image}
+                    schedule={format(
+                      new Date(item.course_date),
+                      "EEEE, d MMMM yyyy"
+                    )}
+                    price={Intl.NumberFormat("id-ID").format(item.price)}
+                  />
+                  <IconButton
+                    aria-label="delete"
+                    sx={{
+                      color: "#EB5757",
+                    }}
+                    onClick={() => handleDelete(item.detail_checkout_id)}
                   >
-                    <FormControlLabel
-                      key={index}
-                      control={
-                        <Checkbox
-                          style={{
-                            border: "none",
-                            color: "#00e676",
-                          }}
-                          checked={checkedItems[index] || false}
-                          onChange={() => handleChangeItem(index)}
-                        />
-                      }
-                    />
-                    <CardCheckbox
-                      title={item.category_name}
-                      body={item.course_description}
-                      image={item.course_image}
-                      schedule={format(
-                        new Date(item.course_date),
-                        "EEEE, d MMMM yyyy"
-                      )}
-                      price={item.price}
-                    />
-                  </Grid>
-                ));
-              }
+                    <DeleteForeverIcon sx={{ height: 40, width: 40 }} />
+                  </IconButton>
+                </Grid>
+              ));
             })()}
           </Grid>
         </Box>
@@ -259,7 +277,9 @@ const Checkout = () => {
         >
           <div id="1574" className="flex flex-row gap-24 items-center">
             <div className="font-400 text-18">Total Price</div>
-            <div className="font-600 text-24 text-green">IDR </div>
+            <div className="font-600 text-24 text-green">
+              IDR {Intl.NumberFormat("id-ID").format(totalHarga)}
+            </div>
           </div>
           <div>
             <Button
