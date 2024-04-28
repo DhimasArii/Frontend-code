@@ -398,48 +398,52 @@ const Checkout = () => {
               >
                 <div id="frame1516" className="flex items-center">
                   <div>
-                    <Button
-                      variant="contained"
-                      sx={{
-                        backgroundColor: "yellow.main",
-                        padding: "12px 16px",
-                        width: "155px",
-                        height: "48px",
-                        fontSize: "16px",
-                        fontWeight: "600",
-                        fontFamily: "Montserrat",
-                        textTransform: "none",
-                        lineHeight: "24",
-                        borderRadius: "8px",
-                        "&:hover": {
-                          backgroundColor: "yellow.light",
-                        },
-                      }}
-                    >
-                      Cancle
-                    </Button>
+                    <Link to="/checkout">
+                      <Button
+                        variant="contained"
+                        sx={{
+                          backgroundColor: "yellow.main",
+                          padding: "12px 16px",
+                          width: "155px",
+                          height: "48px",
+                          fontSize: "16px",
+                          fontWeight: "600",
+                          fontFamily: "Montserrat",
+                          textTransform: "none",
+                          lineHeight: "24",
+                          borderRadius: "8px",
+                          "&:hover": {
+                            backgroundColor: "yellow.light",
+                          },
+                        }}
+                      >
+                        Cancle
+                      </Button>
+                    </Link>
                   </div>
                   <div className="ml-16">
-                    <Button
-                      variant="contained"
-                      sx={{
-                        backgroundColor: "green.main",
-                        padding: "12px 16px",
-                        width: "155px",
-                        height: "48px",
-                        fontSize: "16px",
-                        fontWeight: "600",
-                        fontFamily: "Montserrat",
-                        textTransform: "none",
-                        lineHeight: "24",
-                        borderRadius: "8px",
-                        "&:hover": {
-                          backgroundColor: "green.light",
-                        },
-                      }}
-                    >
-                      Pay Now
-                    </Button>
+                    <Link to="/PurchaseSuccess">
+                      <Button
+                        variant="contained"
+                        sx={{
+                          backgroundColor: "green.main",
+                          padding: "12px 16px",
+                          width: "155px",
+                          height: "48px",
+                          fontSize: "16px",
+                          fontWeight: "600",
+                          fontFamily: "Montserrat",
+                          textTransform: "none",
+                          lineHeight: "24",
+                          borderRadius: "8px",
+                          "&:hover": {
+                            backgroundColor: "green.light",
+                          },
+                        }}
+                      >
+                        Pay Now
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </DialogActions>

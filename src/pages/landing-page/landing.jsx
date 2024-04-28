@@ -155,8 +155,8 @@ const Landing = () => {
                         style={{ textDecoration: "none" }}
                       >
                         <CardComponent
-                          title={item.course_name}
-                          body={item.course_description}
+                          title={item.category_name}
+                          body={item.course_name}
                           image={item.course_image}
                           price={Intl.NumberFormat("id-ID").format(item.price)}
                         />
