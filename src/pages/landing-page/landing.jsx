@@ -168,7 +168,7 @@ const Landing = () => {
                                 title={course_name}
                                 body={course_description}
                                 image={course_image}
-                                price={price}
+                                price={Intl.NumberFormat("id-ID").format(price)}
                               />
                             </Link>
                           </Grid>
