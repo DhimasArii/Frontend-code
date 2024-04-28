@@ -8,7 +8,13 @@ import { CardActionArea } from "@mui/material";
 import "../components/style.css";
 import PropTypes from "prop-types";
 
-export default function ActionAreaCard({ title, body, image, price }) {
+export default function ActionAreaCard({
+  title,
+  body,
+  schedule,
+  image,
+  price,
+}) {
   return (
     <Card sx={{ width: 1017, gap: 24 }}>
       <CardActionArea
@@ -32,6 +38,9 @@ export default function ActionAreaCard({ title, body, image, price }) {
             </div>
             <div className=" text-left text-18 font-600 font-montserrat">
               {body}
+            </div>
+            <div className=" text-left text-16 font-400 font-montserrat text-gray-light">
+              {schedule}
             </div>
           </CardContent>
           <CardContent sx={{}}>

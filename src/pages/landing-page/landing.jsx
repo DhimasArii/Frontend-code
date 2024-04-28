@@ -148,33 +148,21 @@ const Landing = () => {
             <div id="frame1545" className="flex flex-basis items-center mt-60">
               <div>
                 <Grid container columnSpacing={2} rowSpacing={5}>
-                  {data
-                    .slice(0, 6)
-                    .map(
-                      ({
-                        course_id,
-                        course_image,
-                        course_name,
-                        course_description,
-                        price,
-                      }) => {
-                        return (
-                          <Grid key={course_image} xs={4} maxWidth={350}>
-                            <Link
-                              to={`/detail-kelas/${course_id}`}
-                              style={{ textDecoration: "none" }}
-                            >
-                              <CardComponent
-                                title={course_name}
-                                body={course_description}
-                                image={course_image}
-                                price={Intl.NumberFormat("id-ID").format(price)}
-                              />
-                            </Link>
-                          </Grid>
-                        );
-                      }
-                    )}
+                  {data.slice(0, 6).map((item, index) => (
+                    <Grid key={index} xs={4} maxWidth={350}>
+                      <Link
+                        to={`/detail-kelas/${item.course_id}`}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <CardComponent
+                          title={item.course_name}
+                          body={item.course_description}
+                          image={item.course_image}
+                          price={Intl.NumberFormat("id-ID").format(item.price)}
+                        />
+                      </Link>
+                    </Grid>
+                  ))}
                 </Grid>
               </div>
             </div>
@@ -217,24 +205,19 @@ const Landing = () => {
             <div id="frame1545" className="flex flex-basis items-center">
               <div>
                 <Grid container columnSpacing={2} rowSpacing={5}>
-                  {category
-                    .slice(0, 8)
-                    .map(({ category_id, category_image, category_name }) => {
-                      console.log(category_id);
-                      return (
-                        <Grid key={category_id} xs={3} maxWidth={350}>
-                          <Link
-                            to={`/menu-kelas/${category_id}`}
-                            style={{ textDecoration: "none" }}
-                          >
-                            <CardFlag
-                              body={category_name}
-                              image={category_image}
-                            />
-                          </Link>
-                        </Grid>
-                      );
-                    })}
+                  {category.slice(0, 8).map((item, index) => (
+                    <Grid key={index} xs={3} maxWidth={350}>
+                      <Link
+                        to={`/menu-kelas/${item.category_id}`}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <CardFlag
+                          body={item.category_name}
+                          image={item.category_image}
+                        />
+                      </Link>
+                    </Grid>
+                  ))}
                 </Grid>
               </div>
             </div>

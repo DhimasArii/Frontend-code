@@ -1,4 +1,5 @@
 import React from "react";
+import { format } from "date-fns";
 import NavbarLogIn from "../../components/Navbar2";
 import NavbarLogOut from "../../components/Navbar";
 import Container from "@mui/material/Container";
@@ -55,11 +56,14 @@ const Checkout = () => {
           return;
         }
 
-        const response = await axios.get("https://dummyjson.com/auth/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "https://localhost:7175/api/User/GetUserData",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setDataUser(response.data);
         console.log(response.data);
       } catch (error) {
@@ -76,10 +80,10 @@ const Checkout = () => {
       try {
         if (dataUser.id) {
           const response = await axios.get(
-            `https://dummyjson.com/cart/user/${dataUser.id}`
+            `https://localhost:7175/api/Checkout/GetAllByCheckoutId?checkout_id=ead2ebc3-cf68-416b-8415-f97b38fc726b`
           );
-          setData(response.data.carts[0].products);
-          console.log(response.data.carts[0].products);
+          setData(response.data[0].checkout_detail);
+          console.log(data);
         }
       } catch (error) {
         console.error("Error fetching cart data:", error);
@@ -99,13 +103,13 @@ const Checkout = () => {
   //   console.log(localStorage.getItem("token"));
   // }, []);
 
-  const totalHarga = data.reduce((total, item) => {
-    // Pastikan item.price adalah angka sebelum ditambahkan ke total
-    if (!isNaN(item.price)) {
-      return total + parseFloat(item.price);
-    }
-    return total;
-  }, 0);
+  // const totalHarga = data.reduce((total, item) => {
+  //   // Pastikan item.price adalah angka sebelum ditambahkan ke total
+  //   if (!isNaN(item.price)) {
+  //     return total + parseFloat(item.price);
+  //   }
+  //   return total;
+  // }, 0);
 
   // Checkbox
   const [checkedItems, setCheckedItems] = useState({});
@@ -213,7 +217,7 @@ const Checkout = () => {
               } else {
                 return data.map((item, index) => (
                   <Grid
-                    key={index}
+                    key={item.schedule_id}
                     xs={4}
                     sx={{ width: "100%" }}
                     display={"flex"}
@@ -233,9 +237,13 @@ const Checkout = () => {
                       }
                     />
                     <CardCheckbox
-                      title={item.title}
-                      body={item.title}
-                      image={item.thumbnail}
+                      title={item.category_name}
+                      body={item.course_description}
+                      image={item.course_image}
+                      schedule={format(
+                        new Date(item.course_date),
+                        "EEEE, d MMMM yyyy"
+                      )}
                       price={item.price}
                     />
                   </Grid>
@@ -251,7 +259,7 @@ const Checkout = () => {
         >
           <div id="1574" className="flex flex-row gap-24 items-center">
             <div className="font-400 text-18">Total Price</div>
-            <div className="font-600 text-24 text-green">IDR {totalHarga}</div>
+            <div className="font-600 text-24 text-green">IDR </div>
           </div>
           <div>
             <Button
