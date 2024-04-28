@@ -156,44 +156,49 @@ const DetailKelas = () => {
                   </div>
                 </div>
                 <div id="frame1558" className="flex flex-row gap-16">
-                  <Button
-                    variant="contained"
-                    sx={{
-                      backgroundColor: "yellow.main",
-                      padding: "10px,20px",
-                      width: "233.5px",
-                      height: "40px",
-                      fontSize: "16px",
-                      fontWeight: "500",
-                      fontFamily: "Montserrat",
-                      textTransform: "none",
-                      borderRadius: "8px",
-                      "&:hover": {
-                        backgroundColor: "yellow.light",
-                      },
-                    }}
-                  >
-                    Add to Cart
-                  </Button>
-                  <Button
-                    variant="contained"
-                    sx={{
-                      backgroundColor: "green.main",
-                      padding: "10px,20px",
-                      width: "233.5px",
-                      height: "40px",
-                      fontSize: "16px",
-                      fontWeight: "500",
-                      fontFamily: "Montserrat",
-                      textTransform: "none",
-                      borderRadius: "8px",
-                      "&:hover": {
-                        backgroundColor: "green.light",
-                      },
-                    }}
-                  >
-                    Buy Now
-                  </Button>
+                  <Link to="/checkout">
+                    <Button
+                      variant="contained"
+                      sx={{
+                        backgroundColor: "yellow.main",
+                        padding: "10px,20px",
+                        width: "233.5px",
+                        height: "40px",
+                        fontSize: "16px",
+                        fontWeight: "500",
+                        fontFamily: "Montserrat",
+                        textTransform: "none",
+                        borderRadius: "8px",
+                        "&:hover": {
+                          backgroundColor: "yellow.light",
+                        },
+                      }}
+                    >
+                      Add to Cart
+                    </Button>
+                  </Link>
+
+                  <Link to="/checkout">
+                    <Button
+                      variant="contained"
+                      sx={{
+                        backgroundColor: "green.main",
+                        padding: "10px,20px",
+                        width: "233.5px",
+                        height: "40px",
+                        fontSize: "16px",
+                        fontWeight: "500",
+                        fontFamily: "Montserrat",
+                        textTransform: "none",
+                        borderRadius: "8px",
+                        "&:hover": {
+                          backgroundColor: "green.light",
+                        },
+                      }}
+                    >
+                      Buy Now
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </div>

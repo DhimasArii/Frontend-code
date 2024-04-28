@@ -11,6 +11,7 @@ import Regis from "./pages/register-new/register";
 import Checkout from "./pages/Checkout/checkout";
 import Invoice from "./pages/invoice/invoice";
 import DetailInvoice from "./pages/detail-invoice/detailInvoice";
+import PurchaseSuccess from "./pages/PurchaseSuccess/index";
 
 import { Routes, Route, ScrollRestoration } from "react-router-dom";
 import MyClass from "./pages/my-class/my-class";
@@ -68,6 +69,15 @@ function App() {
         path="/my-class"
         element={
           <MyClass isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+        }
+      />
+      <Route
+        path="/PurchaseSuccess"
+        element={
+          <PurchaseSuccess
+            isLoggedIn={isLoggedIn}
+            setIsLoggedIn={setIsLoggedIn}
+          />
         }
       />
     </Routes>
