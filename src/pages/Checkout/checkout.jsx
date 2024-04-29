@@ -88,7 +88,7 @@ const Checkout = () => {
       try {
         if (dataUser.id) {
           const response = await axios.get(
-            `https://localhost:7175/api/Checkout/GetAllByCheckoutId?checkout_id=ead2ebc3-cf68-416b-8415-f97b38fc726b`
+            `https://localhost:7175/api/Checkout/GetAllByUserId?user_id=${dataUser.id}`
           );
           setData(response.data[0].checkout_detail);
           console.log(data);
@@ -248,7 +248,7 @@ const Checkout = () => {
                   />
                   <CardCheckbox
                     title={item.category_name}
-                    body={item.course_description}
+                    body={item.course_name}
                     image={item.course_image}
                     schedule={format(
                       new Date(item.course_date),
