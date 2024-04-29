@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { format } from "date-fns";
 import React from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -34,7 +35,8 @@ const DetailKelas = () => {
   const [data, setData] = useState([]);
   const [detail, setDetail] = useState([]);
   const { id } = useParams();
-  const [schedule, setSchedule] = React.useState("");
+  const [schedule, setSchedule] = useState("");
+  const [scheduleList, setScheduleList] = useState([]);
   const handleSelect = (event) => {
     setSchedule(event.target.value);
   };
@@ -83,6 +85,22 @@ const DetailKelas = () => {
 
     fetchData();
   }, [detail]);
+
+  useEffect(() => {
+    const fetchScheduleData = async () => {
+      try {
+        const response = await axios.get(
+          `https://localhost:7175/api/Schedule/GetByCourseId?course_id=${id}`
+        );
+        setScheduleList(response.data);
+        console.log(scheduleList);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchScheduleData();
+  }, [id, detail]);
 
   const handleLogoutClick = async () => {
     await handleLogout();
@@ -145,12 +163,14 @@ const DetailKelas = () => {
                             Select Schedule
                           </em>
                         </MenuItem>
-                        <MenuItem value={1}>Monday, 25 July 2022</MenuItem>
-                        <MenuItem value={2}>Tuesday, 26 July 2022</MenuItem>
-                        <MenuItem value={3}>Wednesday, 27 July 2022</MenuItem>
-                        <MenuItem value={4}>Thursday, 28 July 2022</MenuItem>
-                        <MenuItem value={5}>Friday, 29 July 2022</MenuItem>
-                        <MenuItem value={6}>Saturday, 30 July 2022</MenuItem>
+                        {scheduleList.map((schedule, index) => (
+                          <MenuItem key={index} value={schedule.schedule_id}>
+                            {format(
+                              new Date(schedule.course_date),
+                              "EEEE, d MMMM yyyy"
+                            )}
+                          </MenuItem>
+                        ))}
                       </Select>
                     </FormControl>
                   </div>
