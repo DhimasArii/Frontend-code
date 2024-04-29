@@ -149,26 +149,43 @@ const DetailKelas = () => {
                   </div>
                   <div id="frame1508" className="">
                     <FormControl
-                      sx={{ m: 1, minWidth: 300, fontFamily: "Montserrat" }}
+                      sx={{
+                        m: 1,
+                        minWidth: 300,
+                        height: 40,
+                        fontFamily: "Montserrat",
+                      }}
                     >
                       <Select
                         value={schedule}
                         onChange={handleSelect}
                         displayEmpty
-                        autoWidth
+                        // autoWidth
                         inputProps={{ "aria-label": "Without label" }}
+                        sx={{ minHeight: 10 }}
                       >
                         <MenuItem value="">
-                          <em style={{ fontFamily: "Montserrat" }}>
+                          <div
+                            className="font-400 font-montserrat text-15"
+                            style={{ lineHeight: "18.29px", color: "#41454D" }}
+                          >
                             Select Schedule
-                          </em>
+                          </div>
                         </MenuItem>
                         {scheduleList.map((schedule, index) => (
                           <MenuItem key={index} value={schedule.schedule_id}>
-                            {format(
-                              new Date(schedule.course_date),
-                              "EEEE, d MMMM yyyy"
-                            )}
+                            <div
+                              className="font-400 font-montserrat text-15"
+                              style={{
+                                lineHeight: "18.29px",
+                                color: "#2B2E33",
+                              }}
+                            >
+                              {format(
+                                new Date(schedule.course_date),
+                                "EEEE, d MMMM yyyy"
+                              )}
+                            </div>
                           </MenuItem>
                         ))}
                       </Select>
