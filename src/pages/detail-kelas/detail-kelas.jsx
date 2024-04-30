@@ -22,6 +22,8 @@ import NavbarLogOut from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import useCheckLogin from "../../hooks/useCheckLogin";
 import useLogout from "../../hooks/useLogout";
+import useUserStore from "../../store/useUserStore";
+import useStoreOrder from "../../store/useStoreOrder";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -32,13 +34,17 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const DetailKelas = () => {
+  const { userData, fetchUserData } = useUserStore();
+  const { setSortOrder } = useStoreOrder();
   const [data, setData] = useState([]);
   const [detail, setDetail] = useState([]);
+  const [dataCheckout, setCheckout] = useState([]);
   const { id } = useParams();
   const [schedule, setSchedule] = useState("");
   const [scheduleList, setScheduleList] = useState([]);
   const handleSelect = (event) => {
     setSchedule(event.target.value);
+    console.log(event.target.value);
   };
   const navigate = useNavigate();
   const { isLoggedIn } = useCheckLogin();
@@ -46,6 +52,36 @@ const DetailKelas = () => {
 
   const column1 = ["Arabic", "English", "Indonesian", "Mandarin"];
   const column2 = ["Deutsch", "French", "Japanese", "Melayu"];
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetchUserData(token, navigate);
+    }
+  }, [fetchUserData, navigate]);
+
+  useEffect(() => {
+    console.log(userData); // Tampilkan userData setelah perubahan
+  }, [userData]);
+
+  useEffect(() => {
+    const fetchCartData = async () => {
+      try {
+        if (userData.id) {
+          const response = await axios.get(
+            `https://localhost:7175/api/Checkout/GetAllByUserId?user_id=${userData.id}&sortOrder=asc`
+          );
+          setCheckout(response.data[0]);
+          console.log(dataCheckout);
+        }
+      } catch (error) {
+        console.error("Error fetching cart data:", error);
+        // Handle error, such as displaying an error message or retrying the request
+      }
+    };
+
+    fetchCartData();
+  }, [schedule, userData]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,7 +103,7 @@ const DetailKelas = () => {
   }, [id]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchCategory = async () => {
       try {
         const response = await axios.get(
           `https://localhost:7175/api/Course/GetAllCoursesByCategory/${detail.category_id}`
@@ -83,7 +119,7 @@ const DetailKelas = () => {
       }
     };
 
-    fetchData();
+    fetchCategory();
   }, [detail]);
 
   useEffect(() => {
@@ -106,6 +142,77 @@ const DetailKelas = () => {
     await handleLogout();
     navigate("/login");
   };
+
+  const handleAddToCart = async () => {
+    try {
+      if (schedule) {
+        // Periksa apakah schedule_id sudah ada di detail_checkout
+        const isScheduleExists = dataCheckout.checkout_detail.some(
+          (detail) => detail.schedule_id === schedule
+        );
+
+        if (isScheduleExists) {
+          // Tampilkan alert atau pesan lainnya bahwa schedule sudah ada di cart
+          alert("Schedule already exists in cart.");
+        } else {
+          const data = {
+            checkout_id: dataCheckout.checkout_id,
+            schedule_id: schedule,
+            checklist: false,
+          };
+
+          const response = await axios.post(
+            "https://localhost:7175/api/Checkout/AddDetailCheckout",
+            data
+          );
+          console.log(response.data); // Tampilkan respons dari API jika diperlukan
+          // Lakukan hal lain jika ada
+        }
+      } else {
+        alert("Please select schedule.");
+      }
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      // Penanganan error jika diperlukan
+    }
+  };
+
+  const handleClickBuyNow = async () => {
+    try {
+      if (schedule) {
+        // Periksa apakah schedule_id sudah ada di detail_checkout
+        const isScheduleExists = dataCheckout.checkout_detail.some(
+          (detail) => detail.schedule_id === schedule
+        );
+
+        if (isScheduleExists) {
+          // Tampilkan alert atau pesan lainnya bahwa schedule sudah ada di cart
+          alert("Schedule already exists in cart.");
+        }
+
+        setSortOrder("desc");
+        const data = {
+          user_id: userData.id,
+          id_payment_method: "ec22fe4f-865e-4204-b6e2-8e65ff33ff9e",
+          schedule_id: schedule,
+        };
+
+        const response = await axios.post(
+          "https://localhost:7175/api/Checkout/BuyNow",
+          data
+        );
+        console.log(response.data); // Tampilkan respons dari API jika diperlukan
+        setCheckout(response.data); // Set data checkout setelah pembelian
+        navigate("/checkout"); // Navigasi ke halaman checkout setelah pembelian
+      } else {
+        alert("Please select schedule.");
+      }
+    } catch (error) {
+      console.error("Error buying now:", error);
+      // Penanganan error jika diperlukan
+    }
+  };
+
   return (
     <Container>
       <ThemeProvider theme={theme}>
@@ -164,13 +271,13 @@ const DetailKelas = () => {
                         inputProps={{ "aria-label": "Without label" }}
                         sx={{ minHeight: 10 }}
                       >
-                        <MenuItem value="">
-                          <div
+                        <MenuItem disabled value="">
+                          <em
                             className="font-400 font-montserrat text-15"
                             style={{ lineHeight: "18.29px", color: "#41454D" }}
                           >
                             Select Schedule
-                          </div>
+                          </em>
                         </MenuItem>
                         {scheduleList.map((schedule, index) => (
                           <MenuItem key={index} value={schedule.schedule_id}>
@@ -193,49 +300,47 @@ const DetailKelas = () => {
                   </div>
                 </div>
                 <div id="frame1558" className="flex flex-row gap-16">
-                  <Link to="/checkout">
-                    <Button
-                      variant="contained"
-                      sx={{
-                        backgroundColor: "yellow.main",
-                        padding: "10px,20px",
-                        width: "233.5px",
-                        height: "40px",
-                        fontSize: "16px",
-                        fontWeight: "500",
-                        fontFamily: "Montserrat",
-                        textTransform: "none",
-                        borderRadius: "8px",
-                        "&:hover": {
-                          backgroundColor: "yellow.light",
-                        },
-                      }}
-                    >
-                      Add to Cart
-                    </Button>
-                  </Link>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      backgroundColor: "yellow.main",
+                      padding: "10px,20px",
+                      width: "233.5px",
+                      height: "40px",
+                      fontSize: "16px",
+                      fontWeight: "500",
+                      fontFamily: "Montserrat",
+                      textTransform: "none",
+                      borderRadius: "8px",
+                      "&:hover": {
+                        backgroundColor: "yellow.light",
+                      },
+                    }}
+                    onClick={handleAddToCart}
+                  >
+                    Add to Cart
+                  </Button>
 
-                  <Link to="/checkout">
-                    <Button
-                      variant="contained"
-                      sx={{
-                        backgroundColor: "green.main",
-                        padding: "10px,20px",
-                        width: "233.5px",
-                        height: "40px",
-                        fontSize: "16px",
-                        fontWeight: "500",
-                        fontFamily: "Montserrat",
-                        textTransform: "none",
-                        borderRadius: "8px",
-                        "&:hover": {
-                          backgroundColor: "green.light",
-                        },
-                      }}
-                    >
-                      Buy Now
-                    </Button>
-                  </Link>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      backgroundColor: "green.main",
+                      padding: "10px,20px",
+                      width: "233.5px",
+                      height: "40px",
+                      fontSize: "16px",
+                      fontWeight: "500",
+                      fontFamily: "Montserrat",
+                      textTransform: "none",
+                      borderRadius: "8px",
+                      "&:hover": {
+                        backgroundColor: "green.light",
+                      },
+                    }}
+                    onClick={handleClickBuyNow}
+                  >
+                    Buy Now
+                  </Button>
                 </div>
               </div>
             </div>

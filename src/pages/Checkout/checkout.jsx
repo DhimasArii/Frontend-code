@@ -34,10 +34,13 @@ import {
 } from "@mui/material";
 import useCheckLogin from "../../hooks/useCheckLogin";
 import useLogout from "../../hooks/useLogout";
+import useUserStore from "../../store/useUserStore";
+import useStoreOrder from "../../store/useStoreOrder";
 
 const Checkout = () => {
+  const { userData, fetchUserData } = useUserStore();
   const [data, setData] = useState([]);
-  const [dataUser, setDataUser] = useState([]);
+  const { sortOrder, setSortOrder } = useStoreOrder();
 
   const navigate = useNavigate();
   const { isLoggedIn } = useCheckLogin();
@@ -49,46 +52,18 @@ const Checkout = () => {
   };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          alert("Silakan login terlebih dahulu.");
-          return;
-        }
-
-        const response = await axios.get(
-          "https://localhost:7175/api/User/GetUserData",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setDataUser(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        // Handle error, such as redirecting to login page or displaying an error message
-        if (error.response && error.response.status === 401) {
-          alert("Sesi Anda telah berakhir. Silakan login kembali.");
-          localStorage.removeItem("token"); // Hapus token dari localStorage
-          navigate("/login"); // Redirect ke halaman login
-        } else {
-          // Handle other errors, such as displaying an error message
-        }
-      }
-    };
-
-    fetchUserData();
-  }, []);
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetchUserData(token, navigate);
+    }
+  }, [fetchUserData, navigate]);
 
   useEffect(() => {
     const fetchCartData = async () => {
       try {
-        if (dataUser.id) {
+        if (userData.id) {
           const response = await axios.get(
-            `https://localhost:7175/api/Checkout/GetAllByUserId?user_id=${dataUser.id}`
+            `https://localhost:7175/api/Checkout/GetAllByUserId?user_id=${userData.id}&sortOrder=${sortOrder}`
           );
           setData(response.data[0].checkout_detail);
           console.log(data);
@@ -100,7 +75,7 @@ const Checkout = () => {
     };
 
     fetchCartData();
-  }, [dataUser]);
+  }, [userData, sortOrder]);
 
   // Checkbox
   const [checkedItems, setCheckedItems] = useState({});
@@ -183,11 +158,19 @@ const Checkout = () => {
   // pop up
   const [open, openchange] = useState(false);
   const functionopenpopup = () => {
-    openchange(true);
+    if (sortOrder == "desc") {
+      openchange(true);
+    } else {
+      openchange(false);
+    }
   };
   const closepopup = () => {
     openchange(false);
   };
+
+  useEffect(() => {
+    functionopenpopup(); // Panggil functionopenpopup saat halaman dimuat
+  }, []);
   return (
     <Container>
       <ThemeProvider theme={theme}>
@@ -216,13 +199,11 @@ const Checkout = () => {
                 checked={Object.values(checkedItems).every(
                   (isChecked) => isChecked
                 )}
-                // indeterminate={!checkedAll && checkedItems.some((item) => item)}
                 onChange={handleCheckAll}
               />
             }
           />
 
-          {/* <img src={Sampah} alt="" style={{ right: "0" }} /> */}
           <Grid container columnSpacing={1} rowSpacing={5} direction={"column"}>
             {(() => {
               return data.map((item, index) => (
@@ -416,6 +397,7 @@ const Checkout = () => {
                             backgroundColor: "yellow.light",
                           },
                         }}
+                        onClick={closepopup}
                       >
                         Cancle
                       </Button>
