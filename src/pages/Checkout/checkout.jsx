@@ -158,18 +158,16 @@ const Checkout = () => {
   // pop up
   const [open, openchange] = useState(false);
   const functionopenpopup = () => {
-    if (sortOrder == "desc") {
-      openchange(true);
-    } else {
-      openchange(false);
-    }
+    openchange(true);
   };
   const closepopup = () => {
     openchange(false);
   };
 
   useEffect(() => {
-    functionopenpopup(); // Panggil functionopenpopup saat halaman dimuat
+    if (sortOrder == "desc") {
+      functionopenpopup();
+    }
   }, []);
   return (
     <Container>
@@ -312,7 +310,6 @@ const Checkout = () => {
                   fontFamily: "Poppins",
                 }}
               >
-                {/* <DialogContentText>Do you want remove this user?</DialogContentText> */}
                 <DialogContentText>
                   <div
                     className="flex items-center gap-16 text-18 font-500"

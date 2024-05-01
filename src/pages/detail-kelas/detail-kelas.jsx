@@ -193,7 +193,6 @@ const DetailKelas = () => {
         setSortOrder("desc");
         const data = {
           user_id: userData.id,
-          id_payment_method: "ec22fe4f-865e-4204-b6e2-8e65ff33ff9e",
           schedule_id: schedule,
         };
 
