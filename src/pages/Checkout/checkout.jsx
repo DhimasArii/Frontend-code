@@ -208,6 +208,7 @@ const Checkout = () => {
         }
       );
       console.log("Invoice created successfully:", response.data);
+      navigate("/PurchaseSuccess");
     } catch (error) {
       console.error("Error creating invoice:", error);
     }

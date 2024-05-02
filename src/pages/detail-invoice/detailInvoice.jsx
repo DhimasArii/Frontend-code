@@ -161,7 +161,8 @@ const DetailInvoice = ({ isLoggedIn, setIsLoggedIn }) => {
                         key={key}
                         style={{
                           textAlign: "center",
-                          backgroundColor: key === 1 ? "#EA9E1F33" : "inherit",
+                          backgroundColor:
+                            key % 2 === 0 ? "inherit" : "#EA9E1F33",
                           color: "#4F4F4F",
                         }}
                         className="font-500 text-16 font-montserrat"
