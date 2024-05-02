@@ -323,6 +323,8 @@ const Checkout = () => {
                     overflowY: "hidden",
                   },
                 }}
+                disableScrollLock
+                disableRestoreFocus
               >
                 <div className="m-24 gap-24">
                   <DialogTitle

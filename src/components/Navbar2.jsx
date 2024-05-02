@@ -37,7 +37,9 @@ const Navbar2 = ({ handleLogout }) => {
             <img src={IconShopingCart} alt="" />
           </Link>
           <div className="text-16 font-montserrat text-green">My Class</div>
-          <div className="text-16 font-montserrat text-green">Invoice</div>
+          <Link to="/invoice" style={{ textDecoration: "none" }}>
+            <div className="text-16 font-montserrat text-green">Invoice</div>
+          </Link>
           <hr
             style={{
               color: "#000000",

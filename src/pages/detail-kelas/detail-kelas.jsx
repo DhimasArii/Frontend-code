@@ -8,7 +8,15 @@ import "../../components/style.css";
 import ImageNavbar from "../../assets/image-navbar-confirm.png";
 import ImageHeaderKelas from "../../assets/image-header-kelas.png";
 import { ThemeProvider, styled } from "@mui/material/styles";
-import { InputAdornment, Box, Paper, FormControl } from "@mui/material";
+import {
+  InputAdornment,
+  Box,
+  Paper,
+  FormControl,
+  Alert,
+  AlertTitle,
+  Snackbar,
+} from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import theme from "../../components/color";
 import CardComponent from "../../components/CardComponents";
@@ -49,6 +57,7 @@ const DetailKelas = () => {
   const navigate = useNavigate();
   const { isLoggedIn } = useCheckLogin();
   const { handleLogout } = useLogout();
+  const [isAlertAddToCartOpen, setIsAlertAddToCartOpen] = useState(false);
 
   const column1 = ["Arabic", "English", "Indonesian", "Mandarin"];
   const column2 = ["Deutsch", "French", "Japanese", "Melayu"];
@@ -167,6 +176,13 @@ const DetailKelas = () => {
           );
           console.log(response.data); // Tampilkan respons dari API jika diperlukan
           // Lakukan hal lain jika ada
+
+          <Alert severity="success">
+            <AlertTitle>Success</AlertTitle>
+            This is a success Alert with an encouraging title.
+          </Alert>;
+
+          setIsAlertAddToCartOpen(true);
         }
       } else {
         alert("Please select schedule.");
@@ -175,6 +191,13 @@ const DetailKelas = () => {
       console.error("Error adding to cart:", error);
       // Penanganan error jika diperlukan
     }
+  };
+  const handleCloseAlert = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setIsAlertAddToCartOpen(false);
   };
 
   const handleClickBuyNow = async () => {
@@ -319,6 +342,22 @@ const DetailKelas = () => {
                   >
                     Add to Cart
                   </Button>
+                  {/* Tampilkan Alert ketika berhasil add to cart */}
+                  <Snackbar
+                    open={isAlertAddToCartOpen}
+                    autoHideDuration={6000}
+                    onClose={handleCloseAlert}
+                    anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                  >
+                    <Alert
+                      onClose={handleCloseAlert}
+                      severity="success"
+                      variant="filled"
+                      sx={{ width: "100%" }}
+                    >
+                      Berhasil add to cart
+                    </Alert>
+                  </Snackbar>
 
                   <Button
                     variant="contained"

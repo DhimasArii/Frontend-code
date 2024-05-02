@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { format } from "date-fns";
 import Footer from "../../components/Footer";
 import Container from "@mui/material/Container";
 import { ThemeProvider, styled } from "@mui/material/styles";
@@ -8,6 +9,7 @@ import NavbarLogIn from "../../components/Navbar2";
 import NavbarLogOut from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
+import axios from "axios";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -17,13 +19,30 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const invoice = ({ isLoggedIn, setIsLoggedIn }) => {
+const Invoice = ({ isLoggedIn, setIsLoggedIn }) => {
   const navigate = useNavigate();
+  const [invoiceData, setInvoiceData] = useState([]);
   const handleLogout = () => {
     setIsLoggedIn(false);
     // Lakukan aksi logout, misalnya redirect ke halaman login
     navigate("/login");
   };
+
+  useEffect(() => {
+    const fetchInvoiceData = async () => {
+      try {
+        const response = await axios.get(
+          "https://localhost:7175/api/Invoice/GetAll"
+        );
+        setInvoiceData(response.data);
+        console.log(invoiceData);
+      } catch (error) {
+        console.error("Error fetching invoice data:", error);
+      }
+    };
+
+    fetchInvoiceData();
+  }, []);
 
   const data = [
     {
@@ -122,15 +141,7 @@ const invoice = ({ isLoggedIn, setIsLoggedIn }) => {
 
         {/* body */}
         <div className="flex flex-col w-100">
-          <div
-            id="frame1732"
-            className="flex flex-col gap-32"
-            style={{
-              paddingTop: "46px",
-              paddingLeft: "10px",
-              paddingRight: "10px",
-            }}
-          >
+          <div id="frame1732" className="flex flex-col gap-32 px-70 mt-46">
             <div id="frame1410" className="flex flex-row gap-8 ">
               <div className="font-600 text-16 font-montserrat text-gray">
                 Home -
@@ -165,43 +176,59 @@ const invoice = ({ isLoggedIn, setIsLoggedIn }) => {
                   }}
                   className="font-600 text-16 font-montserrat"
                 >
-                  <th style={{ padding: "20px" }}>No</th>
-                  <th style={{ padding: "20px" }}>No. Invoice</th>
-                  <th style={{ padding: "20px" }}>Date</th>
-                  <th style={{ padding: "20px" }}>Total Course</th>
-                  <th style={{ padding: "20px" }}>Total Price</th>
-                  <th style={{ padding: "20px" }}>Action</th>
+                  <th style={{ padding: "20px 20px 20px 0" }}>No</th>
+                  <th style={{ padding: "20px 20px 20px 0" }}>No. Invoice</th>
+                  <th style={{ padding: "20px 20px 20px 0" }}>Date</th>
+                  <th style={{ padding: "20px 20px 20px 0" }}>Total Course</th>
+                  <th style={{ padding: "20px 20px 20px 0" }}>Total Price</th>
+                  <th style={{ padding: "20px 20px 20px 0" }}>Action</th>
                 </tr>
-                {data.map((val, key) => {
-                  return (
-                    <tr
-                      key={key}
-                      style={{
-                        textAlign: "center",
-                        backgroundColor: key === 1 ? "#EA9E1F33" : "inherit",
-                        color: "#4F4F4F",
-                      }}
-                      className="font-500 text-16 font-montserrat"
-                    >
-                      <td style={{ padding: "20px 20px 20px 0" }}>{val.no}</td>
-                      <td style={{ padding: "20px 20px 20px 0" }}>
-                        {val.noInvoice}
-                      </td>
-                      <td style={{ padding: "20px 20px 20px 0" }}>
-                        {val.date}
-                      </td>
-                      <td style={{ padding: "20px 20px 20px 0" }}>
-                        {val.totalCourse}
-                      </td>
-                      <td style={{ padding: "20px 20px 20px 0" }}>
-                        {val.totalPrice}
-                      </td>
-                      <td style={{ padding: "20px 20px 20px 0" }}>
-                        {val.action}
-                      </td>
-                    </tr>
-                  );
-                })}
+                {invoiceData.map((val, key) => (
+                  <tr
+                    key={key}
+                    style={{
+                      textAlign: "center",
+                      backgroundColor: key % 2 === 0 ? "#EA9E1F33" : "inherit",
+                      color: "#4F4F4F",
+                    }}
+                    className="font-500 text-16 font-montserrat"
+                  >
+                    <td style={{ padding: "20px 20px 20px 0" }}>{key + 1}</td>
+                    <td style={{ padding: "20px 20px 20px 0" }}>
+                      {val.invoice_number}
+                    </td>
+                    <td style={{ padding: "20px 20px 20px 0" }}>
+                      {format(new Date(val.invoice_date), "dd MMMM yyyy")}
+                    </td>
+                    <td style={{ padding: "20px 20px 20px 0" }}>
+                      {val.total_course}
+                    </td>
+                    <td style={{ padding: "20px 20px 20px 0" }}>
+                      {val.total_price}
+                    </td>
+                    <td style={{ padding: "20px 20px 20px 0" }}>
+                      <Button
+                        variant="contained"
+                        sx={{
+                          backgroundColor: "yellow.main",
+                          padding: "10px,20px",
+                          width: "233.5px",
+                          height: "40px",
+                          fontSize: "16px",
+                          fontWeight: "500",
+                          fontFamily: "Montserrat",
+                          textTransform: "none",
+                          borderRadius: "8px",
+                          "&:hover": {
+                            backgroundColor: "yellow.light",
+                          },
+                        }}
+                      >
+                        Details
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
               </table>
             </div>
           </div>
@@ -213,4 +240,4 @@ const invoice = ({ isLoggedIn, setIsLoggedIn }) => {
   );
 };
 
-export default invoice;
+export default Invoice;
