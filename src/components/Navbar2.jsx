@@ -36,8 +36,20 @@ const Navbar2 = ({ handleLogout }) => {
           <Link to="/checkout" onClick={handleCart}>
             <img src={IconShopingCart} alt="" />
           </Link>
-          <div className="text-16 font-montserrat text-green">My Class</div>
-          <Link to="/invoice" style={{ textDecoration: "none" }}>
+          <Link
+            to={"/my-class"}
+            style={{ textDecoration: "none", color: "inherit" }}
+            onMouseEnter={(e) => (e.target.style.textDecoration = "underline")}
+            onMouseLeave={(e) => (e.target.style.textDecoration = "none")}
+          >
+            <div className="text-16 font-montserrat text-green">My Class</div>
+          </Link>
+          <Link
+            to={"/invoice"}
+            style={{ textDecoration: "none", color: "inherit" }}
+            onMouseEnter={(e) => (e.target.style.textDecoration = "underline")}
+            onMouseLeave={(e) => (e.target.style.textDecoration = "none")}
+          >
             <div className="text-16 font-montserrat text-green">Invoice</div>
           </Link>
           <hr

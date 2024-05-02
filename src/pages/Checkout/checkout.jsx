@@ -44,6 +44,7 @@ import { green, red } from "@mui/material/colors";
 const Checkout = () => {
   const { userData, fetchUserData } = useUserStore();
   const [data, setData] = useState([]);
+  const [dataCheckout, setDataCheckout] = useState([]);
   const { sortOrder, setSortOrder } = useStoreOrder();
 
   const navigate = useNavigate();
@@ -69,6 +70,7 @@ const Checkout = () => {
           const response = await axios.get(
             `https://localhost:7175/api/Checkout/GetAllByUserId?user_id=${userData.id}&sortOrder=${sortOrder}`
           );
+          setDataCheckout(response.data[0]);
           setData(response.data[0].checkout_detail);
           console.log(data);
         }
@@ -194,6 +196,22 @@ const Checkout = () => {
 
     fetchPaymentMethods();
   }, []);
+
+  const handlePayNowClick = async () => {
+    try {
+      const response = await axios.post(
+        "https://localhost:7175/api/Invoice/CreateInvoice",
+        {
+          user_id: userData.id,
+          checkout_id: dataCheckout.checkout_id,
+          id_payment_method: selectedPayment.id_payment_method,
+        }
+      );
+      console.log("Invoice created successfully:", response.data);
+    } catch (error) {
+      console.error("Error creating invoice:", error);
+    }
+  };
 
   return (
     <Container>
@@ -422,29 +440,28 @@ const Checkout = () => {
                     </Button>
                   </div>
                   <div className="ml-16">
-                    <Link to="/PurchaseSuccess">
-                      <Button
-                        variant="contained"
-                        sx={{
-                          backgroundColor: "green.main",
-                          padding: "12px 16px 12px 16px",
-                          width: "155px",
-                          height: "48px",
-                          gap: "8px",
-                          fontSize: "16px",
-                          fontWeight: "600",
-                          fontFamily: "Poppins",
-                          textTransform: "none",
-                          lineHeight: "24px",
-                          borderRadius: "8px",
-                          "&:hover": {
-                            backgroundColor: "green.light",
-                          },
-                        }}
-                      >
-                        Pay Now
-                      </Button>
-                    </Link>
+                    <Button
+                      variant="contained"
+                      sx={{
+                        backgroundColor: "green.main",
+                        padding: "12px 16px 12px 16px",
+                        width: "155px",
+                        height: "48px",
+                        gap: "8px",
+                        fontSize: "16px",
+                        fontWeight: "600",
+                        fontFamily: "Poppins",
+                        textTransform: "none",
+                        lineHeight: "24px",
+                        borderRadius: "8px",
+                        "&:hover": {
+                          backgroundColor: "green.light",
+                        },
+                      }}
+                      onClick={handlePayNowClick}
+                    >
+                      Pay Now
+                    </Button>
                   </div>
                 </div>
               </Dialog>

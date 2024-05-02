@@ -7,7 +7,7 @@ import { InputAdornment, Box, Paper, FormControl } from "@mui/material";
 import theme from "../../components/color";
 import NavbarLogIn from "../../components/Navbar2";
 import NavbarLogOut from "../../components/Navbar";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import axios from "axios";
 
@@ -44,92 +44,10 @@ const Invoice = ({ isLoggedIn, setIsLoggedIn }) => {
     fetchInvoiceData();
   }, []);
 
-  const data = [
-    {
-      no: 1,
-      noInvoice: "DLA00003",
-      date: "12 Juli 2023",
-      totalCourse: 2,
-      totalPrice: "IDR 700.00",
-      action: (
-        <Button
-          variant="contained"
-          sx={{
-            backgroundColor: "yellow.main",
-            padding: "10px,20px",
-            width: "233.5px",
-            height: "40px",
-            fontSize: "16px",
-            fontWeight: "500",
-            fontFamily: "Montserrat",
-            textTransform: "none",
-            borderRadius: "8px",
-            "&:hover": {
-              backgroundColor: "yellow.light",
-            },
-          }}
-        >
-          Details
-        </Button>
-      ),
-    },
-    {
-      no: 2,
-      noInvoice: "DLA00003",
-      date: "12 Juli 2023",
-      totalCourse: 1,
-      totalPrice: "IDR 700.00",
-      action: (
-        <Button
-          variant="contained"
-          sx={{
-            backgroundColor: "yellow.main",
-            padding: "10px,20px",
-            width: "233.5px",
-            height: "40px",
-            fontSize: "16px",
-            fontWeight: "500",
-            fontFamily: "Montserrat",
-            textTransform: "none",
-            borderRadius: "8px",
-            "&:hover": {
-              backgroundColor: "yellow.light",
-            },
-          }}
-        >
-          Details
-        </Button>
-      ),
-    },
-    {
-      no: 3,
-      noInvoice: "DLA00003",
-      date: "12 Juli 2023",
-      totalCourse: 1,
-      totalPrice: "IDR 700.00",
-      action: (
-        <Button
-          variant="contained"
-          sx={{
-            backgroundColor: "yellow.main",
-            padding: "10px,20px",
-            width: "233.5px",
-            height: "40px",
-            fontSize: "16px",
-            fontWeight: "500",
-            fontFamily: "Montserrat",
-            textTransform: "none",
-            borderRadius: "8px",
-            "&:hover": {
-              backgroundColor: "yellow.light",
-            },
-          }}
-        >
-          Details
-        </Button>
-      ),
-    },
-  ];
+  const handleDetailClick = (invoiceId) => {
+    navigate(`/detail-invoice/${invoiceId}`);
+  };
+
   return (
     <Container>
       <ThemeProvider theme={theme}>
@@ -144,7 +62,16 @@ const Invoice = ({ isLoggedIn, setIsLoggedIn }) => {
           <div id="frame1732" className="flex flex-col gap-32 px-70 mt-46">
             <div id="frame1410" className="flex flex-row gap-8 ">
               <div className="font-600 text-16 font-montserrat text-gray">
-                Home -
+                <Link
+                  to={"/"}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                  onMouseEnter={(e) =>
+                    (e.target.style.textDecoration = "underline")
+                  }
+                  onMouseLeave={(e) => (e.target.style.textDecoration = "none")}
+                >
+                  Home &gt;
+                </Link>
               </div>
               <div className="font-600 text-16 font-montserrat text-yellow">
                 Invoice
@@ -223,6 +150,7 @@ const Invoice = ({ isLoggedIn, setIsLoggedIn }) => {
                             backgroundColor: "yellow.light",
                           },
                         }}
+                        onClick={() => handleDetailClick(val.invoice_id)}
                       >
                         Details
                       </Button>
