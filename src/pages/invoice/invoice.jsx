@@ -10,6 +10,7 @@ import NavbarLogOut from "../../components/Navbar";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import axios from "axios";
+import useUserStore from "../../store/useUserStore";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -20,6 +21,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Invoice = ({ isLoggedIn, setIsLoggedIn }) => {
+  const { userData, fetchUserData } = useUserStore();
   const navigate = useNavigate();
   const [invoiceData, setInvoiceData] = useState([]);
   const handleLogout = () => {
@@ -27,12 +29,18 @@ const Invoice = ({ isLoggedIn, setIsLoggedIn }) => {
     // Lakukan aksi logout, misalnya redirect ke halaman login
     navigate("/login");
   };
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetchUserData(token, navigate);
+    }
+  }, [fetchUserData, navigate]);
 
   useEffect(() => {
     const fetchInvoiceData = async () => {
       try {
         const response = await axios.get(
-          "https://localhost:7175/api/Invoice/GetAll"
+          `https://localhost:7175/api/Invoice/GetAllByUserId?user_id=${userData.id}`
         );
         setInvoiceData(response.data);
         console.log(invoiceData);

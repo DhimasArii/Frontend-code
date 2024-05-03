@@ -32,6 +32,7 @@ import useCheckLogin from "../../hooks/useCheckLogin";
 import useLogout from "../../hooks/useLogout";
 import useUserStore from "../../store/useUserStore";
 import useStoreOrder from "../../store/useStoreOrder";
+import useStoreTempBuyNow from "../../store/useStoreTempBuyNow";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -50,6 +51,7 @@ const DetailKelas = () => {
   const { id } = useParams();
   const [schedule, setSchedule] = useState("");
   const [scheduleList, setScheduleList] = useState([]);
+  const { buyNowData, setBuyNowData } = useStoreTempBuyNow();
   const handleSelect = (event) => {
     setSchedule(event.target.value);
     console.log(event.target.value);
@@ -58,6 +60,8 @@ const DetailKelas = () => {
   const { isLoggedIn } = useCheckLogin();
   const { handleLogout } = useLogout();
   const [isAlertAddToCartOpen, setIsAlertAddToCartOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertSeverity, setAlertSeverity] = useState("");
 
   const column1 = ["Arabic", "English", "Indonesian", "Mandarin"];
   const column2 = ["Deutsch", "French", "Japanese", "Melayu"];
@@ -78,7 +82,7 @@ const DetailKelas = () => {
       try {
         if (userData.id) {
           const response = await axios.get(
-            `https://localhost:7175/api/Checkout/GetAllByUserId?user_id=${userData.id}&sortOrder=asc`
+            `https://localhost:7175/api/Checkout/GetAllByUserId?user_id=${userData.id}`
           );
           setCheckout(response.data[0]);
           console.log(dataCheckout);
@@ -162,7 +166,9 @@ const DetailKelas = () => {
 
         if (isScheduleExists) {
           // Tampilkan alert atau pesan lainnya bahwa schedule sudah ada di cart
-          alert("Schedule already exists in cart.");
+          setAlertMessage("Schedule already exists in cart.");
+          setAlertSeverity("warning");
+          setIsAlertAddToCartOpen(true);
         } else {
           const data = {
             checkout_id: dataCheckout.checkout_id,
@@ -177,15 +183,14 @@ const DetailKelas = () => {
           console.log(response.data); // Tampilkan respons dari API jika diperlukan
           // Lakukan hal lain jika ada
 
-          <Alert severity="success">
-            <AlertTitle>Success</AlertTitle>
-            This is a success Alert with an encouraging title.
-          </Alert>;
-
+          setAlertMessage("Berhasil add to cart");
+          setAlertSeverity("success");
           setIsAlertAddToCartOpen(true);
         }
       } else {
-        alert("Please select schedule.");
+        setAlertMessage("Please select schedule!");
+        setAlertSeverity("warning");
+        setIsAlertAddToCartOpen(true);
       }
     } catch (error) {
       console.error("Error adding to cart:", error);
@@ -210,24 +215,25 @@ const DetailKelas = () => {
 
         if (isScheduleExists) {
           // Tampilkan alert atau pesan lainnya bahwa schedule sudah ada di cart
-          alert("Schedule already exists in cart.");
+          setAlertMessage(
+            "Schedule already exists in cart. Please check your cart!"
+          );
+          setAlertSeverity("warning");
+          setIsAlertAddToCartOpen(true);
+        } else {
+          const tempBuyNow = {
+            user_id: userData.id,
+            schedule_id: schedule,
+          };
+          setBuyNowData(tempBuyNow);
+          setSortOrder("buy_now");
+
+          navigate("/checkout"); // Navigasi ke halaman checkout setelah pembelian
         }
-
-        setSortOrder("desc");
-        const data = {
-          user_id: userData.id,
-          schedule_id: schedule,
-        };
-
-        const response = await axios.post(
-          "https://localhost:7175/api/Checkout/BuyNow",
-          data
-        );
-        console.log(response.data); // Tampilkan respons dari API jika diperlukan
-        setCheckout(response.data); // Set data checkout setelah pembelian
-        navigate("/checkout"); // Navigasi ke halaman checkout setelah pembelian
       } else {
-        alert("Please select schedule.");
+        setAlertMessage("Please select schedule!");
+        setAlertSeverity("warning");
+        setIsAlertAddToCartOpen(true);
       }
     } catch (error) {
       console.error("Error buying now:", error);
@@ -342,20 +348,20 @@ const DetailKelas = () => {
                   >
                     Add to Cart
                   </Button>
-                  {/* Tampilkan Alert ketika berhasil add to cart */}
+                  {/* Tampilkan Alert */}
                   <Snackbar
                     open={isAlertAddToCartOpen}
-                    autoHideDuration={6000}
+                    autoHideDuration={2000}
                     onClose={handleCloseAlert}
                     anchorOrigin={{ vertical: "top", horizontal: "center" }}
                   >
                     <Alert
                       onClose={handleCloseAlert}
-                      severity="success"
+                      severity={alertSeverity}
                       variant="filled"
                       sx={{ width: "100%" }}
                     >
-                      Berhasil add to cart
+                      {alertMessage}
                     </Alert>
                   </Snackbar>
 

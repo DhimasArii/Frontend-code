@@ -17,6 +17,8 @@ import {
   ListItemAvatar,
   Avatar,
   ListItemText,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Unstable_Grid2";
@@ -40,12 +42,16 @@ import useLogout from "../../hooks/useLogout";
 import useUserStore from "../../store/useUserStore";
 import useStoreOrder from "../../store/useStoreOrder";
 import { green, red } from "@mui/material/colors";
+import useStoreTempBuyNow from "../../store/useStoreTempBuyNow";
 
 const Checkout = () => {
   const { userData, fetchUserData } = useUserStore();
   const [data, setData] = useState([]);
   const [dataCheckout, setDataCheckout] = useState([]);
+  const [dataTempBuyNow, setDataTempBuyNow] = useState([]);
   const { sortOrder, setSortOrder } = useStoreOrder();
+  const { buyNowData, setBuyNowData } = useStoreTempBuyNow();
+  const [checkedItems, setCheckedItems] = useState({});
 
   const navigate = useNavigate();
   const { isLoggedIn } = useCheckLogin();
@@ -65,14 +71,24 @@ const Checkout = () => {
 
   useEffect(() => {
     const fetchCartData = async () => {
+      console.log(buyNowData, "\n", sortOrder);
       try {
         if (userData.id) {
-          const response = await axios.get(
-            `https://localhost:7175/api/Checkout/GetAllByUserId?user_id=${userData.id}&sortOrder=${sortOrder}`
-          );
-          setDataCheckout(response.data[0]);
-          setData(response.data[0].checkout_detail);
-          console.log(data);
+          if (sortOrder == "cart") {
+            const response = await axios.get(
+              `https://localhost:7175/api/Checkout/GetAllByUserId?user_id=${userData.id}`
+            );
+            setDataCheckout(response.data[0]);
+            setData(response.data[0].checkout_detail);
+            console.log(data);
+            console.log(buyNowData);
+          } else if (sortOrder == "buy_now") {
+            const response = await axios.get(
+              `https://localhost:7175/api/Schedule/${buyNowData.schedule_id}`
+            );
+            setDataTempBuyNow(response.data);
+            console.log(dataTempBuyNow);
+          }
         }
       } catch (error) {
         console.error("Error fetching cart data:", error);
@@ -83,24 +99,32 @@ const Checkout = () => {
     fetchCartData();
   }, [userData, sortOrder]);
 
-  // Checkbox
-  const [checkedItems, setCheckedItems] = useState({});
-  useEffect(() => {
-    if (data.length > 0) {
-      const initialCheckedItems = {};
-      data.forEach((item, index) => {
-        initialCheckedItems[index] = item.checklist;
-      });
-      setCheckedItems(initialCheckedItems);
-    }
-  }, [data]);
+  const totalHarga = (sortOrder === "cart" ? data : dataTempBuyNow).reduce(
+    (total, item, index) => {
+      if (checkedItems[index]) {
+        if (!isNaN(item.price)) {
+          return total + parseFloat(item.price);
+        }
+      }
+      return total;
+    },
+    0
+  );
 
-  const totalHarga = data.reduce((total, item) => {
-    if (!isNaN(item.price)) {
-      return total + parseFloat(item.price);
+  // Checkbox
+  useEffect(() => {
+    const initialCheckedItems = {};
+    if (sortOrder === "cart") {
+      if (data.length > 0) {
+        data.forEach((item, index) => {
+          initialCheckedItems[index] = item.checklist;
+        });
+      }
+    } else {
+      initialCheckedItems[0] = true;
     }
-    return total;
-  }, 0);
+    setCheckedItems(initialCheckedItems);
+  }, [data]);
 
   const handleCheckAll = () => {
     const allChecked = Object.values(checkedItems).every(
@@ -110,18 +134,26 @@ const Checkout = () => {
     // Jika semua item sudah dicentang, set semua item menjadi tidak dicentang (false)
     if (allChecked) {
       const newCheckedItems = {};
-      data.forEach((item, index) => {
-        newCheckedItems[index] = false;
-        updateDetailCheckout(item.detail_checkout_id, false); // Tambahkan pembaruan otomatis ke API
-      });
+      if (sortOrder === "cart") {
+        data.forEach((item, index) => {
+          newCheckedItems[index] = false;
+          updateDetailCheckout(item.detail_checkout_id, false); // Tambahkan pembaruan otomatis ke API
+        });
+      } else {
+        newCheckedItems[0] = false;
+      }
       setCheckedItems(newCheckedItems);
     } else {
       // Jika belum semua item dicentang, set semua item menjadi dicentang (true)
       const newCheckedItems = {};
-      data.forEach((item, index) => {
-        newCheckedItems[index] = true;
-        updateDetailCheckout(item.detail_checkout_id, true); // Tambahkan pembaruan otomatis ke API
-      });
+      if (sortOrder === "cart") {
+        data.forEach((item, index) => {
+          newCheckedItems[index] = true;
+          updateDetailCheckout(item.detail_checkout_id, true); // Tambahkan pembaruan otomatis ke API
+        });
+      } else {
+        newCheckedItems[0] = true;
+      }
       setCheckedItems(newCheckedItems);
     }
   };
@@ -134,7 +166,9 @@ const Checkout = () => {
 
     const item = data[index];
     const isChecked = !checkedItems[index];
-    updateDetailCheckout(item.detail_checkout_id, isChecked); // Panggil fungsi pembaruan otomatis ke API
+    if (sortOrder === "cart") {
+      updateDetailCheckout(item.detail_checkout_id, isChecked); // Panggil fungsi pembaruan otomatis ke API
+    }
   };
 
   const updateDetailCheckout = async (detailCheckoutId, isChecked) => {
@@ -149,15 +183,19 @@ const Checkout = () => {
     }
   };
   const handleDelete = async (detail_checkout_id) => {
-    try {
-      const response = await axios.delete(
-        `https://localhost:7175/api/Checkout/DeleteDetailCheckout?detail_checkout_id=${detail_checkout_id}`
-      );
-      console.log(response.data);
-      // Tambahkan logika untuk mengupdate state atau komponen setelah penghapusan berhasil
-      navigate(0);
-    } catch (error) {
-      console.error("Error deleting detail checkout:", error);
+    if (sortOrder === "cart") {
+      try {
+        const response = await axios.delete(
+          `https://localhost:7175/api/Checkout/DeleteDetailCheckout?detail_checkout_id=${detail_checkout_id}`
+        );
+        console.log(response.data);
+        // Tambahkan logika untuk mengupdate state atau komponen setelah penghapusan berhasil
+        navigate(0);
+      } catch (error) {
+        console.error("Error deleting detail checkout:", error);
+      }
+    } else if (sortOrder === "buy_now") {
+      navigate(-1);
     }
   };
 
@@ -177,7 +215,7 @@ const Checkout = () => {
   };
 
   useEffect(() => {
-    if (sortOrder == "desc") {
+    if (sortOrder == "buy_now") {
       functionopenpopup();
     }
   }, []);
@@ -197,18 +235,64 @@ const Checkout = () => {
     fetchPaymentMethods();
   }, []);
 
+  //alert
+
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertSeverity, setAlertSeverity] = useState("");
+  const handleCloseAlert = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setIsAlertOpen(false);
+  };
+
   const handlePayNowClick = async () => {
     try {
-      const response = await axios.post(
-        "https://localhost:7175/api/Invoice/CreateInvoice",
-        {
-          user_id: userData.id,
-          checkout_id: dataCheckout.checkout_id,
-          id_payment_method: selectedPayment.id_payment_method,
-        }
+      const hasTrueChecklist = Object.values(checkedItems).some(
+        (isChecked) => isChecked
       );
-      console.log("Invoice created successfully:", response.data);
-      navigate("/PurchaseSuccess");
+
+      let message = [];
+
+      if (!selectedPayment) {
+        message.push("select a payment method");
+      }
+
+      if (!hasTrueChecklist) {
+        message.push("checklist at least one item");
+      }
+      if (message.length > 0) {
+        const combinedMessage = "Please " + message.join(" and ");
+        setAlertMessage(combinedMessage);
+        setIsAlertOpen(true);
+        return;
+      }
+
+      if (sortOrder === "cart") {
+        const response = await axios.post(
+          "https://localhost:7175/api/Invoice/CreateInvoice",
+          {
+            user_id: userData.id,
+            checkout_id: dataCheckout.checkout_id,
+            id_payment_method: selectedPayment.id_payment_method,
+          }
+        );
+        console.log("Invoice created successfully:", response.data);
+        navigate("/PurchaseSuccess");
+      } else {
+        const response = await axios.post(
+          "https://localhost:7175/api/Invoice/CreateSingleInvoice",
+          {
+            user_id: userData.id,
+            schedule_id: buyNowData.schedule_id,
+            id_payment_method: selectedPayment.id_payment_method,
+          }
+        );
+        console.log("Invoice created successfully:", response.data);
+        navigate("/PurchaseSuccess");
+      }
     } catch (error) {
       console.error("Error creating invoice:", error);
     }
@@ -249,48 +333,50 @@ const Checkout = () => {
 
           <Grid container columnSpacing={1} rowSpacing={5} direction={"column"}>
             {(() => {
-              return data.map((item, index) => (
-                <Grid
-                  key={item.schedule_id}
-                  xs={4}
-                  sx={{ width: "100%", alignItems: "center" }}
-                  display={"flex"}
-                  flexDirection={"row"}
-                >
-                  <FormControlLabel
-                    key={index}
-                    control={
-                      <Checkbox
-                        style={{
-                          border: "none",
-                          color: "#00e676",
-                        }}
-                        checked={checkedItems[index] || false}
-                        onChange={() => handleChangeItem(index)}
-                      />
-                    }
-                  />
-                  <CardCheckbox
-                    title={item.category_name}
-                    body={item.course_name}
-                    image={item.course_image}
-                    schedule={format(
-                      new Date(item.course_date),
-                      "EEEE, d MMMM yyyy"
-                    )}
-                    price={Intl.NumberFormat("id-ID").format(item.price)}
-                  />
-                  <IconButton
-                    aria-label="delete"
-                    sx={{
-                      color: "#EB5757",
-                    }}
-                    onClick={() => handleDelete(item.detail_checkout_id)}
+              return (sortOrder === "cart" ? data : dataTempBuyNow).map(
+                (item, index) => (
+                  <Grid
+                    key={item.schedule_id}
+                    xs={4}
+                    sx={{ width: "100%", alignItems: "center" }}
+                    display={"flex"}
+                    flexDirection={"row"}
                   >
-                    <DeleteForeverIcon sx={{ height: 40, width: 40 }} />
-                  </IconButton>
-                </Grid>
-              ));
+                    <FormControlLabel
+                      key={index}
+                      control={
+                        <Checkbox
+                          style={{
+                            border: "none",
+                            color: "#00e676",
+                          }}
+                          checked={checkedItems[index] || false}
+                          onChange={() => handleChangeItem(index)}
+                        />
+                      }
+                    />
+                    <CardCheckbox
+                      title={item.category_name}
+                      body={item.course_name}
+                      image={item.course_image}
+                      schedule={format(
+                        new Date(item.course_date),
+                        "EEEE, d MMMM yyyy"
+                      )}
+                      price={Intl.NumberFormat("id-ID").format(item.price)}
+                    />
+                    <IconButton
+                      aria-label="delete"
+                      sx={{
+                        color: "#EB5757",
+                      }}
+                      onClick={() => handleDelete(item.detail_checkout_id)}
+                    >
+                      <DeleteForeverIcon sx={{ height: 40, width: 40 }} />
+                    </IconButton>
+                  </Grid>
+                )
+              );
             })()}
           </Grid>
         </Box>
@@ -467,6 +553,23 @@ const Checkout = () => {
                 </div>
               </Dialog>
             </div>
+
+            {/* show Alert */}
+            <Snackbar
+              open={isAlertOpen}
+              autoHideDuration={2000}
+              onClose={handleCloseAlert}
+              anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            >
+              <Alert
+                onClose={handleCloseAlert}
+                severity="warning"
+                variant="filled"
+                sx={{ width: "100%" }}
+              >
+                {alertMessage}
+              </Alert>
+            </Snackbar>
           </div>
         </div>
       </ThemeProvider>

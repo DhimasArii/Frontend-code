@@ -11,7 +11,7 @@ const Navbar2 = ({ handleLogout }) => {
   const { sortOrder, setSortOrder } = useStoreOrder();
   const navigate = useNavigate();
   const handleCart = () => {
-    setSortOrder("asc");
+    setSortOrder("cart");
     navigate("/checkout");
     console.log(sortOrder);
   };

@@ -1,7 +1,7 @@
 import {create} from "zustand";
 
 const useStoreOrder = create((set) => ({
-  sortOrder: "asc",
+  sortOrder: "cart",
   setSortOrder: (order) => set({ sortOrder: order }),
 }));
 
