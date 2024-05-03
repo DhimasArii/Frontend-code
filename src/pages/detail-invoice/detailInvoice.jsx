@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { format, parseISO } from "date-fns";
 import Footer from "../../components/Footer";
 import Container from "@mui/material/Container";
 import { ThemeProvider, styled } from "@mui/material/styles";
@@ -6,8 +7,11 @@ import { InputAdornment, Box, Paper, FormControl } from "@mui/material";
 import theme from "../../components/color";
 import NavbarLogIn from "../../components/Navbar2";
 import NavbarLogOut from "../../components/Navbar";
-import { useNavigate, Link } from "react-router-dom";
+
+import { Link, useNavigate, useParams } from "react-router-dom";
+
 import Button from "@mui/material/Button";
+import axios from "axios";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -17,63 +21,42 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const invoice = ({ isLoggedIn, setIsLoggedIn }) => {
+const DetailInvoice = ({ isLoggedIn, setIsLoggedIn }) => {
   const navigate = useNavigate();
+  const { invoice_id } = useParams();
+  const [detailInvoiceData, setDetailInvoiceData] = useState([]);
   const handleLogout = () => {
     setIsLoggedIn(false);
     // Lakukan aksi logout, misalnya redirect ke halaman login
     navigate("/login");
   };
+  console.log(invoice_id);
 
-  const data = [
-    {
-      no: 1,
-      noInvoice: "DLA00003",
-      date: "12 Juli 2023",
-      totalCourse: 2,
-      totalPrice: "IDR 700.00",
-      action: (
-        <Link to="/detail-invoice">
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "yellow.main",
-              padding: "10px,20px",
-              width: "233.5px",
-              height: "40px",
-              fontSize: "16px",
-              fontWeight: "500",
-              fontFamily: "Montserrat",
-              textTransform: "none",
-              borderRadius: "8px",
-              "&:hover": {
-                backgroundColor: "yellow.light",
-              },
-            }}
-          >
-            Details
-          </Button>
-        </Link>
-      ),
-    },
-  ];
+  useEffect(() => {
+    const fetchDetailInvoice = async () => {
+      try {
+        const response = await axios.get(
+          `https://localhost:7175/api/Invoice/GetAllByInvoiceId?invoice_id=${invoice_id}`
+        );
+        setDetailInvoiceData(response.data[0]);
+        console.log(detailInvoiceData);
+      } catch (error) {
+        console.error("Error fetching invoice data:", error);
+      }
+    };
 
-  const course = [
-    {
-      no: 1,
-      courseName: "Basic English for Junior",
-      language: "English",
-      schedule: "Friday, 29 July 2022",
-      price: "IDR 400.000",
-    },
-    {
-      no: 2,
-      courseName: "Japanese Course : Kanji",
-      language: "Japanese",
-      schedule: "Saturday, 30 July 2022",
-      price: "IDR 300.000",
-    },
-  ];
+    fetchDetailInvoice();
+  }, [invoice_id]);
+
+  useEffect(() => {
+    console.log(detailInvoiceData.detail_Invoices);
+  }, [invoice_id]);
+  const courseDate = detailInvoiceData.invoice_date || "";
+  const formattedDate = courseDate
+    ? format(new Date(courseDate), "dd MMMM yyyy")
+    : "";
+
+
   return (
     <Container>
       <ThemeProvider theme={theme}>
@@ -85,21 +68,31 @@ const invoice = ({ isLoggedIn, setIsLoggedIn }) => {
 
         {/* body */}
         <div className="flex flex-col w-100">
-          <div
-            id="frame1732"
-            className="flex flex-col gap-32"
-            style={{
-              paddingTop: "46px",
-              paddingLeft: "10px",
-              paddingRight: "10px",
-            }}
-          >
+          <div id="frame1732" className="flex flex-col gap-32 px-70 mt-46">
             <div id="frame1410" className="flex flex-row gap-8 ">
               <div className="font-600 text-16 font-montserrat text-gray">
-                Home -
+                <Link
+                  to={"/"}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                  onMouseEnter={(e) =>
+                    (e.target.style.textDecoration = "underline")
+                  }
+                  onMouseLeave={(e) => (e.target.style.textDecoration = "none")}
+                >
+                  Home &gt;
+                </Link>
               </div>
               <div className="font-600 text-16 font-montserrat text-gray">
-                Invoice -
+                <Link
+                  to={"/invoice"}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                  onMouseEnter={(e) =>
+                    (e.target.style.textDecoration = "underline")
+                  }
+                  onMouseLeave={(e) => (e.target.style.textDecoration = "none")}
+                >
+                  Invoice &gt;
+                </Link>
               </div>
               <div className="font-600 text-16 font-montserrat text-yellow">
                 Detail Invice
@@ -116,9 +109,9 @@ const invoice = ({ isLoggedIn, setIsLoggedIn }) => {
 
               <div id="frame1551" className="flex flex-col">
                 <div className="font-500 text-18 font-montserrat">
-                  No. Invoice :{" "}
+                  No. Invoice :
                   <span style={{ marginLeft: "25px" }}>
-                    {data.map((val, key) => val.noInvoice)}{" "}
+                    {detailInvoiceData.invoice_number}
                   </span>
                 </div>
 
@@ -126,22 +119,16 @@ const invoice = ({ isLoggedIn, setIsLoggedIn }) => {
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   <div className="font-500 text-18 font-montserrat">
-                    Date :{" "}
-                    <span style={{ marginLeft: "80px" }}>
-                      {" "}
-                      {data.map((val, key) => {
-                        return val.date;
-                      })}{" "}
-                    </span>
+                    Date :
+                    <span style={{ marginLeft: "80px" }}>{formattedDate}</span>
                   </div>
 
                   <div className="font-700 text-18 font-montserrat">
-                    Total Price{" "}
+                    Total Price
                     <span style={{ marginLeft: "8px" }}>
-                      {" "}
-                      {data.map((val, key) => {
-                        return val.totalPrice;
-                      })}{" "}
+                      {Intl.NumberFormat("id-ID").format(
+                        detailInvoiceData.total_price
+                      )}
                     </span>
                   </div>
                 </div>
@@ -170,33 +157,37 @@ const invoice = ({ isLoggedIn, setIsLoggedIn }) => {
                   <th style={{ padding: "20px" }}>Schedule</th>
                   <th style={{ padding: "20px" }}>Price</th>
                 </tr>
-                {course.map((val, key) => {
-                  return (
-                    <tr
-                      key={key}
-                      style={{
-                        textAlign: "center",
-                        backgroundColor: key === 1 ? "#EA9E1F33" : "inherit",
-                        color: "#4F4F4F",
-                      }}
-                      className="font-500 text-16 font-montserrat"
-                    >
-                      <td style={{ padding: "20px 20px 20px 0" }}>{val.no}</td>
-                      <td style={{ padding: "20px 20px 20px 0" }}>
-                        {val.courseName}
-                      </td>
-                      <td style={{ padding: "20px 20px 20px 0" }}>
-                        {val.language}
-                      </td>
-                      <td style={{ padding: "20px 20px 20px 0" }}>
-                        {val.schedule}
-                      </td>
-                      <td style={{ padding: "20px 20px 20px 0" }}>
-                        {val.price}
-                      </td>
-                    </tr>
-                  );
-                })}
+                {detailInvoiceData.detail_Invoices &&
+                  detailInvoiceData.detail_Invoices.map((val, key) => {
+                    return (
+                      <tr
+                        key={key}
+                        style={{
+                          textAlign: "center",
+                          backgroundColor:
+                            key % 2 === 0 ? "inherit" : "#EA9E1F33",
+                          color: "#4F4F4F",
+                        }}
+                        className="font-500 text-16 font-montserrat"
+                      >
+                        <td style={{ padding: "20px 20px 20px 0" }}>
+                          {key + 1}
+                        </td>
+                        <td style={{ padding: "20px 20px 20px 0" }}>
+                          {val.course_name}
+                        </td>
+                        <td style={{ padding: "20px 20px 20px 0" }}>
+                          {val.category_name}
+                        </td>
+                        <td style={{ padding: "20px 20px 20px 0" }}>
+                          {format(new Date(val.course_date), "dd MMMM yyyy")}
+                        </td>
+                        <td style={{ padding: "20px 20px 20px 0" }}>
+                          {Intl.NumberFormat("id-ID").format(val.course_price)}
+                        </td>
+                      </tr>
+                    );
+                  })}
               </table>
             </div>
           </div>
@@ -208,4 +199,4 @@ const invoice = ({ isLoggedIn, setIsLoggedIn }) => {
   );
 };
 
-export default invoice;
+export default DetailInvoice;

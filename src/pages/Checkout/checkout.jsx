@@ -7,20 +7,23 @@ import theme from "../../components/color";
 import { useState, useEffect } from "react";
 import CardCheckbox from "../../components/CardCheckbox";
 import { ThemeProvider, styled } from "@mui/material/styles";
-import { InputAdornment, Box, Paper } from "@mui/material";
+import {
+  InputAdornment,
+  Box,
+  Paper,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemAvatar,
+  Avatar,
+  ListItemText,
+} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Unstable_Grid2";
 import Button from "@mui/material/Button";
 import { Form, useParams, useNavigate, Link } from "react-router-dom";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import axios from "axios";
-
-import Gopay from "../../assets/gopay.png";
-import Ovo from "../../assets/ovo.png";
-import Dana from "../../assets/dana.png";
-import Mandiri from "../../assets/mandiri.png";
-import Bca from "../../assets/bca.png";
-import Bni from "../../assets/bni.png";
 
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -34,10 +37,15 @@ import {
 } from "@mui/material";
 import useCheckLogin from "../../hooks/useCheckLogin";
 import useLogout from "../../hooks/useLogout";
+import useUserStore from "../../store/useUserStore";
+import useStoreOrder from "../../store/useStoreOrder";
+import { green, red } from "@mui/material/colors";
 
 const Checkout = () => {
+  const { userData, fetchUserData } = useUserStore();
   const [data, setData] = useState([]);
-  const [dataUser, setDataUser] = useState([]);
+  const [dataCheckout, setDataCheckout] = useState([]);
+  const { sortOrder, setSortOrder } = useStoreOrder();
 
   const navigate = useNavigate();
   const { isLoggedIn } = useCheckLogin();
@@ -49,47 +57,20 @@ const Checkout = () => {
   };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          alert("Silakan login terlebih dahulu.");
-          return;
-        }
-
-        const response = await axios.get(
-          "https://localhost:7175/api/User/GetUserData",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setDataUser(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        // Handle error, such as redirecting to login page or displaying an error message
-        if (error.response && error.response.status === 401) {
-          alert("Sesi Anda telah berakhir. Silakan login kembali.");
-          localStorage.removeItem("token"); // Hapus token dari localStorage
-          navigate("/login"); // Redirect ke halaman login
-        } else {
-          // Handle other errors, such as displaying an error message
-        }
-      }
-    };
-
-    fetchUserData();
-  }, []);
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetchUserData(token, navigate);
+    }
+  }, [fetchUserData, navigate]);
 
   useEffect(() => {
     const fetchCartData = async () => {
       try {
-        if (dataUser.id) {
+        if (userData.id) {
           const response = await axios.get(
-            `https://localhost:7175/api/Checkout/GetAllByUserId?user_id=${dataUser.id}`
+            `https://localhost:7175/api/Checkout/GetAllByUserId?user_id=${userData.id}&sortOrder=${sortOrder}`
           );
+          setDataCheckout(response.data[0]);
           setData(response.data[0].checkout_detail);
           console.log(data);
         }
@@ -100,7 +81,7 @@ const Checkout = () => {
     };
 
     fetchCartData();
-  }, [dataUser]);
+  }, [userData, sortOrder]);
 
   // Checkbox
   const [checkedItems, setCheckedItems] = useState({});
@@ -182,12 +163,57 @@ const Checkout = () => {
 
   // pop up
   const [open, openchange] = useState(false);
+  const [paymentMethods, setPaymentMethods] = useState([]);
+  const [selectedPayment, setSelectedPayment] = useState(null);
+  const handlePaymentSelect = (payment) => {
+    setSelectedPayment(payment);
+  };
   const functionopenpopup = () => {
     openchange(true);
   };
   const closepopup = () => {
     openchange(false);
+    setSelectedPayment(null);
   };
+
+  useEffect(() => {
+    if (sortOrder == "desc") {
+      functionopenpopup();
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchPaymentMethods = async () => {
+      try {
+        const response = await axios.get(
+          "https://localhost:7175/api/PaymentMethod/GetAll"
+        );
+        setPaymentMethods(response.data);
+      } catch (error) {
+        console.error("Error fetching payment methods:", error);
+      }
+    };
+
+    fetchPaymentMethods();
+  }, []);
+
+  const handlePayNowClick = async () => {
+    try {
+      const response = await axios.post(
+        "https://localhost:7175/api/Invoice/CreateInvoice",
+        {
+          user_id: userData.id,
+          checkout_id: dataCheckout.checkout_id,
+          id_payment_method: selectedPayment.id_payment_method,
+        }
+      );
+      console.log("Invoice created successfully:", response.data);
+      navigate("/PurchaseSuccess");
+    } catch (error) {
+      console.error("Error creating invoice:", error);
+    }
+  };
+
   return (
     <Container>
       <ThemeProvider theme={theme}>
@@ -216,13 +242,11 @@ const Checkout = () => {
                 checked={Object.values(checkedItems).every(
                   (isChecked) => isChecked
                 )}
-                // indeterminate={!checkedAll && checkedItems.some((item) => item)}
                 onChange={handleCheckAll}
               />
             }
           />
 
-          {/* <img src={Sampah} alt="" style={{ right: "0" }} /> */}
           <Grid container columnSpacing={1} rowSpacing={5} direction={"column"}>
             {(() => {
               return data.map((item, index) => (
@@ -305,149 +329,144 @@ const Checkout = () => {
             </Button>
 
             {/* pop up */}
-            <Dialog
-              // fullScreen
-              open={open}
-              onClose={closepopup}
-              fullWidth
-              maxWidth="xs"
-            >
-              <DialogTitle
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  fontFamily: "Poppins",
+            <div>
+              <Dialog
+                open={open}
+                onClose={closepopup}
+                sx={{
+                  padding: "24px 0px 0px 0px",
+                  gap: "32px",
+                  borderRadius: "10px 0px 0px 0px",
+                  opacity: "0px",
+                  "& .MuiPaper-root": {
+                    overflowY: "hidden",
+                  },
                 }}
+                disableScrollLock
+                disableRestoreFocus
               >
-                Select Payment Method
-              </DialogTitle>
-              <DialogContent
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "left",
-                  gap: "16px",
-                  fontFamily: "Poppins",
-                }}
-              >
-                {/* <DialogContentText>Do you want remove this user?</DialogContentText> */}
-                <DialogContentText>
-                  <div
-                    className="flex items-center gap-16 text-18 font-500"
-                    style={{ color: "#41454D" }}
+                <div className="m-24 gap-24">
+                  <DialogTitle
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      padding: 0,
+                      alignItems: "center",
+                      fontFamily: "Poppins",
+                      fontWeight: "500px",
+                      width: "326px",
+                      maxHeight: "502px",
+                      textAlign: "center",
+                    }}
                   >
-                    <img src={Gopay} alt="" />
-                    Gopay
-                  </div>
-                </DialogContentText>
-                <DialogContentText>
-                  <div
-                    className="flex items-center gap-16 text-18 font-500"
-                    style={{ color: "#41454D" }}
+                    Select Payment Method
+                  </DialogTitle>
+                  <List
+                    sx={{
+                      maxHeight: "calc(100vh - 300px)",
+                      overflowY: "auto",
+                    }}
                   >
-                    <img src={Ovo} alt="" />
-                    Ovo
-                  </div>
-                </DialogContentText>
-                <DialogContentText>
-                  <div
-                    className="flex items-center gap-16 text-18 font-500"
-                    style={{ color: "#41454D" }}
-                  >
-                    <img src={Dana} alt="" />
-                    Dana
-                  </div>
-                </DialogContentText>
-                <DialogContentText>
-                  <div
-                    className="flex items-center gap-16 text-18 font-500"
-                    style={{ color: "#41454D" }}
-                  >
-                    <img src={Mandiri} alt="" />
-                    Mandiri
-                  </div>
-                </DialogContentText>
-                <DialogContentText>
-                  <div
-                    className="flex items-center gap-16 text-18 font-500"
-                    style={{ color: "#41454D" }}
-                  >
-                    <img src={Bca} alt="" />
-                    Bca
-                  </div>
-                </DialogContentText>
-                <DialogContentText>
-                  <div
-                    className="flex items-center gap-16 text-18 font-500"
-                    style={{ color: "#41454D" }}
-                  >
-                    <img src={Bni} alt="" />
-                    Bni
-                  </div>
-                </DialogContentText>
-              </DialogContent>
-              {/* actions */}
-              <DialogActions
-                style={{
-                  alignItems: "center",
-                  gap: "16px",
-                  fontFamily: "Poppins",
-                  justifyContent: "center",
-                }}
-              >
-                <div id="frame1516" className="flex items-center">
-                  <div>
-                    <Link to="/checkout">
-                      <Button
-                        variant="contained"
+                    {paymentMethods.map((method) => (
+                      <ListItem
+                        key={method.id_payment_method}
                         sx={{
-                          backgroundColor: "yellow.main",
-                          padding: "12px 16px",
-                          width: "155px",
-                          height: "48px",
-                          fontSize: "16px",
-                          fontWeight: "600",
-                          fontFamily: "Montserrat",
-                          textTransform: "none",
-                          lineHeight: "24",
-                          borderRadius: "8px",
-                          "&:hover": {
-                            backgroundColor: "yellow.light",
-                          },
+                          padding: 0,
+                          height: "40px",
+                          mt: "16px",
+                          border:
+                            selectedPayment === method.id_payment_method
+                              ? "1px solid blue"
+                              : "none", // Efek border saat item dipilih
+                          backgroundColor:
+                            selectedPayment === method.id_payment_method
+                              ? "lightgray"
+                              : "transparent", // Efek warna latar belakang saat item dipilih
                         }}
                       >
-                        Cancle
-                      </Button>
-                    </Link>
+                        <ListItemButton
+                          onClick={() => handlePaymentSelect(method)}
+                          selected={
+                            selectedPayment &&
+                            selectedPayment.id_payment_method ===
+                              method.id_payment_method
+                          }
+                          sx={{
+                            padding: 0,
+                            height: 40,
+                            "&.Mui-selected": {
+                              backgroundColor: "#ffecb3",
+                            },
+                          }}
+                        >
+                          <ListItemAvatar>
+                            <Avatar
+                              variant="square"
+                              src={method.payment_icon}
+                              alt={method.payment_name}
+                            />
+                          </ListItemAvatar>
+                          <ListItemText primary={method.payment_name} />
+                        </ListItemButton>
+                      </ListItem>
+                    ))}
+                  </List>
+                </div>
+                <div
+                  id="frame1515"
+                  className="flex flex-row items-center justify-center mb-24"
+                >
+                  <div>
+                    <Button
+                      variant="contained"
+                      sx={{
+                        backgroundColor: "yellow.main",
+                        padding: "12px 16px 12px 16px",
+                        width: "155px",
+                        height: "48px",
+                        gap: "8px",
+                        fontSize: "16px",
+                        fontWeight: "600",
+                        fontFamily: "Poppins",
+                        textTransform: "none",
+                        lineHeight: "24px",
+                        borderRadius: "8px",
+                        "&:hover": {
+                          backgroundColor: "yellow.light",
+                        },
+                      }}
+                      onClick={closepopup}
+                    >
+                      Cancel
+                    </Button>
                   </div>
                   <div className="ml-16">
-                    <Link to="/PurchaseSuccess">
-                      <Button
-                        variant="contained"
-                        sx={{
-                          backgroundColor: "green.main",
-                          padding: "12px 16px",
-                          width: "155px",
-                          height: "48px",
-                          fontSize: "16px",
-                          fontWeight: "600",
-                          fontFamily: "Montserrat",
-                          textTransform: "none",
-                          lineHeight: "24",
-                          borderRadius: "8px",
-                          "&:hover": {
-                            backgroundColor: "green.light",
-                          },
-                        }}
-                      >
-                        Pay Now
-                      </Button>
-                    </Link>
+                    <Button
+                      variant="contained"
+                      sx={{
+                        backgroundColor: "green.main",
+                        padding: "12px 16px 12px 16px",
+                        width: "155px",
+                        height: "48px",
+                        gap: "8px",
+                        fontSize: "16px",
+                        fontWeight: "600",
+                        fontFamily: "Poppins",
+                        textTransform: "none",
+                        lineHeight: "24px",
+                        borderRadius: "8px",
+                        "&:hover": {
+                          backgroundColor: "green.light",
+                        },
+                      }}
+                      onClick={handlePayNowClick}
+                    >
+                      Pay Now
+                    </Button>
                   </div>
                 </div>
-              </DialogActions>
-            </Dialog>
+              </Dialog>
+            </div>
           </div>
         </div>
       </ThemeProvider>

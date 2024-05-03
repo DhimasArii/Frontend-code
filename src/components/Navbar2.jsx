@@ -5,8 +5,16 @@ import { Outlet, Link, useNavigate } from "react-router-dom";
 import IconShopingCart from "../assets/icon_shopping_cart.png";
 import IconPerson from "../assets/icon_person.png";
 import IconLogout from "../assets/icon_logout.png";
+import useStoreOrder from "../store/useStoreOrder";
 
 const Navbar2 = ({ handleLogout }) => {
+  const { sortOrder, setSortOrder } = useStoreOrder();
+  const navigate = useNavigate();
+  const handleCart = () => {
+    setSortOrder("asc");
+    navigate("/checkout");
+    console.log(sortOrder);
+  };
   return (
     <>
       {/* navbar */}
@@ -25,11 +33,25 @@ const Navbar2 = ({ handleLogout }) => {
           </Link>
         </div>
         <div id="frame1516" className="flex items-center gap-40">
-          <Link to="/checkout">
+          <Link to="/checkout" onClick={handleCart}>
             <img src={IconShopingCart} alt="" />
           </Link>
-          <div className="text-16 font-montserrat text-green">My Class</div>
-          <div className="text-16 font-montserrat text-green">Invoice</div>
+          <Link
+            to={"/my-class"}
+            style={{ textDecoration: "none", color: "inherit" }}
+            onMouseEnter={(e) => (e.target.style.textDecoration = "underline")}
+            onMouseLeave={(e) => (e.target.style.textDecoration = "none")}
+          >
+            <div className="text-16 font-montserrat text-green">My Class</div>
+          </Link>
+          <Link
+            to={"/invoice"}
+            style={{ textDecoration: "none", color: "inherit" }}
+            onMouseEnter={(e) => (e.target.style.textDecoration = "underline")}
+            onMouseLeave={(e) => (e.target.style.textDecoration = "none")}
+          >
+            <div className="text-16 font-montserrat text-green">Invoice</div>
+          </Link>
           <hr
             style={{
               color: "#000000",

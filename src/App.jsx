@@ -57,7 +57,7 @@ function App() {
         }
       />
       <Route
-        path="/detail-invoice"
+        path="/detail-invoice/:invoice_id"
         element={
           <DetailInvoice
             isLoggedIn={isLoggedIn}
