@@ -4,15 +4,28 @@ import Container from "@mui/material/Container";
 import "../../components/style.css";
 import ImageNavbar from "../../assets/image-navbar-confirm.png";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import NavbarLogIn from "../../components/Navbar2";
+import NavbarLogOut from "../../components/Navbar";
 import theme from "../../components/color";
 import { useState } from "react";
 import Navbar from "../../components/Navbar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import useCheckLogin from "../../hooks/useCheckLogin";
+import useLogout from "../../hooks/useLogout";
 
 const Forgot = () => {
+  const { isLoggedIn } = useCheckLogin();
+  const { handleLogout } = useLogout();
+  const navigate = useNavigate();
   const [data, setData] = useState({
     email: "",
   });
+
+  const handleLogoutClick = async () => {
+    await handleLogout();
+    navigate("/login");
+  };
 
   const handleInput = (e) => {
     const name = e.target.name;
@@ -56,7 +69,7 @@ const Forgot = () => {
     });
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     handleReset();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -69,16 +82,36 @@ const Forgot = () => {
         email: "Format email tidak valid",
       });
     } else {
-      // Lakukan aksi selanjutnya setelah validasi sukses
-      console.log("Form valid,\n Email :", data.email);
+      try {
+        const response = await axios.post(
+          "https://localhost:7175/api/User/ForgetPassword",
+          {
+            email: data.email,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        console.log(response.data);
+        alert("Email reset password telah dikirim");
+      } catch (error) {
+        console.error(error);
+        alert("Gagal mengirim email reset password. Silakan coba lagi.");
+      }
     }
   };
 
   return (
     <Container>
       <ThemeProvider theme={theme}>
-        <Navbar />
-
+        {isLoggedIn ? (
+          <NavbarLogIn handleLogout={handleLogoutClick} />
+        ) : (
+          <NavbarLogOut />
+        )}
         {/* body */}
         <div className="flex items-center flex-col mt-96">
           <div className="flex flex-col gap-16 items-right gap-60">
@@ -135,29 +168,27 @@ const Forgot = () => {
                 </Link>
               </div>
               <div>
-                <Link to="/new-password">
-                  <Button
-                    variant="contained"
-                    onClick={handleClick}
-                    sx={{
-                      backgroundColor: "green.main",
-                      padding: "10px",
-                      width: "140px",
-                      height: "38px",
-                      fontSize: "15px",
-                      fontWeight: "500",
-                      fontFamily: "Montserrat",
-                      textTransform: "none",
-                      lineHeight: "1",
-                      borderRadius: "8px",
-                      "&:hover": {
-                        backgroundColor: "green.light",
-                      },
-                    }}
-                  >
-                    Confirm
-                  </Button>
-                </Link>
+                <Button
+                  variant="contained"
+                  onClick={handleClick}
+                  sx={{
+                    backgroundColor: "green.main",
+                    padding: "10px",
+                    width: "140px",
+                    height: "38px",
+                    fontSize: "15px",
+                    fontWeight: "500",
+                    fontFamily: "Montserrat",
+                    textTransform: "none",
+                    lineHeight: "1",
+                    borderRadius: "8px",
+                    "&:hover": {
+                      backgroundColor: "green.light",
+                    },
+                  }}
+                >
+                  Confirm
+                </Button>
               </div>
             </div>
           </div>

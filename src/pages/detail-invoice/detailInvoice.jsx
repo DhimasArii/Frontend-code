@@ -7,7 +7,9 @@ import { InputAdornment, Box, Paper, FormControl } from "@mui/material";
 import theme from "../../components/color";
 import NavbarLogIn from "../../components/Navbar2";
 import NavbarLogOut from "../../components/Navbar";
+
 import { Link, useNavigate, useParams } from "react-router-dom";
+
 import Button from "@mui/material/Button";
 import axios from "axios";
 
@@ -53,6 +55,7 @@ const DetailInvoice = ({ isLoggedIn, setIsLoggedIn }) => {
   const formattedDate = courseDate
     ? format(new Date(courseDate), "dd MMMM yyyy")
     : "";
+
 
   return (
     <Container>
