@@ -11,6 +11,7 @@ import { useState } from "react";
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import axios from "axios";
 
 import Navbar from "../../components/Navbar";
 
@@ -130,7 +131,7 @@ const Forgot = ({ setIsLoggedIn }) => {
     });
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     handleReset();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -192,24 +193,32 @@ const Forgot = ({ setIsLoggedIn }) => {
         confirmPassword: "Password dan Confirm Password harus sama",
       });
     } else {
-      // Lakukan aksi selanjutnya setelah validasi sukses
-      setIsLoggedIn(true);
-      // Redirect ke halaman Landing setelah login berhasil
-      navigate("/email-confirmation");
+      try {
+        const response = await axios.post(
+          "https://localhost:7175/api/User/CreateUser",
+          {
+            email: data.email,
+            passwords: data.password,
+            role: "user", // Sesuaikan dengan role yang sesuai
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-      console.log(
-        "Form ",
-        setIsLoggedIn,
-        "\n Nama :",
-        data.name,
-        "\n Email :",
-        data.email,
-        "\n Password:",
-        data.password,
-        "\n Confirm Password:",
-        data.confirmPassword
-      );
-      console.log(data);
+        console.log(response.data);
+        alert("Data telah terkirim \n Tolong cek email untuk aktivasi");
+
+        // Lakukan aksi selanjutnya setelah validasi sukses
+        setIsLoggedIn(true);
+        // Redirect ke halaman Landing setelah login berhasil
+        navigate("/email-confirmation");
+      } catch (error) {
+        console.error(error);
+        alert("Register gagal!\nSilahkan cek kembali data anda!");
+      }
     }
   };
 

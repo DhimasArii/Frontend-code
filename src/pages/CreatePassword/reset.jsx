@@ -5,16 +5,20 @@ import "../../components/style.css";
 import ImageNavbar from "../../assets/image-navbar-confirm.png";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import theme from "../../components/color";
-import { useState } from "react";
+import { useState, useParams, useContext } from "react";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { InputAdornment, Box, Paper } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../../components/Navbar";
+import axios from "axios";
 
 const CreatePassword = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const email = searchParams.get("email");
   const [data, setData] = useState({
     password: "",
     confirmPassword: "",
@@ -101,7 +105,7 @@ const CreatePassword = ({ setIsLoggedIn }) => {
     });
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     handleReset();
     if (!data.password && !data.confirmPassword) {
       setError({
@@ -122,19 +126,31 @@ const CreatePassword = ({ setIsLoggedIn }) => {
         confirmPassword: "Confirm Password tidak boleh kosong",
       });
     } else {
-      // Lakukan aksi selanjutnya setelah validasi sukses
-      setIsLoggedIn(true);
-      // Redirect ke halaman Landing setelah login berhasil
-      navigate("/login");
+      try {
+        console.log(email);
+        const response = await axios.post(
+          `https://localhost:7175/api/User/ResetPassword`,
+          {
+            email: email, // Kirim email pengguna yang login
+            password: data.password,
+            confirmPassword: data.confirmPassword,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log(response.data);
 
-      console.log(
-        "Form ",
-        setIsLoggedIn,
-        "\n Password :",
-        data.password,
-        "\n Confirm Password :",
-        data.confirmPassword
-      );
+        // Lakukan aksi selanjutnya setelah validasi sukses
+        setIsLoggedIn(true);
+        // Redirect ke halaman Landing setelah login berhasil
+        navigate("/login");
+      } catch (error) {
+        console.error(error);
+        alert("Reset password gagal!\nSilahkan cek kembali data Anda!");
+      }
     }
   };
 

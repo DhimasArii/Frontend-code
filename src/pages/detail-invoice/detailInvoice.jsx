@@ -6,7 +6,7 @@ import { InputAdornment, Box, Paper, FormControl } from "@mui/material";
 import theme from "../../components/color";
 import NavbarLogIn from "../../components/Navbar2";
 import NavbarLogOut from "../../components/Navbar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -33,25 +33,27 @@ const invoice = ({ isLoggedIn, setIsLoggedIn }) => {
       totalCourse: 2,
       totalPrice: "IDR 700.00",
       action: (
-        <Button
-          variant="contained"
-          sx={{
-            backgroundColor: "yellow.main",
-            padding: "10px,20px",
-            width: "233.5px",
-            height: "40px",
-            fontSize: "16px",
-            fontWeight: "500",
-            fontFamily: "Montserrat",
-            textTransform: "none",
-            borderRadius: "8px",
-            "&:hover": {
-              backgroundColor: "yellow.light",
-            },
-          }}
-        >
-          Details
-        </Button>
+        <Link to="/detail-invoice">
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: "yellow.main",
+              padding: "10px,20px",
+              width: "233.5px",
+              height: "40px",
+              fontSize: "16px",
+              fontWeight: "500",
+              fontFamily: "Montserrat",
+              textTransform: "none",
+              borderRadius: "8px",
+              "&:hover": {
+                backgroundColor: "yellow.light",
+              },
+            }}
+          >
+            Details
+          </Button>
+        </Link>
       ),
     },
   ];
