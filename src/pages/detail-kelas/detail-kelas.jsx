@@ -51,6 +51,8 @@ const DetailKelas = () => {
   const { id } = useParams();
   const [schedule, setSchedule] = useState("");
   const [scheduleList, setScheduleList] = useState([]);
+  const [myClassScheduleList, setMyClassScheduleList] = useState([]);
+  const [filteredSchedule, setFilteredSchedule] = useState([]);
   const { buyNowData, setBuyNowData } = useStoreTempBuyNow();
   const handleSelect = (event) => {
     setSchedule(event.target.value);
@@ -150,6 +152,39 @@ const DetailKelas = () => {
 
     fetchScheduleData();
   }, [id, detail]);
+
+  useEffect(() => {
+    const fetchMyClassScheduleData = async () => {
+      try {
+        const response = await axios.get(
+          `https://localhost:7175/api/MyClass/GetAllByUserId?user_id=${userData.id}`
+        );
+        const filteredMyClassScheduleData = response.data.filter((item) =>
+          item.my_class.some((course) => course.course_id === id)
+        );
+        setMyClassScheduleList(filteredMyClassScheduleData);
+        console.log(myClassScheduleList);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchMyClassScheduleData();
+  }, [id, detail]);
+
+  //filter hanya menampilkan schedule yang tidak ada di my_class
+  useEffect(() => {
+    const filteredData = scheduleList.filter(
+      (schedule) =>
+        !myClassScheduleList.some(
+          (detail) => detail.schedule_id === schedule.schedule_id
+        )
+    );
+
+    // Update state with filtered data
+    setFilteredSchedule(filteredData);
+    console.log(filteredSchedule);
+  }, [myClassScheduleList, scheduleList]);
 
   const handleLogoutClick = async () => {
     await handleLogout();
@@ -299,15 +334,17 @@ const DetailKelas = () => {
                         inputProps={{ "aria-label": "Without label" }}
                         sx={{ minHeight: 10 }}
                       >
-                        <MenuItem disabled value="">
+                        <MenuItem disabled={!filteredSchedule.length} value="">
                           <em
                             className="font-400 font-montserrat text-15"
                             style={{ lineHeight: "18.29px", color: "#41454D" }}
                           >
-                            Select Schedule
+                            {filteredSchedule.length
+                              ? "Select Schedule"
+                              : "Tidak ada schedule lagi, semua telah terbeli"}
                           </em>
                         </MenuItem>
-                        {scheduleList.map((schedule, index) => (
+                        {filteredSchedule.map((schedule, index) => (
                           <MenuItem key={index} value={schedule.schedule_id}>
                             <div
                               className="font-400 font-montserrat text-15"

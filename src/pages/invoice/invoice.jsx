@@ -50,7 +50,7 @@ const Invoice = ({ isLoggedIn, setIsLoggedIn }) => {
     };
 
     fetchInvoiceData();
-  }, []);
+  }, [userData]);
 
   const handleDetailClick = (invoiceId) => {
     navigate(`/detail-invoice/${invoiceId}`);
