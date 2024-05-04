@@ -14,7 +14,7 @@
     "@emotion/styled": "^11.11.5",
     "@fontsource/montserrat": "^5.0.17",
     "@mui/icons-material": "^5.15.14",
-    "@mui/material": "^5.15.15",
+    "@mui/material": "^5.15.16",
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "axios": "^1.6.8",
     "date-fns": "^3.6.0",

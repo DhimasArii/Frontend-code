@@ -12,9 +12,9 @@ import Checkout from "./pages/Checkout/checkout";
 import Invoice from "./pages/invoice/invoice";
 import DetailInvoice from "./pages/detail-invoice/detailInvoice";
 import PurchaseSuccess from "./pages/PurchaseSuccess/index";
+import MyClass from "./pages/my-class/my-class";
 
 import { Routes, Route, ScrollRestoration } from "react-router-dom";
-import MyClass from "./pages/my-class/my-class";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

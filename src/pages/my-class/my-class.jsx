@@ -1,6 +1,6 @@
 import { Container } from "@mui/material";
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import "../../components/style.css";
@@ -11,66 +11,52 @@ import NavbarLogIn from "../../components/Navbar2";
 import NavbarLogOut from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import { Form, useParams, useNavigate, Link } from "react-router-dom";
+import { Form, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import { format } from "date-fns";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import useUserStore from "../../store/useUserStore";
 
 import CardMyClass from "../../components/CardMyClass";
 
 const MyClass = () => {
   const navigate = useNavigate();
-  const [data, setData] = useState([]);
-  const [dataUser, setDataUser] = useState([]);
+  const [detailInvoiceData, setDetailInvoiceData] = useState([]);
+  const { userData, fetchUserData } = useUserStore();
 
   const handleLogout = () => {
-    // setIsLoggedIn(false);
-    // Lakukan aksi logout, misalnya redirect ke halaman login
     localStorage.removeItem("token");
     navigate("/login");
   };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          alert("Silakan login terlebih dahulu.");
-          return;
-        }
-
-        const response = await axios.get("https://dummyjson.com/auth/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setDataUser(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        // Handle error, such as redirecting to login page or displaying an error message
-      }
-    };
-
-    fetchUserData();
-  }, []);
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetchUserData(token, navigate);
+    }
+  }, [fetchUserData, navigate]);
 
   useEffect(() => {
-    const fetchCartData = async () => {
+    const fetchData = async () => {
       try {
-        if (dataUser.id) {
-          const response = await axios.get(
-            `https://dummyjson.com/cart/user/${dataUser.id}`
-          );
-          setData(response.data.carts[0].products);
-          console.log(response.data.carts[0].products);
-        }
+        const response = await axios.get(
+          `https://localhost:7175/api/MyClass/GetAllByUserId?user_id=${userData.id}`
+        );
+        setDetailInvoiceData(response.data);
+        console.log(detailInvoiceData);
       } catch (error) {
-        console.error("Error fetching cart data:", error);
-        // Handle error, such as displaying an error message or retrying the request
+        console.error("Error fetching invoice data:", error);
       }
     };
 
-    fetchCartData();
-  }, [dataUser]);
+    fetchData();
+  }, [userData]);
+
+  console.log(detailInvoiceData);
+
+  const formattedDate = (courseDate) =>
+    courseDate ? format(new Date(courseDate), "EEEE, dd MMMM yyyy") : "";
 
   return (
     <Container>
@@ -89,35 +75,44 @@ const MyClass = () => {
             paddingX: "71px",
           }}
         >
-          <Grid container columnSpacing={1} rowSpacing={3} direction={"column"}>
-            {(() => {
-              if (!data || data.length === 0) {
-                return (
-                  <div style={{ cursor: "pointer" }}>
-                    <Link to="/">
-                      Cartmu kosong. Klik di sini untuk menambahkan produk.
-                    </Link>
-                  </div>
-                );
-              } else {
-                return data.map((item, index) => (
-                  <Grid
-                    key={index}
-                    xs={4}
-                    sx={{ width: "100%" }}
-                    display={"flex"}
-                    flexDirection={"row"}
-                  >
-                    <CardMyClass
-                      category={item.title}
-                      title={item.title}
-                      image={item.thumbnail}
-                      schedule={item.price}
-                    />
-                  </Grid>
-                ));
-              }
-            })()}
+          <Grid
+            container
+            columnSpacing={1}
+            rowSpacing={3}
+            direction={"column"}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "24px",
+              marginTop: "40px",
+              paddingX: "71px",
+            }}
+          >
+            {detailInvoiceData && detailInvoiceData.length > 0 ? (
+              detailInvoiceData.map((item, index) => (
+                <Grid
+                  key={index}
+                  item
+                  xs={4}
+                  sx={{ width: "100%" }}
+                  display={"flex"}
+                  flexDirection={"row"}
+                >
+                  <CardMyClass
+                    category={item.my_class[0].category_name}
+                    title={item.my_class[0].course_name}
+                    image={item.my_class[0].course_image} // Assuming you have an image field in the data
+                    schedule={formattedDate(item.my_class[0].course_date)}
+                  />
+                </Grid>
+              ))
+            ) : (
+              <div style={{ cursor: "pointer" }}>
+                <Link to="/">
+                  Cartmu kosong. Klik di sini untuk menambahkan produk.
+                </Link>
+              </div>
+            )}
           </Grid>
         </Box>
         <Footer />

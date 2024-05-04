@@ -56,7 +56,6 @@ const DetailInvoice = ({ isLoggedIn, setIsLoggedIn }) => {
     ? format(new Date(courseDate), "dd MMMM yyyy")
     : "";
 
-
   return (
     <Container>
       <ThemeProvider theme={theme}>
@@ -95,7 +94,7 @@ const DetailInvoice = ({ isLoggedIn, setIsLoggedIn }) => {
                 </Link>
               </div>
               <div className="font-600 text-16 font-montserrat text-yellow">
-                Detail Invice
+                Detail Invoice
               </div>
             </div>
 

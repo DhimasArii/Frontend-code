@@ -209,7 +209,7 @@ const Forgot = ({ setIsLoggedIn }) => {
         );
 
         console.log(response.data);
-        alert("Data telah terkirim \n Tolong cek email untuk aktivasi");
+        alert("Data telah terkirim \nTolong cek email untuk aktivasi");
 
         // Lakukan aksi selanjutnya setelah validasi sukses
         setIsLoggedIn(true);
