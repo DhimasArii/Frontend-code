@@ -14,6 +14,18 @@ import DetailInvoice from "./pages/detail-invoice/detailInvoice";
 import PurchaseSuccess from "./pages/PurchaseSuccess/index";
 import MyClass from "./pages/my-class/my-class";
 
+//admin
+import User from "./pages/Admin/pages/User/User";
+import Category from "./pages/Admin/pages/Category/Category";
+import Checkout1 from "./pages/Admin/pages/UserCheckout/UserCheckout";
+import Course from "./pages/Admin/pages/Course/Course";
+import Invoice1 from "./pages/Admin/pages/UserInvoice/UserInvoice";
+import MyClass1 from "./pages/Admin/pages/MyClass/MyClass";
+import PaymentMethod from "./pages/Admin/pages/PaymentMethod/PaymentMethod";
+import Schedule from "./pages/Admin/pages/Schedule/Schedule";
+import Register from "./pages/Admin/pages/Register/Register";
+import Login1 from "./pages/Admin/pages/Login/AdminLogin";
+
 import { Routes, Route, ScrollRestoration } from "react-router-dom";
 
 function App() {
@@ -80,6 +92,16 @@ function App() {
           />
         }
       />
+      <Route path="/User" element={<User />} />
+      <Route path="/Category" element={<Category />} />
+      <Route path="/UserCheckout" element={<Checkout1 />} />
+      <Route path="/Course" element={<Course />} />
+      <Route path="/UserInvoice" element={<Invoice1 />} />
+      <Route path="/MyClass" element={<MyClass1 />} />
+      <Route path="/PaymentMethod" element={<PaymentMethod />} />
+      <Route path="/Schedule" element={<Schedule />} />
+      <Route path="/Register" element={<Register />} />
+      <Route path="/AdminLogin" element={<Login1 />} />
     </Routes>
   );
 }
