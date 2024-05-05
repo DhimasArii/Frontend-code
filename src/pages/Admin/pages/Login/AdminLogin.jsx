@@ -15,7 +15,7 @@ import Header from "../../components/Header";
 
 import { Link, useNavigate } from "react-router-dom";
 
-const Login = ({ setIsLoggedIn }) => {
+const Login = () => {
   const navigate = useNavigate();
   const [data, setData] = useState({
     email: "",
@@ -139,12 +139,11 @@ const Login = ({ setIsLoggedIn }) => {
         console.log(response.data.token);
         if (response.data.token) {
           localStorage.setItem("token", response.data.token);
-
-          setIsLoggedIn(true);
         } else {
           console.error("Login failed:", response.data.error);
         }
         alert("Login Berhasil");
+        navigate("/admin/user");
       } catch (error) {
         console.error(error);
         alert("Login gagal!\nSilahkan cek kembali email dan password anda!");

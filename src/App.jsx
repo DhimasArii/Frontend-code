@@ -92,16 +92,16 @@ function App() {
           />
         }
       />
-      <Route path="/User" element={<User />} />
-      <Route path="/Category" element={<Category />} />
-      <Route path="/UserCheckout" element={<Checkout1 />} />
-      <Route path="/Course" element={<Course />} />
-      <Route path="/UserInvoice" element={<Invoice1 />} />
-      <Route path="/MyClass" element={<MyClass1 />} />
-      <Route path="/PaymentMethod" element={<PaymentMethod />} />
-      <Route path="/Schedule" element={<Schedule />} />
-      <Route path="/Register" element={<Register />} />
-      <Route path="/AdminLogin" element={<Login1 />} />
+      <Route path="/admin/user" element={<User />} />
+      <Route path="/admin/category" element={<Category />} />
+      <Route path="/admin/user-checkout" element={<Checkout1 />} />
+      <Route path="/admin/course" element={<Course />} />
+      <Route path="/admin/user-invoice" element={<Invoice1 />} />
+      <Route path="/admin/my-class" element={<MyClass1 />} />
+      <Route path="/admin/payment-method" element={<PaymentMethod />} />
+      <Route path="/admin/schedule" element={<Schedule />} />
+      <Route path="/admin/register" element={<Register />} />
+      <Route path="/admin/login" element={<Login1 />} />
     </Routes>
   );
 }
