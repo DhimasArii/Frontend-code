@@ -321,7 +321,7 @@ const Checkout = () => {
               <Checkbox
                 style={{
                   border: "none",
-                  color: "#00e676",
+                  color: "#226957",
                 }}
                 checked={Object.values(checkedItems).every(
                   (isChecked) => isChecked
@@ -348,7 +348,7 @@ const Checkout = () => {
                         <Checkbox
                           style={{
                             border: "none",
-                            color: "#00e676",
+                            color: "#226957",
                           }}
                           checked={checkedItems[index] || false}
                           onChange={() => handleChangeItem(index)}

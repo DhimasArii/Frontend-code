@@ -15,9 +15,11 @@ const Navbar = () => {
           <Link to="/" style={{ textDecoration: "none", color: "#000000" }}>
             <div id="frame1738" className="flex items-center">
               <div className="mr-10-5">
-                <img src={ImageNavbar} alt="" />
+                <img src={ImageNavbar} alt="" className="image_size" />
               </div>
-              <div className="font-400 text-24 font-montserrat">Language</div>
+              <div className="font-400 text-24 font-montserrat font_size">
+                Language
+              </div>
             </div>
           </Link>
         </div>
