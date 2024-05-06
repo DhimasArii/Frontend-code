@@ -14,6 +14,8 @@ const Course = () => {
     course_description: "",
     course_image: "",
     price: null,
+    course_id: "",
+    category_id: "",
   });
 
   useEffect(() => {
@@ -58,6 +60,8 @@ const Course = () => {
           course_description: data.course_description,
           course_image: data.course_image,
           price: data.price,
+          course_id: data.course_id,
+          category_id: data.category_id,
         },
         {
           headers: {
@@ -100,6 +104,28 @@ const Course = () => {
                   <div className="w-100">
                     <TextField
                       fullWidth
+                      name="course_id"
+                      value={data.course_id}
+                      onChange={handleInput}
+                      label="Course Id"
+                      variant="outlined"
+                      size="small"
+                    />
+                  </div>
+                  <div className="w-100">
+                    <TextField
+                      fullWidth
+                      name="course_id"
+                      value={data.category_id}
+                      onChange={handleInput}
+                      label="Category Id"
+                      variant="outlined"
+                      size="small"
+                    />
+                  </div>
+                  <div className="w-100">
+                    <TextField
+                      fullWidth
                       name="course_name"
                       value={data.course_name}
                       onChange={handleInput}
@@ -122,8 +148,8 @@ const Course = () => {
                   <div className="w-100">
                     <TextField
                       fullWidth
-                      name="category_image"
-                      value={data.category_image}
+                      name="course_image"
+                      value={data.course_image}
                       onChange={handleInput}
                       label="Category Image URL"
                       variant="outlined"
@@ -190,8 +216,12 @@ const Course = () => {
                   className="font-600 font-montserrat"
                 >
                   <th style={{ padding: "20px 20px 20px 0" }}>No</th>
-                  <th style={{ padding: "20px 20px 20px 0" }}>category_name</th>
+                  <th style={{ padding: "20px 20px 20px 0" }}>course_id</th>
+                  <th style={{ padding: "20px 20px 20px 0" }}>category_id</th>
                   <th style={{ padding: "20px 20px 20px 0" }}>course_name</th>
+                  <th style={{ padding: "20px 20px 20px 0" }}>
+                    course_description
+                  </th>
                   <th style={{ padding: "20px 20px 20px 0" }}>course_image</th>
                   <th style={{ padding: "20px 20px 20px 0" }}>price</th>
                 </tr>
@@ -208,10 +238,16 @@ const Course = () => {
                   >
                     <td style={{ padding: "20px 20px 20px 0" }}>{key + 1}</td>
                     <td style={{ padding: "20px 20px 20px 0" }}>
-                      {val.category_name}
+                      {val.course_id}
+                    </td>
+                    <td style={{ padding: "20px 20px 20px 0" }}>
+                      {val.category_id}
                     </td>
                     <td style={{ padding: "20px 20px 20px 0" }}>
                       {val.course_name}
+                    </td>
+                    <td style={{ padding: "20px 20px 20px 0" }}>
+                      {val.course_description}
                     </td>
                     <td style={{ padding: "20px 20px 20px 0" }}>
                       {val.course_image}

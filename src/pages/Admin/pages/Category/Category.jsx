@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 const Category = () => {
   const [category, setCategory] = useState([]);
   const [data, setData] = useState({
+    category_id: "",
     category_name: "",
     category_description: "",
     category_image: "",
@@ -48,9 +49,10 @@ const Category = () => {
       const response = await axios.post(
         "https://localhost:7175/api/Category/CreateCategory",
         {
+          category_id: data.category_id,
           category_name: data.category_name,
-          category_description: data.category_description,
           category_image: data.category_image,
+          category_description: data.category_description,
         },
         {
           headers: {
@@ -93,6 +95,17 @@ const Category = () => {
                   <div className="w-100">
                     <TextField
                       fullWidth
+                      name="category_id"
+                      value={data.category_id}
+                      onChange={handleInput}
+                      label="Category Id"
+                      variant="outlined"
+                      size="small"
+                    />
+                  </div>
+                  <div className="w-100">
+                    <TextField
+                      fullWidth
                       name="category_name"
                       value={data.category_name}
                       onChange={handleInput}
@@ -104,10 +117,10 @@ const Category = () => {
                   <div className="w-100">
                     <TextField
                       fullWidth
-                      name="category_description"
-                      value={data.category_description}
+                      name="category_image"
+                      value={data.category_image}
                       onChange={handleInput}
-                      label="Category Description"
+                      label="Category Image URL"
                       variant="outlined"
                       size="small"
                     />
@@ -115,10 +128,10 @@ const Category = () => {
                   <div className="w-100">
                     <TextField
                       fullWidth
-                      name="category_image"
-                      value={data.category_image}
+                      name="category_description"
+                      value={data.category_description}
                       onChange={handleInput}
-                      label="Category Image URL"
+                      label="Category Description"
                       variant="outlined"
                       size="small"
                     />
