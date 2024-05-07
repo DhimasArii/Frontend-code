@@ -95,10 +95,10 @@ const PaymentMethod = () => {
     payment_status: false,
   });
 
-  const handleDeleteUser = async (userId) => {
+  const handleDeletePayment = async (paymentId) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`${api}/api/User?id=${userId}`, {
+      await axios.delete(`${api}/api/PaymentMethod/${paymentId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -338,7 +338,9 @@ const PaymentMethod = () => {
                           <IconButton
                             variant="contained"
                             color="error"
-                            onClick={() => handleDeleteUser(payment.payment_id)}
+                            onClick={() =>
+                              handleDeletePayment(payment.id_payment_method)
+                            }
                           >
                             <DeleteIcon />
                           </IconButton>
