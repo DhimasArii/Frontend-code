@@ -10,6 +10,7 @@ const SideMenu = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/admin/login");
+    navigate(0);
   };
 
   useEffect(() => {
@@ -18,7 +19,7 @@ const SideMenu = () => {
       fetchUserData(token, navigate);
     }
     console.log(userData);
-  }, [fetchUserData]);
+  }, [fetchUserData, navigate]);
 
   return (
     <Drawer
@@ -42,15 +43,9 @@ const SideMenu = () => {
         <ListItemButton component={Link} to="/admin/course">
           <ListItemText primary="Course" />
         </ListItemButton>
-        {/* <ListItemButton component={Link} to="/admin/user-checkout">
-          <ListItemText primary="Checkout" />
-        </ListItemButton> */}
         <ListItemButton component={Link} to="/admin/user-invoice">
           <ListItemText primary="Invoice" />
         </ListItemButton>
-        {/* <ListItemButton component={Link} to="/admin/my-class">
-          <ListItemText primary="MyClass" />
-        </ListItemButton> */}
         <ListItemButton component={Link} to="/admin/payment-method">
           <ListItemText primary="PaymentMethod" />
         </ListItemButton>
@@ -64,9 +59,6 @@ const SideMenu = () => {
           </ListItemButton>
         ) : (
           <>
-            <ListItemButton component={Link} to="/admin/register">
-              <ListItemText primary="Register" />
-            </ListItemButton>
             <ListItemButton component={Link} to="/admin/login">
               <ListItemText primary="Login" />
             </ListItemButton>

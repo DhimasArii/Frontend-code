@@ -4,24 +4,44 @@ import Header from "../../components/Header";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { format } from "date-fns";
+import { parseISO } from "date-fns";
+import { formatInTimeZone, toDate, toZonedTime, format } from "date-fns-tz";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import theme from "../../../../components/color";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
+import { id } from "date-fns/locale";
+import { useNavigate } from "react-router-dom";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 const Schedule = () => {
+  const api = import.meta.env.VITE_URL_API;
+  const navigate = useNavigate();
   const [schedule, setSchedule] = useState([]);
+  const [dataCourse, setCourse] = useState([]);
   const [data, setData] = useState({
-    schedule_id: "",
     course_id: "",
-    course_date: null,
+    course_date: "",
   });
 
   useEffect(() => {
     const fetchSchedule = async () => {
       try {
-        const response = await axios.get(
-          "https://localhost:7175/api/Schedule/GetAll"
-        );
+        const response = await axios.get(`${api}/api/Schedule/GetAll`);
         setSchedule(response.data);
       } catch (error) {
         console.error("fetching error:", error);
@@ -29,6 +49,17 @@ const Schedule = () => {
     };
 
     fetchSchedule();
+
+    const fetchCourse = async () => {
+      try {
+        const response = await axios.get(`${api}/api/Course/GetAllCourse`);
+        setCourse(response.data);
+      } catch (error) {
+        console.error("fatching error:", error);
+      }
+    };
+
+    fetchCourse();
   }, []);
   console.log(schedule);
 
@@ -37,8 +68,7 @@ const Schedule = () => {
     courseDate ? format(new Date(courseDate), "EEEE, dd MMMM yyyy") : "";
 
   const handleInput = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
+    const { name, value } = e.target;
 
     setData({
       ...data,
@@ -49,27 +79,108 @@ const Schedule = () => {
 
   const handleClick = async () => {
     try {
+      const token = localStorage.getItem("token");
       const response = await axios.post(
-        "https://localhost:7175/api/Schedule/CreateSchedule",
+        `${api}/api/Schedule/CreateSchedule`,
         {
-          schedule_id: data.schedule_id,
           course_id: data.course_id,
           course_date: data.course_date,
         },
         {
           headers: {
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
 
       console.log(response.data);
       alert("Data telah terkirim");
+      navigate(0);
     } catch (error) {
       console.error("fatching error: ", error);
       alert("Data gagal terkirim!");
     }
   };
+
+  //edit & delete
+  const [getall, setGetall] = useState([]);
+  const [openPopup, setOpenPopup] = useState(false);
+  const [editSchedule, setEditSchedule] = useState(null);
+  const [formData, setFormData] = useState({
+    schedule_id: "",
+    course_id: "",
+    course_date: "",
+  });
+
+  const handleDeleteSchedule = async (scheduleId) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`${api}/api/Schedule/${scheduleId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      navigate(0);
+    } catch (error) {
+      console.error("Error deleting category:", error);
+    }
+  };
+
+  const handleOpenPopup = (schedules) => {
+    setEditSchedule(schedules);
+
+    const inputDate = schedules?.course_date;
+    const parsedDate = toDate(inputDate, { timeZone: "Asia/Bangkok" });
+    const bangkokDate = toZonedTime(parsedDate, "Asia/Bangkok");
+    const formattedDate = format(bangkokDate, "yyyy-MM-dd", {
+      timeZone: "Asia/Bangkok",
+    });
+
+    setFormData({
+      schedule_id: schedules?.schedule_id || "",
+      course_id: schedules?.course_id || "",
+      course_date: formattedDate || "",
+    });
+    setOpenPopup(true);
+  };
+
+  const handleClosePopup = () => {
+    setOpenPopup(false);
+    setEditSchedule(null);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSaveSchedule = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (editSchedule) {
+        await axios.put(
+          `${api}/api/Schedule/${editSchedule.schedule_id}`,
+          {
+            course_id: formData.course_id,
+            course_date: formData.course_date,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      }
+      handleClosePopup();
+      navigate(0);
+    } catch (error) {
+      console.error("Error saving schedule:", error);
+    }
+  };
+
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -94,38 +205,59 @@ const Schedule = () => {
 
                 <div className="flex items-center flex-col gap-24">
                   <div className="w-100">
-                    <TextField
-                      fullWidth
-                      name="schedule_id"
-                      value={data.schedule_id}
-                      onChange={handleInput}
-                      label="Schedule Id"
-                      variant="outlined"
-                      size="small"
-                    />
+                    <FormControl fullWidth sx={{ mb: 2 }}>
+                      <InputLabel id="course-label">course</InputLabel>
+                      <Select
+                        fullWidth
+                        name="course_id"
+                        value={data.course_id}
+                        onChange={handleInput}
+                        labelId="course-label"
+                        label="course"
+                        size="small"
+                      >
+                        {dataCourse.map((course) => (
+                          <MenuItem
+                            key={course.course_id}
+                            value={course.course_id}
+                          >
+                            {course.course_name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   </div>
                   <div className="w-100">
-                    <TextField
-                      fullWidth
-                      name="course_id"
-                      value={data.course_id}
-                      onChange={handleInput}
-                      label="Course Id"
-                      variant="outlined"
-                      size="small"
-                    />
-                  </div>
-                  <div className="w-100">
-                    <TextField
-                      fullWidth
-                      name="course_date"
-                      inputFormat="yyyy-MM-dd"
-                      value={data.course_date}
-                      onChange={handleInput}
-                      label="Course Date"
-                      variant="outlined"
-                      size="small"
-                    />
+                    <LocalizationProvider
+                      dateAdapter={AdapterDateFns}
+                      adapterLocale={id}
+                    >
+                      <DatePicker
+                        label="Date"
+                        fullWidth
+                        name="course_date"
+                        value={
+                          data.course_date
+                            ? toDate(data.course_date, {
+                                timeZone: "Asia/Jakarta",
+                              })
+                            : null
+                        }
+                        onChange={(newValue) =>
+                          setData((prevData) => ({
+                            ...prevData,
+                            course_date: newValue
+                              ? format(
+                                  toZonedTime(newValue, "Asia/Jakarta"),
+                                  "yyyy-MM-dd",
+                                  { timeZone: "Asia/Jakarta" }
+                                )
+                              : null,
+                          }))
+                        }
+                        sx={{ mb: 2 }}
+                      />
+                    </LocalizationProvider>
                   </div>
                 </div>
 
@@ -179,6 +311,8 @@ const Schedule = () => {
                   <th style={{ padding: "20px 20px 20px 0" }}>schedule_id</th>
                   <th style={{ padding: "20px 20px 20px 0" }}>course_id</th>
                   <th style={{ padding: "20px 20px 20px 0" }}>course_date</th>
+                  <th></th>
+                  <th></th>
                 </tr>
                 {schedule.map((val, key) => (
                   <tr
@@ -201,12 +335,105 @@ const Schedule = () => {
                     <td style={{ padding: "20px 20px 20px 0" }}>
                       {formattedDate(val.course_date)}
                     </td>
+                    <td>
+                      <IconButton
+                        variant="contained"
+                        onClick={() => handleOpenPopup(val)}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    </td>
+                    <td>
+                      <IconButton
+                        variant="contained"
+                        color="error"
+                        onClick={() => handleDeleteSchedule(val.schedule_id)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </td>
                   </tr>
                 ))}
               </table>
             </div>
           </div>
         </div>
+        {/* Dialog Pop Up */}
+        <Dialog open={openPopup} onClose={handleClosePopup}>
+          <DialogTitle>
+            {editSchedule ? "Edit Schedule" : "Add Schedule"}
+          </DialogTitle>
+          <DialogContent>
+            <form>
+              <TextField
+                label="schedule id"
+                fullWidth
+                name="schedule_id"
+                value={formData.schedule_id}
+                disabled={!!editSchedule}
+                onChange={handleInputChange}
+                sx={{ mb: 2, mt: 2 }}
+              />
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <InputLabel id="course-label">course</InputLabel>
+                <Select
+                  fullWidth
+                  name="course_id"
+                  value={formData.course_id}
+                  onChange={handleInput}
+                  labelId="course-label"
+                  label="course"
+                  size="small"
+                >
+                  {dataCourse.map((course) => (
+                    <MenuItem key={course.course_id} value={course.course_id}>
+                      {course.course_name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <LocalizationProvider
+                dateAdapter={AdapterDateFns}
+                adapterLocale={id}
+              >
+                <DatePicker
+                  label="Date"
+                  fullWidth
+                  name="course_date"
+                  value={
+                    formData.course_date
+                      ? toDate(formData.course_date, {
+                          timeZone: "Asia/Jakarta",
+                        })
+                      : null
+                  }
+                  onChange={(newValue) =>
+                    setFormData((prevData) => ({
+                      ...prevData,
+                      course_date: newValue
+                        ? format(
+                            toZonedTime(newValue, "Asia/Jakarta"),
+                            "yyyy-MM-dd",
+                            { timeZone: "Asia/Jakarta" }
+                          )
+                        : null,
+                    }))
+                  }
+                  sx={{ mb: 2 }}
+                />
+              </LocalizationProvider>
+            </form>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClosePopup} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={handleSaveSchedule} color="primary">
+              Save
+            </Button>
+          </DialogActions>
+        </Dialog>
+        {/* End of Dialog Pop Up */}
       </ThemeProvider>
     </>
   );

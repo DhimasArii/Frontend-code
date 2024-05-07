@@ -30,6 +30,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/L
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 
 const UserInvoice = () => {
+  const api = import.meta.env.VITE_URL_API;
   const [invoices, setInvoices] = useState([]);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [editInvoice, setEditInvoice] = useState(null);
@@ -45,9 +46,7 @@ const UserInvoice = () => {
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        const response = await axios.get(
-          "https://localhost:7175/api/Invoice/GetAll"
-        );
+        const response = await axios.get(`${api}/api/Invoice/GetAll`);
         setInvoices(response.data);
       } catch (error) {
         console.error("Error fetching invoices:", error);
@@ -62,7 +61,7 @@ const UserInvoice = () => {
       if (selectedInvoiceId) {
         try {
           const response = await axios.get(
-            `https://localhost:7175/api/Invoice/GetAllByInvoiceId?invoice_id=${selectedInvoiceId}`
+            `${api}/api/Invoice/GetAllByInvoiceId?invoice_id=${selectedInvoiceId}`
           );
           setDetailInvoice(response.data[0]);
           console.log(detailInvoice);
@@ -142,151 +141,183 @@ const UserInvoice = () => {
         <div className="flex flex-col">
           <Header />
           <div className="flex items-center">
-            <TableContainer component={Paper} sx={{ width: 1000 }}>
-              <Table>
-                <TableHead sx={{ width: 100 }}>
-                  <TableRow>
-                    <TableCell sx={{ width: 300, height: 10 }}>
-                      Invoice ID
-                    </TableCell>
-                    <TableCell sx={{ width: 100 }}>Date</TableCell>
-                    <TableCell sx={{ width: 100 }}>Total Courses</TableCell>
-                    <TableCell sx={{ width: 100 }}>Total Price</TableCell>
-                    <TableCell>Action</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {invoices
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((invoice) => (
-                      <TableRow key={invoice.invoice_id} sx={{ height: 10 }}>
-                        <TableCell
-                          sx={{ height: 1, cursor: "pointer" }}
-                          onClick={() =>
-                            handleShowDetailInvoice(invoice.invoice_id)
-                          }
-                        >
-                          {invoice.invoice_id}
-                        </TableCell>
-                        <TableCell sx={{ height: 10 }}>
-                          {invoice.invoice_date}
-                        </TableCell>
-                        <TableCell sx={{ height: 10 }}>
-                          {invoice.total_course}
-                        </TableCell>
-                        <TableCell sx={{ height: 10, alignItems: "center" }}>
-                          {invoice.total_price}
-                        </TableCell>
-                        <TableCell sx={{ height: 10 }}>
-                          <IconButton
-                            onClick={() =>
-                              handleEditInvoice(invoice.invoice_id)
-                            }
-                            aria-label="edit"
-                          >
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton
-                            onClick={() =>
-                              handleDeleteInvoice(invoice.invoice_id)
-                            }
-                            aria-label="delete"
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-              <TablePagination
-                rowsPerPageOptions={[2, 5]}
-                component="div"
-                count={invoices.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />
-            </TableContainer>
+            <table
+              className=""
+              style={{
+                width: "100%",
+                maxWidth: "1200px",
+                margin: "0 auto",
+                borderCollapse: "collapse",
+              }}
+            >
+              <tr
+                style={{
+                  backgroundColor: "#226957",
+                  color: "#FFFFFF",
+                  textAlign: "center",
+                }}
+                className="font-600 text-16 font-montserrat"
+              >
+                <th style={{ padding: "20px 20px 20px 0", width: "300px" }}>
+                  Invoice ID
+                </th>
+                <th style={{ padding: "20px 20px 20px 0", width: "100px" }}>
+                  Date
+                </th>
+                <th style={{ padding: "20px 20px 20px 0", width: "100px" }}>
+                  Total Courses
+                </th>
+                <th style={{ padding: "20px 20px 20px 0", width: "100px" }}>
+                  Total Price
+                </th>
+              </tr>
+              {invoices
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((invoice, index) => (
+                  <tr
+                    key={invoice.invoice_id}
+                    style={{
+                      textAlign: "center",
+                      backgroundColor:
+                        index % 2 === 0 ? "inherit" : "#EA9E1F33",
+                      color: "#4F4F4F",
+                      cursor: "pointer",
+                      transition: "background-color 0.3s",
+                    }}
+                    className="font-500 text-16 font-montserrat"
+                    onClick={() => handleShowDetailInvoice(invoice.invoice_id)}
+                  >
+                    <td
+                      style={{
+                        padding: "20px 20px 20px 0",
+                        cursor: "pointer",
+                        textAlign: "center",
+                      }}
+                    >
+                      {invoice.invoice_id}
+                    </td>
+                    <td
+                      style={{
+                        padding: "20px 20px 20px 0",
+                        textAlign: "center",
+                      }}
+                    >
+                      {invoice.invoice_date}
+                    </td>
+                    <td
+                      style={{
+                        padding: "20px 20px 20px 0",
+                        textAlign: "center",
+                      }}
+                    >
+                      {invoice.total_course}
+                    </td>
+                    <td
+                      style={{
+                        padding: "20px 20px 20px 0",
+                        textAlign: "center",
+                      }}
+                    >
+                      {invoice.total_price}
+                    </td>
+                  </tr>
+                ))}
+            </table>
           </div>
+          <TablePagination
+            rowsPerPageOptions={[2, 5]}
+            component="div"
+            count={invoices.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
 
           {/* Detail Invoice Table */}
           {selectedInvoiceId && (
             <div>
               <h2>Detail Invoice for ID: {selectedInvoiceId}</h2>
-              <TableContainer component={Paper}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell sx={{ width: 10 }}>No.</TableCell>
-                      <TableCell sx={{ width: 250 }}>Course Name</TableCell>
-                      <TableCell sx={{ width: 30 }}>Language</TableCell>
-                      <TableCell sx={{ width: 150 }}>Schedule</TableCell>
-                      <TableCell>Price</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {detailInvoice.detail_Invoices &&
-                      detailInvoice.detail_Invoices.map((item, index) => (
-                        <TableRow key={item.course_id}>
-                          <TableCell>{index + 1}</TableCell>
-                          <TableCell>{item.course_name}</TableCell>
-                          <TableCell>{item.category_name}</TableCell>
-                          <TableCell>{item.course_date}</TableCell>
-                          <TableCell>{item.course_price}</TableCell>
-                        </TableRow>
-                      ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+              <table
+                style={{
+                  width: "100%",
+                  maxWidth: "1200px",
+                  margin: "0 auto",
+                  borderCollapse: "collapse",
+                }}
+              >
+                <tr
+                  style={{
+                    backgroundColor: "#226957",
+                    color: "#FFFFFF",
+                    textAlign: "center",
+                  }}
+                  className="font-600 text-16 font-montserrat"
+                >
+                  <th style={{ padding: "20px 20px 20px 0", width: "10px" }}>
+                    No.
+                  </th>
+                  <th style={{ padding: "20px 20px 20px 0", width: "250px" }}>
+                    Course Name
+                  </th>
+                  <th style={{ padding: "20px 20px 20px 0", width: "30px" }}>
+                    Language
+                  </th>
+                  <th style={{ padding: "20px 20px 20px 0", width: "150px" }}>
+                    Schedule
+                  </th>
+                  <th style={{ padding: "20px 20px 20px 0" }}>Price</th>
+                </tr>
+                {detailInvoice.detail_Invoices &&
+                  detailInvoice.detail_Invoices.map((item, index) => (
+                    <tr
+                      key={item.course_id}
+                      style={{
+                        textAlign: "center",
+                        backgroundColor:
+                          index % 2 === 0 ? "inherit" : "#EA9E1F33",
+                        color: "#4F4F4F",
+                      }}
+                      className="font-500 text-16 font-montserrat"
+                    >
+                      <td
+                        style={{
+                          padding: "20px 20px 20px 0",
+                          textAlign: "center",
+                        }}
+                      >
+                        {index + 1}
+                      </td>
+                      <td style={{ padding: "20px 20px 20px 0" }}>
+                        {item.course_name}
+                      </td>
+                      <td style={{ padding: "20px 20px 20px 0" }}>
+                        {item.category_name}
+                      </td>
+                      <td
+                        style={{
+                          padding: "20px 20px 20px 0",
+                          textAlign: "center",
+                        }}
+                      >
+                        {item.course_date}
+                      </td>
+                      <td
+                        style={{
+                          padding: "20px 20px 20px 0",
+                          textAlign: "center",
+                        }}
+                      >
+                        {item.course_price}
+                      </td>
+                    </tr>
+                  ))}
+              </table>
             </div>
           )}
           {/* End Detail Invoice Table */}
         </div>
       </div>
-
-      {/* Edit Invoice Dialog */}
-      <Dialog open={openEditDialog} onClose={handleCloseEditDialog}>
-        <DialogTitle>Edit Invoice</DialogTitle>
-        <DialogContent>
-          <form>
-            <TextField
-              label="Invoice ID"
-              fullWidth
-              name="invoice_id"
-              value={formData.invoice_id}
-              disabled
-              onChange={handleInputChange}
-              sx={{ mb: 2, mt: 2 }}
-            />
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DateTimePicker
-                label="Date"
-                fullWidth
-                name="invoice_date"
-                value={formData.invoice_date}
-                onChange={(newValue) =>
-                  setFormData((prevData) => ({
-                    ...prevData,
-                    invoice_date: newValue,
-                  }))
-                }
-                sx={{ mb: 2 }}
-              />
-            </LocalizationProvider>
-          </form>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseEditDialog} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleSaveInvoice} color="primary">
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
-      {/* End Edit Invoice Dialog */}
     </>
   );
 };

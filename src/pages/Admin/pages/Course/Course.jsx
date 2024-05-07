@@ -6,24 +6,38 @@ import theme from "../../../../components/color";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const Course = () => {
-  const [course, setCourse] = useState([]);
+  const api = import.meta.env.VITE_URL_API;
+  const navigate = useNavigate();
+  const [dataCourse, setCourse] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [data, setData] = useState({
     course_name: "",
     course_description: "",
     course_image: "",
-    price: null,
-    course_id: "",
+    price: "",
     category_id: "",
   });
 
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await axios.get(
-          "https://localhost:7175/api/Course/GetAllCourse"
-        );
+        const response = await axios.get(`${api}/api/Course/GetAllCourse`);
         setCourse(response.data);
       } catch (error) {
         console.error("fatching error:", error);
@@ -31,8 +45,20 @@ const Course = () => {
     };
 
     fetchCourse();
+
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(`${api}/api/Category/GetAll`);
+        setCategories(response.data);
+        console.log(categories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
   }, []);
-  console.log(course);
+  console.log(dataCourse);
 
   const handleInput = (e) => {
     const name = e.target.name;
@@ -54,30 +80,109 @@ const Course = () => {
   const handleClick = async () => {
     try {
       const response = await axios.post(
-        "https://localhost:7175/api/Course/CreateCourse",
+        `${api}/api/Course/CreateCourse`,
         {
           course_name: data.course_name,
           course_description: data.course_description,
           course_image: data.course_image,
-          price: data.price,
-          course_id: data.course_id,
+          price: parseInt(data.price),
           category_id: data.category_id,
         },
         {
           headers: {
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
 
       console.log(response.data);
       alert("Data telah terkirim");
+      navigate(0);
     } catch (error) {
       console.error("fatching error: ", error);
       alert("Data gagal terkirim!");
     }
   };
+  //edit & delete
+  const [getall, setGetall] = useState([]);
+  const [openPopup, setOpenPopup] = useState(false);
+  const [editCourse, setEditCourse] = useState(null);
+  const [formData, setFormData] = useState({
+    course_id: "",
+    course_name: "",
+    course_description: "",
+    course_image: "",
+    price: "",
+    category_id: "",
+  });
 
+  const handleDeleteCourse = async (courseId) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`${api}/api/Category/${courseId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      navigate(0);
+    } catch (error) {
+      console.error("Error deleting course:", error);
+    }
+  };
+
+  const handleOpenPopup = (course) => {
+    setEditCourse(course);
+    setFormData({
+      course_id: course?.course_id || "",
+      category_id: course?.category_id || "",
+      course_name: course?.course_name || "",
+      course_description: course?.course_description || "",
+      course_image: course?.course_image || "",
+      price: course?.price || "",
+    });
+    setOpenPopup(true);
+  };
+
+  const handleClosePopup = () => {
+    setOpenPopup(false);
+    setEditCourse(null);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSaveUser = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      console.log(formData);
+      if (editCourse) {
+        await axios.put(
+          `${api}/api/Course/${formData.course_id}`,
+          {
+            category_id: formData.category_id,
+            course_name: formData.course_name,
+            course_description: formData.course_description,
+            course_image: formData.course_image,
+            price: parseInt(formData.price),
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      }
+      handleClosePopup();
+      navigate(0);
+    } catch (error) {
+      console.error("Error saving course:", error);
+    }
+  };
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -96,32 +201,33 @@ const Course = () => {
                     <div className="text-yellow text-36">Course</div>
                   </div>
                   <div className="items-center font-400 font-montserrat text-16 text-gray">
-                    add course data
+                    add dataCourse data
                   </div>
                 </div>
 
                 <div className="flex items-center flex-col gap-24">
                   <div className="w-100">
-                    <TextField
-                      fullWidth
-                      name="course_id"
-                      value={data.course_id}
-                      onChange={handleInput}
-                      label="Course Id"
-                      variant="outlined"
-                      size="small"
-                    />
-                  </div>
-                  <div className="w-100">
-                    <TextField
-                      fullWidth
-                      name="course_id"
-                      value={data.category_id}
-                      onChange={handleInput}
-                      label="Category Id"
-                      variant="outlined"
-                      size="small"
-                    />
+                    <FormControl fullWidth sx={{ mb: 2 }}>
+                      <InputLabel id="category-label">category</InputLabel>
+                      <Select
+                        fullWidth
+                        name="category_id"
+                        value={data.category_id}
+                        onChange={handleInput}
+                        labelId="category-label"
+                        label="category"
+                        size="small"
+                      >
+                        {categories.map((cat) => (
+                          <MenuItem
+                            key={cat.category_id}
+                            value={cat.category_id}
+                          >
+                            {cat.category_name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   </div>
                   <div className="w-100">
                     <TextField
@@ -165,6 +271,7 @@ const Course = () => {
                       label="Price"
                       variant="outlined"
                       size="small"
+                      type="number"
                     />
                   </div>
                 </div>
@@ -217,15 +324,19 @@ const Course = () => {
                 >
                   <th style={{ padding: "20px 20px 20px 0" }}>No</th>
                   <th style={{ padding: "20px 20px 20px 0" }}>course_id</th>
-                  <th style={{ padding: "20px 20px 20px 0" }}>category_id</th>
+                  <th style={{ padding: "20px 20px 20px 0" }}>
+                    category_id (name)
+                  </th>
                   <th style={{ padding: "20px 20px 20px 0" }}>course_name</th>
                   <th style={{ padding: "20px 20px 20px 0" }}>
                     course_description
                   </th>
                   <th style={{ padding: "20px 20px 20px 0" }}>course_image</th>
                   <th style={{ padding: "20px 20px 20px 0" }}>price</th>
+                  <th></th>
+                  <th></th>
                 </tr>
-                {course.map((val, key) => (
+                {dataCourse.map((val, key) => (
                   <tr
                     key={key}
                     style={{
@@ -242,6 +353,7 @@ const Course = () => {
                     </td>
                     <td style={{ padding: "20px 20px 20px 0" }}>
                       {val.category_id}
+                      {"\n(" + val.category_name + ")"}
                     </td>
                     <td style={{ padding: "20px 20px 20px 0" }}>
                       {val.course_name}
@@ -250,15 +362,115 @@ const Course = () => {
                       {val.course_description}
                     </td>
                     <td style={{ padding: "20px 20px 20px 0" }}>
-                      {val.course_image}
+                      <img
+                        src={val.course_image}
+                        alt={val.course_image}
+                        style={{ width: 100 }}
+                      />
                     </td>
                     <td style={{ padding: "20px 20px 20px 0" }}>{val.price}</td>
+                    <td>
+                      <IconButton
+                        variant="contained"
+                        onClick={() => handleOpenPopup(val)}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    </td>
+                    <td>
+                      <IconButton
+                        variant="contained"
+                        color="error"
+                        onClick={() => handleDeleteCourse(val.category_id)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </td>
                   </tr>
                 ))}
               </table>
             </div>
           </div>
         </div>
+        {/* Dialog Pop Up */}
+        <Dialog open={openPopup} onClose={handleClosePopup}>
+          <DialogTitle>{editCourse ? "Edit User" : "Add User"}</DialogTitle>
+          <DialogContent>
+            <form>
+              <TextField
+                label="dataCourse id"
+                fullWidth
+                name="course_id"
+                value={formData.course_id}
+                disabled={!!editCourse}
+                onChange={handleInputChange}
+                sx={{ mb: 2, mt: 2 }}
+              />
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <InputLabel id="course-label">Category</InputLabel>
+                <Select
+                  fullWidth
+                  name="category_id"
+                  value={formData.category_id}
+                  onChange={handleInputChange}
+                  labelId="course-label"
+                  label="Category"
+                  size="small"
+                >
+                  {categories.map((course) => (
+                    <MenuItem
+                      key={course.category_id}
+                      value={course.category_id}
+                    >
+                      {course.category_name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <TextField
+                label="course name"
+                fullWidth
+                name="course_name"
+                value={formData.course_name}
+                onChange={handleInputChange}
+                sx={{ mb: 2 }}
+              />
+              <TextField
+                label="course_description"
+                fullWidth
+                name="course_description"
+                value={formData.course_description}
+                onChange={handleInputChange}
+                sx={{ mb: 2 }}
+              />
+              <TextField
+                label="course_image"
+                fullWidth
+                name="course_image"
+                value={formData.course_image}
+                onChange={handleInputChange}
+                sx={{ mb: 2 }}
+              />
+              <TextField
+                label="price"
+                fullWidth
+                name="price"
+                value={formData.price}
+                onChange={handleInputChange}
+                sx={{ mb: 2 }}
+              />
+            </form>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClosePopup} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={handleSaveUser} color="primary">
+              Save
+            </Button>
+          </DialogActions>
+        </Dialog>
+        {/* End of Dialog Pop Up */}
       </ThemeProvider>
     </>
   );
