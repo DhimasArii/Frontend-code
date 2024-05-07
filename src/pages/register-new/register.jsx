@@ -228,15 +228,20 @@ const Forgot = ({ setIsLoggedIn }) => {
         <Navbar />
 
         {/* body */}
-        <div className="flex items-center flex-col mt-96">
-          <div className="flex flex-col gap-16 items-right gap-60">
+        <div className="flex items-center flex-col mt-96 P_input">
+          <div className="flex flex-col gap-16 items-right gap-60 P_input">
             <div className="flex flex-col gap-60">
               <div className="flex flex-col gap-16">
-                <div className="mr-415 font-montserrat items-center flex font-500 gap-10">
-                  <div className="text-green text-24">Lets Join</div>
-                  <div className="text-yellow text-36"> D’Language</div>
+                <div className="mr-415 font-montserrat items-center flex font-500 gap-10 P_mr P_gap_8">
+                  <div className="text-green text-24 P_font_size">
+                    Lets Join
+                  </div>
+                  <div className="text-yellow text-36 P_font_size1">
+                    {" "}
+                    D’Language
+                  </div>
                 </div>
-                <div className="items-left font-400 font-montserrat text-16 text-gray">
+                <div className="items-left font-400 font-montserrat text-16 text-gray P_font_size">
                   Please register first
                 </div>
               </div>
@@ -382,7 +387,7 @@ const Forgot = ({ setIsLoggedIn }) => {
               </div>
             </div>
           </div>
-          <div className="flex items-center mt-40 font-400 text-16 font-montserrat mb-92">
+          <div className="flex items-center mt-40 font-400 text-16 font-montserrat mb-92 P_font_size">
             Have account? &nbsp;
             <Link to="/Login" style={{ textDecoration: "none", color: "blue" }}>
               Login here

@@ -518,23 +518,54 @@
 
 /* phone */
 @media (max-width: 450px) {
-  .font_size {
+  .P_font_size {
     font-size: 60%;
   }
 
-  .font_size1 {
+  .P_font_size1 {
     font-size: 90%;
   }
 
-  .image_size {
-    width: 40px;
+  .P_image_size {
+    width: 20px;
   }
 
-  .image_size1 {
-    width: 80px;
+  .P_image_size1 {
+    width: 220px;
   }
 
-  .flex_warp {
+  .P_flex_warp {
     flex-wrap: wrap;
+  }
+
+  .footer {
+    padding: 10px;
+  }
+
+  .P_gap_8 {
+    gap: 8px;
+  }
+
+  .P_height {
+    height: 4px;
+  }
+
+  .P_content_center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* input */
+  .P_input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .P_mr {
+    margin-right: 0;
   }
 }

@@ -26,15 +26,17 @@ const Navbar2 = ({ handleLogout }) => {
           <Link to="/" style={{ textDecoration: "none", color: "#000000" }}>
             <div id="frame1738" className="flex items-center">
               <div className="mr-10-5">
-                <img src={ImageNavbar} alt="" />
+                <img src={ImageNavbar} alt="" className="P_image_size" />
               </div>
-              <div className="font-400 text-24 font-montserrat">Language</div>
+              <div className="font-400 text-24 font-montserrat P_font_size">
+                Language
+              </div>
             </div>
           </Link>
         </div>
-        <div id="frame1516" className="flex items-center gap-40">
+        <div id="frame1516" className="flex items-center gap-40 P_gap_8">
           <Link to="/checkout" onClick={handleCart}>
-            <img src={IconShopingCart} alt="" />
+            <img src={IconShopingCart} alt="" className="P_image_size" />
           </Link>
           <Link
             to={"/my-class"}
@@ -42,7 +44,9 @@ const Navbar2 = ({ handleLogout }) => {
             onMouseEnter={(e) => (e.target.style.textDecoration = "underline")}
             onMouseLeave={(e) => (e.target.style.textDecoration = "none")}
           >
-            <div className="text-16 font-montserrat text-green">My Class</div>
+            <div className="text-16 font-montserrat text-green P_font_size">
+              My Class
+            </div>
           </Link>
           <Link
             to={"/invoice"}
@@ -50,7 +54,9 @@ const Navbar2 = ({ handleLogout }) => {
             onMouseEnter={(e) => (e.target.style.textDecoration = "underline")}
             onMouseLeave={(e) => (e.target.style.textDecoration = "none")}
           >
-            <div className="text-16 font-montserrat text-green">Invoice</div>
+            <div className="text-16 font-montserrat text-green P_font_size">
+              Invoice
+            </div>
           </Link>
           <hr
             style={{
@@ -60,9 +66,9 @@ const Navbar2 = ({ handleLogout }) => {
               borderColor: "#000000",
             }}
           />
-          <img src={IconPerson} alt="" />
+          <img src={IconPerson} alt="" className="P_image_size" />
           <Link to="/" onClick={handleLogout}>
-            <img src={IconLogout} alt="" />
+            <img src={IconLogout} alt="" className="P_image_size" />
           </Link>
         </div>
       </div>

@@ -18,15 +18,15 @@ const Footer = () => {
       {/* Footer */}
       <div>
         <footer
-          className="footer flex flex-row mt-144 px-95 py-24 bg-green text-white gap-80 font-poppins text-justify"
+          className="footer flex flex-row mt-144 px-95 py-24 bg-green text-white gap-80 font-poppins text-justify P_flex_warp P_gap_8"
           style={{
             borderBottomLeftRadius: 20,
             borderBottomRightRadius: 20,
           }}
         >
-          <div className="aboutUsContainer gap-8">
-            <h3 className="font-500 text-16">About Us</h3>
-            <p className="font-400 text-14">
+          <div className="aboutUsContainer gap-8 ">
+            <h3 className="font-500 text-16 P_font_size">About Us</h3>
+            <p className="font-400 text-14 P_font_size">
               Sed ut perspiciatis unde omnis iste natus error sit voluptatem
               accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
               quae ab illo inventore veritatis et quasi architecto beatae vitae
@@ -34,10 +34,10 @@ const Footer = () => {
             </p>
           </div>
           <div className="productContainer">
-            <h3 className="font-500 text-16">Product</h3>
+            <h3 className="font-500 text-16 P_font_size">Product</h3>
             <div
               style={{ display: "flex", marginTop: -20 }}
-              className="font-400 text-14"
+              className="font-400 text-14 P_font_size"
             >
               <ul className="column">
                 {column1.map((item, index) => (
@@ -57,14 +57,14 @@ const Footer = () => {
           </div>
           <div className="addresContactContainer">
             <div className="address">
-              <h3 className="font-500 text-16">Address</h3>
-              <p className="font-400 text-14">
+              <h3 className="font-500 text-16 P_font_size">Address</h3>
+              <p className="font-400 text-14 P_font_size">
                 Sed ut perspiciatis unde omnis iste natus error sit voluptatem
                 accusantium doloremque.
               </p>
             </div>
             <div className="contactUs">
-              <h3 className="font-500 text-16">Contact Us</h3>
+              <h3 className="font-500 text-16 P_font_size">Contact Us</h3>
               <div style={{ display: "flex" }} className="gap-16">
                 <img src={Phone} alt="Phone" />
                 <img src={Instagram} alt="Phone" />

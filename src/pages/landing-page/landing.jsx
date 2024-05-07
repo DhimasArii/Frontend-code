@@ -91,11 +91,11 @@ const Landing = () => {
               id="frame1552"
               className="flex flex-col item-center px-141 pb-72"
             >
-              <div className="item-center text-white font-600 font-montserrat text-32 text-center pt-59 font_size">
+              <div className="item-center text-white font-600 font-montserrat text-32 text-center pt-59 P_font_size">
                 Learn different languages ​​to hone <br /> your communication
                 skills
               </div>
-              <div className="item-center text-white text-center font-400 font-montserrat text-24 pt-27 font_size">
+              <div className="item-center text-white text-center font-400 font-montserrat text-24 pt-27 P_font_size">
                 All the languages ​​you are looking for are available here, so
                 what are you waiting for and immediately improve your language
                 skills
@@ -108,10 +108,10 @@ const Landing = () => {
               id="frame1548"
               className="flex flex-basis flex-col items-center p-16 gap-31"
             >
-              <div className="text-green font-600 font-montserrat text-48 font_size1">
+              <div className="text-green font-600 font-montserrat text-48 P_font_size1">
                 100+
               </div>
-              <div className="font-500 font-montserrat text-16 text-center lh-19 font_size">
+              <div className="font-500 font-montserrat text-16 text-center lh-19 P_font_size">
                 Choose the class you like and get the skills
               </div>
             </div>
@@ -119,10 +119,10 @@ const Landing = () => {
               id="frame1549"
               className="flex flex-basis flex-col items-center p-16 gap-31"
             >
-              <div className="text-green font-600 font-montserrat text-48 font_size1">
+              <div className="text-green font-600 font-montserrat text-48 P_font_size1">
                 50+
               </div>
-              <div className="font-500 font-montserrat text-16 text-center lh-19 font_size">
+              <div className="font-500 font-montserrat text-16 text-center lh-19 P_font_size">
                 Having teachers who are highly skilled and competent in the
                 language
               </div>
@@ -131,10 +131,10 @@ const Landing = () => {
               id="frame1550"
               className="flex flex-basis flex-col items-center p-16 gap-31"
             >
-              <div className="text-green font-600 font-montserrat text-48 font_size1">
+              <div className="text-green font-600 font-montserrat text-48 P_font_size1">
                 10+
               </div>
-              <div className="font-500 font-montserrat text-16 text-center lh-19 font_size">
+              <div className="font-500 font-montserrat text-16 text-center lh-19 P_font_size">
                 Many alumni become ministry employees because of their excellent
                 language skills
               </div>
@@ -142,14 +142,27 @@ const Landing = () => {
           </div>
 
           <div id="1546" className="flex flex-col items-center mt-70 px-91">
-            <div className="text-green font-600 font-montserrat text-24 font_size">
+            <div className="text-green font-600 font-montserrat text-24 P_font_size">
               Recommended Class
             </div>
             <div id="frame1545" className="flex items-center mt-60">
               <div>
-                <Grid container columnSpacing={2} rowSpacing={5}>
+                <Grid
+                  container
+                  columnSpacing={2}
+                  rowSpacing={5}
+                  style={{ display: "flex", flexWrap: "wrap" }}
+                >
                   {data.slice(0, 6).map((item, index) => (
-                    <Grid key={index} xs={4}>
+                    <Grid
+                      key={index}
+                      xs={16}
+                      sm={8}
+                      md={6}
+                      lg={5}
+                      xl={4}
+                      style={{ marginBottom: "10px" }}
+                    >
                       <Link
                         to={`/detail-kelas/${item.course_id}`}
                         style={{ textDecoration: "none" }}
@@ -173,12 +186,15 @@ const Landing = () => {
               id="frame1536"
               className="flex flex-col items-center px-102 pt-65 pb-58"
             >
-              <div id="1535" className="flex flex-row gap-24 flex_warp">
+              <div
+                id="1535"
+                className="flex flex-row gap-24 P_flex_warp P_gap_8"
+              >
                 <div id="1547" className="flex flex-col gap-24 h-280">
-                  <div className="text-white font-600 font-montserrat text-32 font_size1">
+                  <div className="text-white font-600 font-montserrat text-32 P_font_size1">
                     Gets your best benefit
                   </div>
-                  <div className="text-justify text-white font-500 font-montserrat text-16 font_size">
+                  <div className="text-justify text-white font-500 font-montserrat text-16 P_font_size">
                     Sed ut perspiciatis unde omnis iste natus error sit
                     voluptatem accusantium doloremque laudantium, totam rem
                     aperiam, eaque ipsa quae ab illo inventore veritatis et
@@ -192,21 +208,34 @@ const Landing = () => {
                   </div>
                 </div>
                 <div>
-                  <img src={gambar1} alt="" className="image_size1" />
+                  <img src={gambar1} alt="" className="P_image_size1" />
                 </div>
               </div>
             </div>
           </div>
 
           <div id="1534" className="flex flex-col items-center gap-60 mt-122">
-            <div className="text-green font-600 font-montserrat text-24 font_size">
+            <div className="text-green font-600 font-montserrat text-24 P_font_size">
               Available Language Course
             </div>
             <div id="frame1545" className="flex flex-basis items-center">
               <div>
-                <Grid container columnSpacing={2} rowSpacing={5}>
+                <Grid
+                  container
+                  columnSpacing={2}
+                  rowSpacing={5}
+                  style={{ display: "flex", flexWrap: "wrap" }}
+                >
                   {category.slice(0, 8).map((item, index) => (
-                    <Grid key={index} xs={3} maxWidth={350}>
+                    <Grid
+                      key={index}
+                      xs={14}
+                      sm={7}
+                      md={5}
+                      lg={4}
+                      xl={3}
+                      style={{ marginBottom: "10px" }}
+                    >
                       <Link
                         to={`/menu-kelas/${item.category_id}`}
                         style={{ textDecoration: "none" }}

@@ -15,9 +15,9 @@ const Navbar = () => {
           <Link to="/" style={{ textDecoration: "none", color: "#000000" }}>
             <div id="frame1738" className="flex items-center">
               <div className="mr-10-5">
-                <img src={ImageNavbar} alt="" className="image_size" />
+                <img src={ImageNavbar} alt="" className="P_image_size" />
               </div>
-              <div className="font-400 text-24 font-montserrat font_size">
+              <div className="font-400 text-24 font-montserrat P_font_size">
                 Language
               </div>
             </div>
@@ -27,6 +27,7 @@ const Navbar = () => {
           <div>
             <Link to="/login">
               <Button
+                className="navbar-button"
                 variant="contained"
                 sx={{
                   backgroundColor: "green.main",

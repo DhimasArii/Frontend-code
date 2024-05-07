@@ -113,14 +113,14 @@ const Forgot = () => {
           <NavbarLogOut />
         )}
         {/* body */}
-        <div className="flex items-center flex-col mt-96">
-          <div className="flex flex-col gap-16 items-right gap-60">
+        <div className="flex items-center flex-col mt-96 P_input">
+          <div className="flex flex-col gap-16 items-right gap-60 P_input">
             <div className="flex flex-col gap-60">
               <div className="flex flex-col gap-16">
-                <div className="mr-415 font-montserrat text-24">
+                <div className="mr-415 font-montserrat text-24 P_mr P_gap_8 P_font_size1">
                   Reset Password
                 </div>
-                <div className="items-left font-400 font-montserrat text-16 text-gray">
+                <div className="items-left font-400 font-montserrat text-16 text-gray P_font_size">
                   Please enter your email address
                 </div>
               </div>

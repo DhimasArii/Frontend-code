@@ -159,19 +159,19 @@ const Login = ({ setIsLoggedIn }) => {
         <Navbar />
 
         {/* body */}
-        <div className="flex items-center flex-col mt-96">
-          <div className="flex flex-col gap-16 items-right gap-60">
+        <div className="flex items-center flex-col mt-96 P_input">
+          <div className="flex flex-col gap-16 items-right gap-60 P_input">
             <div className="flex flex-col gap-40">
               <div className="flex flex-col gap-16">
-                <div className="mr-429 font-montserrat text-24 text-green">
+                <div className="mr-429 font-montserrat text-24 text-green P_font_size1 P_mr">
                   Welcome Back!
                 </div>
-                <div className="font-400 text-16 font-montserrat">
+                <div className="font-400 text-16 font-montserrat P_font_size ">
                   Please login first
                 </div>
               </div>
 
-              <div className="flex items-left flex-col gap-24">
+              <div className="flex items-left flex-col gap-24 P_input">
                 <div className="w-100">
                   <TextField
                     fullWidth
@@ -227,7 +227,7 @@ const Login = ({ setIsLoggedIn }) => {
                     }}
                   />
                 </div>
-                <div className="flex flex-row font-400 text-16 font-montserrat">
+                <div className="flex flex-row font-400 text-16 font-montserrat P_font_size">
                   Forgot Password &nbsp;
                   <Link
                     to="/forgot-password"
@@ -265,7 +265,7 @@ const Login = ({ setIsLoggedIn }) => {
               </div>
             </div>
           </div>
-          <div className="flex items-center mt-40 font-400 text-16 font-montserrat">
+          <div className="flex items-center mt-40 font-400 text-16 font-montserrat P_font_size">
             Dont have account? &nbsp;
             <Link
               to="/register-new"
