@@ -149,6 +149,7 @@ const User = () => {
 
         console.log(response.data);
         alert("Data telah terkirim \nTolong cek email untuk aktivasi");
+        navigate(0);
       } catch (error) {
         console.error(error);
         alert("Create user gagal!\nSilahkan cek kembali data anda!");

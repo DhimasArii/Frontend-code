@@ -34,35 +34,36 @@ const SideMenu = () => {
       }}
     >
       <List>
-        <ListItemButton component={Link} to="/admin/user">
-          <ListItemText primary="User" />
-        </ListItemButton>
-        <ListItemButton component={Link} to="/admin/category">
-          <ListItemText primary="Category" />
-        </ListItemButton>
-        <ListItemButton component={Link} to="/admin/course">
-          <ListItemText primary="Course" />
-        </ListItemButton>
-        <ListItemButton component={Link} to="/admin/user-invoice">
-          <ListItemText primary="Invoice" />
-        </ListItemButton>
-        <ListItemButton component={Link} to="/admin/payment-method">
-          <ListItemText primary="PaymentMethod" />
-        </ListItemButton>
-        <ListItemButton component={Link} to="/admin/schedule">
-          <ListItemText primary="Schedule" />
-        </ListItemButton>
-
+        {userData && userData.role === "admin" && (
+          <>
+            <ListItemButton component={Link} to="/admin/user">
+              <ListItemText primary="User" />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/admin/category">
+              <ListItemText primary="Category" />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/admin/course">
+              <ListItemText primary="Course" />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/admin/user-invoice">
+              <ListItemText primary="Invoice" />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/admin/payment-method">
+              <ListItemText primary="PaymentMethod" />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/admin/schedule">
+              <ListItemText primary="Schedule" />
+            </ListItemButton>
+          </>
+        )}
         {userData ? (
           <ListItemButton onClick={handleLogout}>
             <ListItemText primary="Logout" />
           </ListItemButton>
         ) : (
-          <>
-            <ListItemButton component={Link} to="/admin/login">
-              <ListItemText primary="Login" />
-            </ListItemButton>
-          </>
+          <ListItemButton component={Link} to="/admin/login">
+            <ListItemText primary="Login" />
+          </ListItemButton>
         )}
       </List>
     </Drawer>

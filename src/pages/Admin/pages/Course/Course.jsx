@@ -391,7 +391,9 @@ const Course = () => {
                         style={{ width: 100 }}
                       />
                     </td>
-                    <td style={{ padding: "20px 20px 20px 0" }}>{val.price}</td>
+                    <td style={{ padding: "20px 20px 20px 0" }}>
+                      {Intl.NumberFormat("id-ID").format(val.price)}
+                    </td>
                     <td style={{ padding: "20px 20px 20px 0" }}>
                       {val.course_status ? "Yes" : "No"}
                     </td>
@@ -420,7 +422,7 @@ const Course = () => {
         </div>
         {/* Dialog Pop Up */}
         <Dialog open={openPopup} onClose={handleClosePopup}>
-          <DialogTitle>{editCourse ? "Edit User" : "Add User"}</DialogTitle>
+          <DialogTitle>{editCourse ? "Edit Course" : "Add Course"}</DialogTitle>
           <DialogContent>
             <form>
               <TextField

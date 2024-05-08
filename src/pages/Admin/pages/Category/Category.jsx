@@ -350,7 +350,9 @@ const Category = () => {
         </div>
         {/* Dialog Pop Up */}
         <Dialog open={openPopup} onClose={handleClosePopup}>
-          <DialogTitle>{editCategory ? "Edit User" : "Add User"}</DialogTitle>
+          <DialogTitle>
+            {editCategory ? "Edit Category" : "Add Category"}
+          </DialogTitle>
           <DialogContent>
             <form>
               <TextField

@@ -218,7 +218,7 @@ const UserInvoice = () => {
                         textAlign: "center",
                       }}
                     >
-                      {invoice.total_price}
+                      {Intl.NumberFormat("id-ID").format(invoice.total_price)}
                     </td>
                   </tr>
                 ))}
@@ -308,7 +308,7 @@ const UserInvoice = () => {
                           textAlign: "center",
                         }}
                       >
-                        {item.course_price}
+                        {Intl.NumberFormat("id-ID").format(item.course_price)}
                       </td>
                     </tr>
                   ))}
