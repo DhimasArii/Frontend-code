@@ -40,7 +40,10 @@ const Landing = () => {
         const response = await axios.get(
           "https://localhost:7175/api/Course/GetAllCourse"
         );
-        setData(response.data);
+        const filteredCourse = response.data.filter(
+          (course) => course.course_status === true
+        );
+        setData(filteredCourse);
       } catch (error) {
         console.error("Error fetching product data:", error);
         // Handle error, such as displaying an error message to the user
@@ -56,8 +59,11 @@ const Landing = () => {
         const response = await axios.get(
           "https://localhost:7175/api/Category/GetAll"
         );
-        setCategory(response.data);
-        console.log(response);
+        const filteredCategories = response.data.filter(
+          (category) => category.category_status === true
+        );
+        setCategory(filteredCategories);
+        console.log(category);
       } catch (error) {
         console.error("Error fetching categories:", error);
         // Handle error, such as displaying an error message to the user

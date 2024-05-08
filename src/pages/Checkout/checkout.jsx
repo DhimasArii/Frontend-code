@@ -226,7 +226,10 @@ const Checkout = () => {
         const response = await axios.get(
           "https://localhost:7175/api/PaymentMethod/GetAll"
         );
-        setPaymentMethods(response.data);
+        const filteredPaymentMethods = response.data.filter(
+          (payment) => payment.payment_status === true
+        );
+        setPaymentMethods(filteredPaymentMethods);
       } catch (error) {
         console.error("Error fetching payment methods:", error);
       }
@@ -449,7 +452,7 @@ const Checkout = () => {
                   </DialogTitle>
                   <List
                     sx={{
-                      maxHeight: "calc(100vh - 300px)",
+                      maxHeight: "calc(100vh - 450px)",
                       overflowY: "auto",
                     }}
                   >

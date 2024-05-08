@@ -32,6 +32,7 @@ const Course = () => {
     course_image: "",
     price: "",
     category_id: "",
+    course_status: true,
   });
 
   useEffect(() => {
@@ -87,6 +88,7 @@ const Course = () => {
           course_image: data.course_image,
           price: parseInt(data.price),
           category_id: data.category_id,
+          course_status: data.course_status,
         },
         {
           headers: {
@@ -114,6 +116,7 @@ const Course = () => {
     course_image: "",
     price: "",
     category_id: "",
+    course_status: false,
   });
 
   const handleDeleteCourse = async (courseId) => {
@@ -139,6 +142,7 @@ const Course = () => {
       course_description: course?.course_description || "",
       course_image: course?.course_image || "",
       price: course?.price || "",
+      course_status: course?.course_status || false,
     });
     setOpenPopup(true);
   };
@@ -169,6 +173,7 @@ const Course = () => {
             course_description: formData.course_description,
             course_image: formData.course_image,
             price: parseInt(formData.price),
+            course_status: formData.course_status,
           },
           {
             headers: {
@@ -274,6 +279,23 @@ const Course = () => {
                       type="number"
                     />
                   </div>
+                  <div className="w-100">
+                    <FormControl fullWidth sx={{ mb: 2 }}>
+                      <InputLabel id="status-label">status</InputLabel>
+                      <Select
+                        fullWidth
+                        name="course_status"
+                        value={data.course_status}
+                        onChange={handleInput}
+                        labelId="status-label"
+                        label="status"
+                        size="small"
+                      >
+                        <MenuItem value={true}>yes</MenuItem>
+                        <MenuItem value={false}>no</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </div>
                 </div>
 
                 <div className="flex items-right flex-row gap-24">
@@ -309,7 +331,7 @@ const Course = () => {
                 style={{
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: "10px", // row gap
+                  gap: "10px",
                   borderCollapse: "collapse",
                 }}
               >
@@ -333,6 +355,7 @@ const Course = () => {
                   </th>
                   <th style={{ padding: "20px 20px 20px 0" }}>course_image</th>
                   <th style={{ padding: "20px 20px 20px 0" }}>price</th>
+                  <th style={{ padding: "20px 20px 20px 0" }}>status</th>
                   <th></th>
                   <th></th>
                 </tr>
@@ -369,6 +392,9 @@ const Course = () => {
                       />
                     </td>
                     <td style={{ padding: "20px 20px 20px 0" }}>{val.price}</td>
+                    <td style={{ padding: "20px 20px 20px 0" }}>
+                      {val.course_status ? "Yes" : "No"}
+                    </td>
                     <td>
                       <IconButton
                         variant="contained"
@@ -459,6 +485,21 @@ const Course = () => {
                 onChange={handleInputChange}
                 sx={{ mb: 2 }}
               />
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <InputLabel id="status-label">status</InputLabel>
+                <Select
+                  fullWidth
+                  name="course_status"
+                  value={formData.course_status}
+                  onChange={handleInputChange}
+                  labelId="status-label"
+                  label="status"
+                  size="small"
+                >
+                  <MenuItem value={true}>yes</MenuItem>
+                  <MenuItem value={false}>no</MenuItem>
+                </Select>
+              </FormControl>
             </form>
           </DialogContent>
           <DialogActions>
