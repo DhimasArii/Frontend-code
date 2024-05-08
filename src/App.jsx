@@ -17,13 +17,10 @@ import MyClass from "./pages/my-class/my-class";
 //admin
 import User from "./pages/Admin/pages/User/User";
 import Category from "./pages/Admin/pages/Category/Category";
-import Checkout1 from "./pages/Admin/pages/UserCheckout/UserCheckout";
 import Course from "./pages/Admin/pages/Course/Course";
 import Invoice1 from "./pages/Admin/pages/UserInvoice/UserInvoice";
-import MyClass1 from "./pages/Admin/pages/MyClass/MyClass";
 import PaymentMethod from "./pages/Admin/pages/PaymentMethod/PaymentMethod";
 import Schedule from "./pages/Admin/pages/Schedule/Schedule";
-import Register from "./pages/Admin/pages/Register/Register";
 import Login1 from "./pages/Admin/pages/Login/AdminLogin";
 
 import { Routes, Route, ScrollRestoration } from "react-router-dom";
@@ -94,13 +91,10 @@ function App() {
       />
       <Route path="/admin/user" element={<User />} />
       <Route path="/admin/category" element={<Category />} />
-      <Route path="/admin/user-checkout" element={<Checkout1 />} />
       <Route path="/admin/course" element={<Course />} />
       <Route path="/admin/user-invoice" element={<Invoice1 />} />
-      <Route path="/admin/my-class" element={<MyClass1 />} />
       <Route path="/admin/payment-method" element={<PaymentMethod />} />
       <Route path="/admin/schedule" element={<Schedule />} />
-      <Route path="/admin/register" element={<Register />} />
       <Route path="/admin/login" element={<Login1 />} />
     </Routes>
   );

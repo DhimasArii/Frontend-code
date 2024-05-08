@@ -7,6 +7,7 @@ const Header = () => {
         className="font-montserrat font-600"
         style={{
           height: "50px",
+          maxWidth: "1000px",
           display: "flex",
           justifyContent: "start",
           alignItems: "center",

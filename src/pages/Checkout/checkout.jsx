@@ -225,8 +225,13 @@ const Checkout = () => {
   useEffect(() => {
     const fetchPaymentMethods = async () => {
       try {
-        const response = await axios.get(`${api}/api/PaymentMethod/GetAll`);
-        setPaymentMethods(response.data);
+        const response = await axios.get(
+          `${api}/api/PaymentMethod/GetAll`
+        );
+        const filteredPaymentMethods = response.data.filter(
+          (payment) => payment.payment_status === true
+        );
+        setPaymentMethods(filteredPaymentMethods);
       } catch (error) {
         console.error("Error fetching payment methods:", error);
       }
@@ -446,7 +451,7 @@ const Checkout = () => {
                   </DialogTitle>
                   <List
                     sx={{
-                      maxHeight: "calc(100vh - 300px)",
+                      maxHeight: "calc(100vh - 450px)",
                       overflowY: "auto",
                     }}
                   >

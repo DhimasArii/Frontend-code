@@ -312,7 +312,7 @@ const DetailKelas = () => {
                         className="font-600 text-24 P_font_size1"
                         style={{ color: "#EA9E1F" }}
                       >
-                        IDR {detail.price}
+                        IDR {Intl.NumberFormat("id-ID").format(detail.price)}
                       </div>
                     </div>
                   </div>

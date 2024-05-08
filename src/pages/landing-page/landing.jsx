@@ -39,8 +39,13 @@ const Landing = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${api}/api/Course/GetAllCourse`);
-        setData(response.data);
+        const response = await axios.get(
+          `${api}/api/Course/GetAllCourse`
+        );
+        const filteredCourse = response.data.filter(
+          (course) => course.course_status === true
+        );
+        setData(filteredCourse);
       } catch (error) {
         console.error("Error fetching product data:", error);
         // Handle error, such as displaying an error message to the user
@@ -53,9 +58,14 @@ const Landing = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(`${api}/api/Category/GetAll`);
-        setCategory(response.data);
-        console.log(response);
+        const response = await axios.get(
+          `${api}/api/Category/GetAll`
+        );
+        const filteredCategories = response.data.filter(
+          (category) => category.category_status === true
+        );
+        setCategory(filteredCategories);
+        console.log(category);
       } catch (error) {
         console.error("Error fetching categories:", error);
         // Handle error, such as displaying an error message to the user
