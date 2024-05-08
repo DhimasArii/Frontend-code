@@ -16,6 +16,7 @@ import useLogout from "../../hooks/useLogout";
 
 const Forgot = () => {
   const { isLoggedIn } = useCheckLogin();
+  const api = import.meta.env.VITE_URL_API;
   const { handleLogout } = useLogout();
   const navigate = useNavigate();
   const [data, setData] = useState({
@@ -84,7 +85,7 @@ const Forgot = () => {
     } else {
       try {
         const response = await axios.post(
-          "https://localhost:7175/api/User/ForgetPassword",
+          `${api}/api/User/ForgetPassword`,
           {
             email: data.email,
           },

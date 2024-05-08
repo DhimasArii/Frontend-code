@@ -14,9 +14,11 @@ const EmailConfirmation = () => {
         <div className="navbar-email-confirmation">
           <div className="flex items-center">
             <div className="mr-10">
-              <img src={ImageNavbar} />
+              <img src={ImageNavbar} className="P_image_size" />
             </div>
-            <div className="font-400 text-24 font-montserrat">Language</div>
+            <div className="font-400 text-24 font-montserrat P_font_size">
+              Language
+            </div>
           </div>
         </div>
 
@@ -25,10 +27,10 @@ const EmailConfirmation = () => {
             <div>
               <img src={ImageBody} />
             </div>
-            <div className="mt-40 text-24 font-500 text-green font-montserrat">
+            <div className="mt-40 text-24 font-500 text-green font-montserrat P_font_size">
               Email Confirmation Success
             </div>
-            <div className="mt-8 text-16 text-gray-light font-montserrat">
+            <div className="mt-8 text-16 text-gray-light font-montserrat P_font_size">
               Thanks for confirmation your email. Please login first
             </div>
             <div className="mt-40">

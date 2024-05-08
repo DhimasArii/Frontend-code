@@ -17,6 +17,7 @@ import Navbar from "../../components/Navbar";
 
 const Forgot = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
+  const api = import.meta.env.VITE_URL_API;
   const [data, setData] = useState({
     name: "",
     email: "",
@@ -195,7 +196,7 @@ const Forgot = ({ setIsLoggedIn }) => {
     } else {
       try {
         const response = await axios.post(
-          "https://localhost:7175/api/User/CreateUser",
+          `${api}/api/User/CreateUser`,
           {
             email: data.email,
             passwords: data.password,

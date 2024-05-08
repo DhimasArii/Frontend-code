@@ -17,6 +17,7 @@ import axios from "axios";
 const CreatePassword = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const api = import.meta.env.VITE_URL_API;
   const searchParams = new URLSearchParams(location.search);
   const email = searchParams.get("email");
   const [data, setData] = useState({
@@ -129,7 +130,7 @@ const CreatePassword = ({ setIsLoggedIn }) => {
       try {
         console.log(email);
         const response = await axios.post(
-          `https://localhost:7175/api/User/ResetPassword`,
+          `${api}/api/User/ResetPassword`,
           {
             email: email, // Kirim email pengguna yang login
             password: data.password,

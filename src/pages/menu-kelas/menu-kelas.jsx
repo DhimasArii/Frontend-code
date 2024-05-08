@@ -34,6 +34,7 @@ const Kelas = () => {
   const navigate = useNavigate();
   const { isLoggedIn } = useCheckLogin();
   const { handleLogout } = useLogout();
+  const api = import.meta.env.VITE_URL_API;
 
   const column1 = ["Arabic", "English", "Indonesian", "Mandarin"];
   const column2 = ["Deutsch", "French", "Japanese", "Melayu"];
@@ -42,7 +43,7 @@ const Kelas = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://localhost:7175/api/Course/GetAllCoursesByCategory/${category}`
+          `${api}/api/Course/GetAllCoursesByCategory/${category}`
         );
         setData(response.data);
         console.log(response.data);
@@ -58,9 +59,7 @@ const Kelas = () => {
   useEffect(() => {
     const fetchDetail = async () => {
       try {
-        const response = await axios.get(
-          `https://localhost:7175/api/Category/${category}`
-        );
+        const response = await axios.get(`${api}/api/Category/${category}`);
         setDetail(response.data[0]);
         console.log(response.data[0]);
       } catch (error) {
@@ -92,10 +91,10 @@ const Kelas = () => {
             id="frame1736"
             className="flex flex-col items-center gap-16 wx-70"
           >
-            <div className="mt-46 text-24 font-600 mx-70 w-100 font-montserrat">
+            <div className="mt-46 text-24 font-600 mx-70 w-100 font-montserrat P_font_size1">
               {detail.category_name}
             </div>
-            <div className="text-16 font-400  mx-70 w-100 font-montserrat text-black-light">
+            <div className="text-16 font-400  mx-70 w-100 font-montserrat text-black-light P_font_size">
               {detail.category_description}
             </div>
           </div>
@@ -114,7 +113,7 @@ const Kelas = () => {
             id="frame1546"
             className="flex flex-col items-center mt-80 gap-60 mx-91"
           >
-            <div className="text-green font-600 font-montserrat text-24">
+            <div className="text-green font-600 font-montserrat text-24 P_font_size1">
               Class you might like
             </div>
             <div>
@@ -124,7 +123,7 @@ const Kelas = () => {
                   return (
                     <Grid
                       key={index}
-                      xs={data.length > 1 ? 4 : 12}
+                      xl={data.length > 1 ? 4 : 12}
                       maxWidth={350}
                     >
                       <Link

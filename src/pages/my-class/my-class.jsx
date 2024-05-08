@@ -24,6 +24,7 @@ const MyClass = () => {
   const navigate = useNavigate();
   const [detailInvoiceData, setDetailInvoiceData] = useState([]);
   const { userData, fetchUserData } = useUserStore();
+  const api = import.meta.env.VITE_URL_API;
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -41,7 +42,7 @@ const MyClass = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://localhost:7175/api/MyClass/GetAllByUserId?user_id=${userData.id}`
+          `${api}/api/MyClass/GetAllByUserId?user_id=${userData.id}`
         );
         setDetailInvoiceData(response.data);
         console.log(detailInvoiceData);
@@ -73,6 +74,9 @@ const MyClass = () => {
             gap: "24px",
             marginTop: "40px",
             paddingX: "71px",
+            "@media (max-width: 450px)": {
+              paddingX: 0,
+            },
           }}
         >
           <Grid

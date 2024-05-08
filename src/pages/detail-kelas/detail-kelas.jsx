@@ -64,6 +64,7 @@ const DetailKelas = () => {
   const [isAlertAddToCartOpen, setIsAlertAddToCartOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertSeverity, setAlertSeverity] = useState("");
+  const api = import.meta.env.VITE_URL_API;
 
   const column1 = ["Arabic", "English", "Indonesian", "Mandarin"];
   const column2 = ["Deutsch", "French", "Japanese", "Melayu"];
@@ -84,7 +85,7 @@ const DetailKelas = () => {
       try {
         if (userData.id) {
           const response = await axios.get(
-            `https://localhost:7175/api/Checkout/GetAllByUserId?user_id=${userData.id}`
+            `${api}/api/Checkout/GetAllByUserId?user_id=${userData.id}`
           );
           setCheckout(response.data[0]);
           console.log(dataCheckout);
@@ -101,9 +102,7 @@ const DetailKelas = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `https://localhost:7175/api/Course/${id}`
-        );
+        const response = await axios.get(`${api}/api/Course/${id}`);
         if (!response.data || response.data.length === 0) {
           throw new Error("Data not found");
         }
@@ -121,7 +120,7 @@ const DetailKelas = () => {
     const fetchCategory = async () => {
       try {
         const response = await axios.get(
-          `https://localhost:7175/api/Course/GetAllCoursesByCategory/${detail.category_id}`
+          `${api}/api/Course/GetAllCoursesByCategory/${detail.category_id}`
         );
         const filteredData = response.data.filter(
           (item) => item.course_id !== detail.course_id
@@ -141,7 +140,7 @@ const DetailKelas = () => {
     const fetchScheduleData = async () => {
       try {
         const response = await axios.get(
-          `https://localhost:7175/api/Schedule/GetByCourseId?course_id=${id}`
+          `${api}/api/Schedule/GetByCourseId?course_id=${id}`
         );
         setScheduleList(response.data);
         console.log(scheduleList);
@@ -157,7 +156,7 @@ const DetailKelas = () => {
     const fetchMyClassScheduleData = async () => {
       try {
         const response = await axios.get(
-          `https://localhost:7175/api/MyClass/GetAllByUserId?user_id=${userData.id}`
+          `${api}/api/MyClass/GetAllByUserId?user_id=${userData.id}`
         );
         const filteredMyClassScheduleData = response.data.filter((item) =>
           item.my_class.some((course) => course.course_id === id)
@@ -212,7 +211,7 @@ const DetailKelas = () => {
           };
 
           const response = await axios.post(
-            "https://localhost:7175/api/Checkout/AddDetailCheckout",
+            `${api}/api/Checkout/AddDetailCheckout`,
             data
           );
           console.log(response.data); // Tampilkan respons dari API jika diperlukan
@@ -293,24 +292,24 @@ const DetailKelas = () => {
           >
             <div
               id="frame1560"
-              className="flex flex-row mt-46 text-24 font-600 mx-70 w-100 font-montserrat gap-40"
+              className="flex flex-row mt-46 text-24 font-600 mx-70 w-100 font-montserrat gap-40 P_flex_warp T_flex_warp"
             >
               <img
                 src={detail.course_image}
-                style={{ width: 400, height: 266.67 }}
+                className="P_images_detlas L_images"
               />
               <div id="frame1559" className="flex gap-60 flex-col">
                 <div id="frame1556" className="flex flex-col gap-32">
                   <div id="frame1555" className="flex flex-col gap-16">
                     <div id="frame1554" className="flex flex-col gap-8">
-                      <div className="font-400 text-16 font-montserrat text-gray">
+                      <div className="font-400 text-16 font-montserrat text-gray P_font_size">
                         {detail.category_name}
                       </div>
-                      <div className="font-600 text-24 font-montserrat ">
+                      <div className="font-600 text-24 font-montserrat P_font_size1">
                         {detail.course_name}
                       </div>
                       <div
-                        className="font-600 text-24"
+                        className="font-600 text-24 P_font_size1"
                         style={{ color: "#EA9E1F" }}
                       >
                         IDR {detail.price}
@@ -322,6 +321,7 @@ const DetailKelas = () => {
                       sx={{
                         m: 1,
                         minWidth: 300,
+                        width: 100,
                         height: 40,
                         fontFamily: "Montserrat",
                       }}
@@ -364,7 +364,10 @@ const DetailKelas = () => {
                     </FormControl>
                   </div>
                 </div>
-                <div id="frame1558" className="flex flex-row gap-16">
+                <div
+                  id="frame1558"
+                  className="flex flex-row gap-16 P_flex_warp"
+                >
                   <Button
                     variant="contained"
                     sx={{
@@ -426,14 +429,14 @@ const DetailKelas = () => {
               </div>
             </div>
             <div id="frame1562" className="flex flex-col gap-16">
-              <div className="font-600 text-24 font-montserrat">
+              <div className="font-600 text-24 font-montserrat P_font_size1">
                 Description
               </div>
               <div id="frame1561" className="flex flex-col gap-24">
-                <div className="font-400 text-16 font-montserrat">
+                <div className="font-400 text-16 font-montserrat P_font_size">
                   {detail.course_description}
                 </div>
-                <div className="font-400 text-16 font-poppins">
+                <div className="font-400 text-16 font-poppins P_font_size">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
                   do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                   Ut enim ad minim veniam, quis nostrud exercitation ullamco
@@ -461,7 +464,7 @@ const DetailKelas = () => {
             id="frame1546"
             className="flex flex-col items-center mt-80 gap-60 mx-91"
           >
-            <div className="text-green font-600 font-montserrat text-24">
+            <div className="text-green font-600 font-montserrat text-24 P_font_size1">
               Another class for you
             </div>
             <div>

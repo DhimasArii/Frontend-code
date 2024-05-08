@@ -22,6 +22,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const Invoice = ({ isLoggedIn, setIsLoggedIn }) => {
   const { userData, fetchUserData } = useUserStore();
+  const api = import.meta.env.VITE_URL_API;
   const navigate = useNavigate();
   const [invoiceData, setInvoiceData] = useState([]);
   const handleLogout = () => {
@@ -40,7 +41,7 @@ const Invoice = ({ isLoggedIn, setIsLoggedIn }) => {
     const fetchInvoiceData = async () => {
       try {
         const response = await axios.get(
-          `https://localhost:7175/api/Invoice/GetAllByUserId?user_id=${userData.id}`
+          `${api}/api/Invoice/GetAllByUserId?user_id=${userData.id}`
         );
         setInvoiceData(response.data);
         console.log(invoiceData);
@@ -67,9 +68,12 @@ const Invoice = ({ isLoggedIn, setIsLoggedIn }) => {
 
         {/* body */}
         <div className="flex flex-col w-100">
-          <div id="frame1732" className="flex flex-col gap-32 px-70 mt-46">
+          <div
+            id="frame1732"
+            className="flex flex-col gap-32 px-70 mt-46 P_padding_x"
+          >
             <div id="frame1410" className="flex flex-row gap-8 ">
-              <div className="font-600 text-16 font-montserrat text-gray">
+              <div className="font-600 text-16 font-montserrat text-gray P_font_size">
                 <Link
                   to={"/"}
                   style={{ textDecoration: "none", color: "inherit" }}
@@ -81,14 +85,14 @@ const Invoice = ({ isLoggedIn, setIsLoggedIn }) => {
                   Home &gt;
                 </Link>
               </div>
-              <div className="font-600 text-16 font-montserrat text-yellow">
+              <div className="font-600 text-16 font-montserrat text-yellow P_font_size">
                 Invoice
               </div>
             </div>
 
             <div id="frame1731" className="flex flex-col gap-24">
               <div
-                className="font-600 text-20 font-montserrat"
+                className="font-600 text-20 font-montserrat P_font_size1"
                 style={{ color: "#4F4F4F" }}
               >
                 Menu Invoice
@@ -101,6 +105,7 @@ const Invoice = ({ isLoggedIn, setIsLoggedIn }) => {
                   justifyContent: "center",
                   gap: "24px", // row gap
                   borderCollapse: "collapse",
+                  width: "100%", // Mengatur lebar tabel menjadi responsif
                 }}
               >
                 <tr
@@ -109,14 +114,26 @@ const Invoice = ({ isLoggedIn, setIsLoggedIn }) => {
                     color: "#FFFFFF",
                     textAlign: "center",
                   }}
-                  className="font-600 text-16 font-montserrat"
+                  className="font-600 text-16 font-montserrat table-row"
                 >
-                  <th style={{ padding: "20px 20px 20px 0" }}>No</th>
-                  <th style={{ padding: "20px 20px 20px 0" }}>No. Invoice</th>
-                  <th style={{ padding: "20px 20px 20px 0" }}>Date</th>
-                  <th style={{ padding: "20px 20px 20px 0" }}>Total Course</th>
-                  <th style={{ padding: "20px 20px 20px 0" }}>Total Price</th>
-                  <th style={{ padding: "20px 20px 20px 0" }}>Action</th>
+                  <th className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
+                    No
+                  </th>
+                  <th className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
+                    No. Invoice
+                  </th>
+                  <th className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
+                    Date
+                  </th>
+                  <th className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
+                    Total Course
+                  </th>
+                  <th className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
+                    Total Price
+                  </th>
+                  <th className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
+                    Action
+                  </th>
                 </tr>
                 {invoiceData.map((val, key) => (
                   <tr
@@ -126,22 +143,24 @@ const Invoice = ({ isLoggedIn, setIsLoggedIn }) => {
                       backgroundColor: key % 2 === 0 ? "inherit" : "#EA9E1F33",
                       color: "#4F4F4F",
                     }}
-                    className="font-500 text-16 font-montserrat"
+                    className="font-500 text-16 font-montserrat table-row"
                   >
-                    <td style={{ padding: "20px 20px 20px 0" }}>{key + 1}</td>
-                    <td style={{ padding: "20px 20px 20px 0" }}>
+                    <td className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
+                      {key + 1}
+                    </td>
+                    <td className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
                       {val.invoice_number}
                     </td>
-                    <td style={{ padding: "20px 20px 20px 0" }}>
+                    <td className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
                       {format(new Date(val.invoice_date), "dd MMMM yyyy")}
                     </td>
-                    <td style={{ padding: "20px 20px 20px 0" }}>
+                    <td className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
                       {val.total_course}
                     </td>
-                    <td style={{ padding: "20px 20px 20px 0" }}>
+                    <td className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
                       {val.total_price}
                     </td>
-                    <td style={{ padding: "20px 20px 20px 0" }}>
+                    <td className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
                       <Button
                         variant="contained"
                         sx={{
