@@ -158,7 +158,7 @@ const Invoice = ({ isLoggedIn, setIsLoggedIn }) => {
                       {val.total_course}
                     </td>
                     <td className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
-                      {val.total_price}
+                      {Intl.NumberFormat("id-ID").format(val.total_price)}
                     </td>
                     <td className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
                       <Button
