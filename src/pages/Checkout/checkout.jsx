@@ -57,6 +57,8 @@ const Checkout = () => {
   const { isLoggedIn } = useCheckLogin();
   const { handleLogout } = useLogout();
 
+  const api = import.meta.env.VITE_URL_API;
+
   const handleLogoutClick = async () => {
     await handleLogout();
     navigate("/login");
@@ -76,7 +78,7 @@ const Checkout = () => {
         if (userData.id) {
           if (sortOrder == "cart") {
             const response = await axios.get(
-              `https://localhost:7175/api/Checkout/GetAllByUserId?user_id=${userData.id}`
+              `${api}/api/Checkout/GetAllByUserId?user_id=${userData.id}`
             );
             setDataCheckout(response.data[0]);
             setData(response.data[0].checkout_detail);
@@ -84,7 +86,7 @@ const Checkout = () => {
             console.log(buyNowData);
           } else if (sortOrder == "buy_now") {
             const response = await axios.get(
-              `https://localhost:7175/api/Schedule/${buyNowData.schedule_id}`
+              `${api}/api/Schedule/${buyNowData.schedule_id}`
             );
             setDataTempBuyNow(response.data);
             console.log(dataTempBuyNow);
@@ -174,7 +176,7 @@ const Checkout = () => {
   const updateDetailCheckout = async (detailCheckoutId, isChecked) => {
     try {
       const response = await axios.put(
-        `https://localhost:7175/api/Checkout/UpdateDetailCheckout?detail_checkout_id=${detailCheckoutId}`,
+        `${api}/api/Checkout/UpdateDetailCheckout?detail_checkout_id=${detailCheckoutId}`,
         { checklist: isChecked }
       );
       console.log(response.data); // Lakukan sesuatu dengan respons jika perlu
@@ -186,7 +188,7 @@ const Checkout = () => {
     if (sortOrder === "cart") {
       try {
         const response = await axios.delete(
-          `https://localhost:7175/api/Checkout/DeleteDetailCheckout?detail_checkout_id=${detail_checkout_id}`
+          `${api}/api/Checkout/DeleteDetailCheckout?detail_checkout_id=${detail_checkout_id}`
         );
         console.log(response.data);
         // Tambahkan logika untuk mengupdate state atau komponen setelah penghapusan berhasil
@@ -224,7 +226,7 @@ const Checkout = () => {
     const fetchPaymentMethods = async () => {
       try {
         const response = await axios.get(
-          "https://localhost:7175/api/PaymentMethod/GetAll"
+          `${api}/api/PaymentMethod/GetAll`
         );
         const filteredPaymentMethods = response.data.filter(
           (payment) => payment.payment_status === true
@@ -274,19 +276,16 @@ const Checkout = () => {
       }
 
       if (sortOrder === "cart") {
-        const response = await axios.post(
-          "https://localhost:7175/api/Invoice/CreateInvoice",
-          {
-            user_id: userData.id,
-            checkout_id: dataCheckout.checkout_id,
-            id_payment_method: selectedPayment.id_payment_method,
-          }
-        );
+        const response = await axios.post(`${api}/api/Invoice/CreateInvoice`, {
+          user_id: userData.id,
+          checkout_id: dataCheckout.checkout_id,
+          id_payment_method: selectedPayment.id_payment_method,
+        });
         console.log("Invoice created successfully:", response.data);
         navigate("/PurchaseSuccess");
       } else {
         const response = await axios.post(
-          "https://localhost:7175/api/Invoice/CreateSingleInvoice",
+          `${api}/api/Invoice/CreateSingleInvoice`,
           {
             user_id: userData.id,
             schedule_id: buyNowData.schedule_id,
@@ -386,11 +385,11 @@ const Checkout = () => {
 
         <div
           id="1576"
-          className="border-top px-70 py-30 flex items-center justify-sb b-0 l-0 r-0 mt-284 font-montserrat"
+          className="border-top px-70 py-30 flex items-center justify-sb b-0 l-0 r-0 mt-284 font-montserrat P_flex_warp P_gap_8"
         >
           <div id="1574" className="flex flex-row gap-24 items-center">
-            <div className="font-400 text-18">Total Price</div>
-            <div className="font-600 text-24 text-green">
+            <div className="font-400 text-18 P_font_size2">Total Price</div>
+            <div className="font-600 text-24 text-green P_font_size2">
               IDR {Intl.NumberFormat("id-ID").format(totalHarga)}
             </div>
           </div>

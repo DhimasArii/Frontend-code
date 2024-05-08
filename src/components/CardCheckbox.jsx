@@ -23,6 +23,7 @@ export default function ActionAreaCard({
           flexDirection: "row",
           justifyContent: "flex-start",
         }}
+        className="P_flex_warp"
       >
         <CardMedia
           sx={{ width: 200 }}

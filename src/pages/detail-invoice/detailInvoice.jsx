@@ -24,6 +24,7 @@ const Item = styled(Paper)(({ theme }) => ({
 const DetailInvoice = ({ isLoggedIn, setIsLoggedIn }) => {
   const navigate = useNavigate();
   const { invoice_id } = useParams();
+  const api = import.meta.env.VITE_URL_API;
   const [detailInvoiceData, setDetailInvoiceData] = useState([]);
   const handleLogout = () => {
     setIsLoggedIn(false);
@@ -36,7 +37,7 @@ const DetailInvoice = ({ isLoggedIn, setIsLoggedIn }) => {
     const fetchDetailInvoice = async () => {
       try {
         const response = await axios.get(
-          `https://localhost:7175/api/Invoice/GetAllByInvoiceId?invoice_id=${invoice_id}`
+          `${api}/api/Invoice/GetAllByInvoiceId?invoice_id=${invoice_id}`
         );
         setDetailInvoiceData(response.data[0]);
         console.log(detailInvoiceData);
@@ -67,9 +68,12 @@ const DetailInvoice = ({ isLoggedIn, setIsLoggedIn }) => {
 
         {/* body */}
         <div className="flex flex-col w-100">
-          <div id="frame1732" className="flex flex-col gap-32 px-70 mt-46">
+          <div
+            id="frame1732"
+            className="flex flex-col gap-32 px-70 mt-46 P_padding_x"
+          >
             <div id="frame1410" className="flex flex-row gap-8 ">
-              <div className="font-600 text-16 font-montserrat text-gray">
+              <div className="font-600 text-16 font-montserrat text-gray P_font_size">
                 <Link
                   to={"/"}
                   style={{ textDecoration: "none", color: "inherit" }}
@@ -81,7 +85,7 @@ const DetailInvoice = ({ isLoggedIn, setIsLoggedIn }) => {
                   Home &gt;
                 </Link>
               </div>
-              <div className="font-600 text-16 font-montserrat text-gray">
+              <div className="font-600 text-16 font-montserrat text-gray P_font_size">
                 <Link
                   to={"/invoice"}
                   style={{ textDecoration: "none", color: "inherit" }}
@@ -93,21 +97,21 @@ const DetailInvoice = ({ isLoggedIn, setIsLoggedIn }) => {
                   Invoice &gt;
                 </Link>
               </div>
-              <div className="font-600 text-16 font-montserrat text-yellow">
+              <div className="font-600 text-16 font-montserrat text-yellow P_font_size">
                 Detail Invoice
               </div>
             </div>
 
             <div id="frame1731" className="flex flex-col gap-24">
               <div
-                className="font-600 text-20 font-montserrat"
+                className="font-600 text-20 font-montserrat P_font_size1"
                 style={{ color: "#4F4F4F" }}
               >
                 Details Invoice
               </div>
 
               <div id="frame1551" className="flex flex-col">
-                <div className="font-500 text-18 font-montserrat">
+                <div className="font-500 text-18 font-montserrat P_font_size">
                   No. Invoice :
                   <span style={{ marginLeft: "25px" }}>
                     {detailInvoiceData.invoice_number}
@@ -117,12 +121,12 @@ const DetailInvoice = ({ isLoggedIn, setIsLoggedIn }) => {
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  <div className="font-500 text-18 font-montserrat">
+                  <div className="font-500 text-18 font-montserrat P_font_size">
                     Date :
                     <span style={{ marginLeft: "80px" }}>{formattedDate}</span>
                   </div>
 
-                  <div className="font-700 text-18 font-montserrat">
+                  <div className="font-700 text-18 font-montserrat P_font_size">
                     Total Price
                     <span style={{ marginLeft: "8px" }}>
                       {Intl.NumberFormat("id-ID").format(
@@ -140,6 +144,7 @@ const DetailInvoice = ({ isLoggedIn, setIsLoggedIn }) => {
                   justifyContent: "center",
                   gap: "24px", // row gap
                   borderCollapse: "collapse",
+                  width: "100%",
                 }}
               >
                 <tr
@@ -148,13 +153,23 @@ const DetailInvoice = ({ isLoggedIn, setIsLoggedIn }) => {
                     color: "#FFFFFF",
                     textAlign: "center",
                   }}
-                  className="font-600 text-16 font-montserrat"
+                  className="font-600 text-16 font-montserrat table-row"
                 >
-                  <th style={{ padding: "20px" }}>No</th>
-                  <th style={{ padding: "20px" }}>Course Name</th>
-                  <th style={{ padding: "20px" }}>Language</th>
-                  <th style={{ padding: "20px" }}>Schedule</th>
-                  <th style={{ padding: "20px" }}>Price</th>
+                  <th className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
+                    No
+                  </th>
+                  <th className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
+                    Course Name
+                  </th>
+                  <th className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
+                    Language
+                  </th>
+                  <th className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
+                    Schedule
+                  </th>
+                  <th className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
+                    Price
+                  </th>
                 </tr>
                 {detailInvoiceData.detail_Invoices &&
                   detailInvoiceData.detail_Invoices.map((val, key) => {
@@ -167,21 +182,21 @@ const DetailInvoice = ({ isLoggedIn, setIsLoggedIn }) => {
                             key % 2 === 0 ? "inherit" : "#EA9E1F33",
                           color: "#4F4F4F",
                         }}
-                        className="font-500 text-16 font-montserrat"
+                        className="font-500 text-16 font-montserrat table-row"
                       >
-                        <td style={{ padding: "20px 20px 20px 0" }}>
+                        <td className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
                           {key + 1}
                         </td>
-                        <td style={{ padding: "20px 20px 20px 0" }}>
+                        <td className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
                           {val.course_name}
                         </td>
-                        <td style={{ padding: "20px 20px 20px 0" }}>
+                        <td className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
                           {val.category_name}
                         </td>
-                        <td style={{ padding: "20px 20px 20px 0" }}>
+                        <td className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
                           {format(new Date(val.course_date), "dd MMMM yyyy")}
                         </td>
-                        <td style={{ padding: "20px 20px 20px 0" }}>
+                        <td className="L_padding_tabel P_font_size P_padding_tabel PC_padding_tabel">
                           {Intl.NumberFormat("id-ID").format(val.course_price)}
                         </td>
                       </tr>

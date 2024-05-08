@@ -18,7 +18,7 @@ const Footer = () => {
       {/* Footer */}
       <div>
         <footer
-          className="footer flex flex-row mt-144 px-95 py-24 bg-green text-white gap-80 font-poppins text-justify P_flex_warp P_gap_8"
+          className="footer flex flex-row mt-144 px-95 py-24 bg-green text-white gap-80 font-poppins text-justify P_flex_warp P_gap_8 T_flex_warp T_gap_8"
           style={{
             borderBottomLeftRadius: 20,
             borderBottomRightRadius: 20,
@@ -66,11 +66,11 @@ const Footer = () => {
             <div className="contactUs">
               <h3 className="font-500 text-16 P_font_size">Contact Us</h3>
               <div style={{ display: "flex" }} className="gap-16">
-                <img src={Phone} alt="Phone" />
-                <img src={Instagram} alt="Phone" />
-                <img src={Youtube} alt="Phone" />
-                <img src={Telegram} alt="Phone" />
-                <img src={Email} alt="Phone" />
+                <img src={Phone} alt="Phone" className="P_images" />
+                <img src={Instagram} alt="Phone" className="P_images" />
+                <img src={Youtube} alt="Phone" className="P_images" />
+                <img src={Telegram} alt="Phone" className="P_images" />
+                <img src={Email} alt="Phone" className="P_images" />
               </div>
             </div>
           </div>

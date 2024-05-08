@@ -34,11 +34,13 @@ const Landing = () => {
   const navigate = useNavigate();
   const { handleLogout } = useLogout();
 
+  const api = import.meta.env.VITE_URL_API;
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://localhost:7175/api/Course/GetAllCourse"
+          `${api}/api/Course/GetAllCourse`
         );
         const filteredCourse = response.data.filter(
           (course) => course.course_status === true
@@ -57,7 +59,7 @@ const Landing = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "https://localhost:7175/api/Category/GetAll"
+          `${api}/api/Category/GetAll`
         );
         const filteredCategories = response.data.filter(
           (category) => category.category_status === true
@@ -97,11 +99,11 @@ const Landing = () => {
               id="frame1552"
               className="flex flex-col item-center px-141 pb-72"
             >
-              <div className="item-center text-white font-600 font-montserrat text-32 text-center pt-59 P_font_size">
+              <div className="item-center text-white font-600 font-montserrat text-32 text-center pt-59 P_font_size T_font_size1">
                 Learn different languages ​​to hone <br /> your communication
                 skills
               </div>
-              <div className="item-center text-white text-center font-400 font-montserrat text-24 pt-27 P_font_size">
+              <div className="item-center text-white text-center font-400 font-montserrat text-24 pt-27 P_font_size T_font_size">
                 All the languages ​​you are looking for are available here, so
                 what are you waiting for and immediately improve your language
                 skills
@@ -148,7 +150,7 @@ const Landing = () => {
           </div>
 
           <div id="1546" className="flex flex-col items-center mt-70 px-91">
-            <div className="text-green font-600 font-montserrat text-24 P_font_size">
+            <div className="text-green font-600 font-montserrat text-24 P_font_size1">
               Recommended Class
             </div>
             <div id="frame1545" className="flex items-center mt-60">
@@ -162,10 +164,10 @@ const Landing = () => {
                   {data.slice(0, 6).map((item, index) => (
                     <Grid
                       key={index}
-                      xs={16}
-                      sm={8}
-                      md={6}
-                      lg={5}
+                      xs={18}
+                      sm={6}
+                      md={4}
+                      lg={4}
                       xl={4}
                       style={{ marginBottom: "10px" }}
                     >
@@ -194,7 +196,7 @@ const Landing = () => {
             >
               <div
                 id="1535"
-                className="flex flex-row gap-24 P_flex_warp P_gap_8"
+                className="flex flex-row gap-24 P_flex_warp P_gap_8 T_flex_warp T_items"
               >
                 <div id="1547" className="flex flex-col gap-24 h-280">
                   <div className="text-white font-600 font-montserrat text-32 P_font_size1">
@@ -214,14 +216,18 @@ const Landing = () => {
                   </div>
                 </div>
                 <div>
-                  <img src={gambar1} alt="" className="P_image_size1" />
+                  <img
+                    src={gambar1}
+                    alt=""
+                    className="P_image_size1 T_image_size1"
+                  />
                 </div>
               </div>
             </div>
           </div>
 
           <div id="1534" className="flex flex-col items-center gap-60 mt-122">
-            <div className="text-green font-600 font-montserrat text-24 P_font_size">
+            <div className="text-green font-600 font-montserrat text-24 P_font_size1">
               Available Language Course
             </div>
             <div id="frame1545" className="flex flex-basis items-center">
@@ -235,10 +241,10 @@ const Landing = () => {
                   {category.slice(0, 8).map((item, index) => (
                     <Grid
                       key={index}
-                      xs={14}
-                      sm={7}
-                      md={5}
-                      lg={4}
+                      xs={6}
+                      sm={3}
+                      md={3}
+                      lg={3}
                       xl={3}
                       style={{ marginBottom: "10px" }}
                     >
