@@ -30,6 +30,7 @@ const Category = () => {
     category_name: "",
     category_description: "",
     category_image: "",
+    category_status: true,
   });
 
   useEffect(() => {
@@ -65,6 +66,7 @@ const Category = () => {
           category_name: data.category_name,
           category_image: data.category_image,
           category_description: data.category_description,
+          category_status: data.category_status,
         },
         {
           headers: {
@@ -91,6 +93,7 @@ const Category = () => {
     category_name: "",
     category_description: "",
     category_image: "",
+    category_status: false,
   });
 
   const handleDeleteCategory = async (categoryId) => {
@@ -114,6 +117,7 @@ const Category = () => {
       category_name: category?.category_name || "",
       category_description: category?.category_description || "",
       category_image: category?.category_image || "",
+      category_status: category?.category_status || false,
     });
     setOpenPopup(true);
   };
@@ -141,6 +145,7 @@ const Category = () => {
             category_name: formData.category_name,
             category_description: formData.category_description,
             category_image: formData.category_image,
+            category_status: formData.category_status,
           },
           {
             headers: {
@@ -211,6 +216,23 @@ const Category = () => {
                       size="small"
                     />
                   </div>
+                  <div className="w-100">
+                    <FormControl fullWidth sx={{ mb: 2 }}>
+                      <InputLabel id="status-label">status</InputLabel>
+                      <Select
+                        fullWidth
+                        name="category_status"
+                        value={data.category_status}
+                        onChange={handleInput}
+                        labelId="status-label"
+                        label="status"
+                        size="small"
+                      >
+                        <MenuItem value={true}>yes</MenuItem>
+                        <MenuItem value={false}>no</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </div>
                 </div>
 
                 <div className="flex items-right flex-row gap-24">
@@ -268,6 +290,7 @@ const Category = () => {
                   <th style={{ padding: "20px 20px 20px 0" }}>
                     category_image
                   </th>
+                  <th style={{ padding: "20px 20px 20px 0" }}>status</th>
                   <th></th>
                   <th></th>
                 </tr>
@@ -298,6 +321,9 @@ const Category = () => {
                         alt={val.category_image}
                         style={{ width: 100 }}
                       />
+                    </td>
+                    <td style={{ padding: "20px 20px 20px 0" }}>
+                      {val.category_status ? "Yes" : "No"}
                     </td>
                     <td>
                       <IconButton
@@ -360,6 +386,21 @@ const Category = () => {
                 onChange={handleInputChange}
                 sx={{ mb: 2 }}
               />
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <InputLabel id="status-label">status</InputLabel>
+                <Select
+                  fullWidth
+                  name="category_status"
+                  value={formData.category_status}
+                  onChange={handleInputChange}
+                  labelId="status-label"
+                  label="status"
+                  size="small"
+                >
+                  <MenuItem value={true}>yes</MenuItem>
+                  <MenuItem value={false}>no</MenuItem>
+                </Select>
+              </FormControl>
             </form>
           </DialogContent>
           <DialogActions>
