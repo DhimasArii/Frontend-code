@@ -17,6 +17,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
+  const api = import.meta.env.VITE_URL_API;
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -122,7 +123,7 @@ const Login = () => {
     } else {
       try {
         const response = await axios.post(
-          "https://localhost:7175/api/User/login",
+          `${api}/api/User/login`,
           {
             email: data.email,
             passwords: data.password,
