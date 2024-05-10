@@ -134,7 +134,7 @@ const Kelas = () => {
                           title={item.category_name}
                           body={item.course_name}
                           image={item.course_image}
-                          price={item.price}
+                          price={Intl.NumberFormat("id-ID").format(item.price)}
                         />
                       </Link>
                     </Grid>
